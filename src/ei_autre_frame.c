@@ -23,32 +23,25 @@ void frame_drawfunc(struct ei_widget_t* widget,
 
 void frame_setdefaultsfunc(struct ei_widget_t* widget)
 {
-    // widget->wclass = return_class_frame();		
-	// widget->pick_id = 0;	
-	// widget->pick_color = NULL;	
-	// widget->user_data = NULL;
-    // widget->destructor = NULL;
+    widget->wclass = return_class_frame();
+    widget->pick_id = 0;
+    widget->pick_color = NULL;
+    widget->user_data = NULL;
+    widget->destructor = NULL; /* Il faut créer la fonction */
+    widget->parent = NULL;
+    widget->children_head = NULL;
+    widget->children_tail = NULL;
+    widget->next_sibling = NULL;
+    widget->geom_params = NULL;
     
-    // widget->parent = ei_app_root_widget();
-	// widget->children_head = NULL;
-	// widget->children_tail = NULL;
-	// widget->next_sibling = NULL;
-
-	// widget->geom_params = NULL;
-
-    // ei_size_t taille;
-    // taille.width = 0;
-    // taille.height = 0;
-
-    // ei_rect_t rect;
-    // rect.top_left.x = 0;
-    // rect.top_left.y = 0;
-    // rect.size.width = 0;
-    // rect.size.height = 0;
-
-	// widget->requested_size = taille;	
-	// widget->screen_location = rect;
-	// widget->content_rect = &rect;
+    ei_size_t taille;
+    taille.width = 600;
+    taille.height = 600;
+    
+    widget->requested_size = taille;
+    ei_rect_t rect; // A changer
+    widget->screen_location = rect;
+    widget->content_rect = NULL;
 }
 
 void frame_geomnotifyfunc(struct ei_widget_t* widget)
@@ -61,7 +54,7 @@ ei_widgetclass_t *return_class_frame()
     ei_widgetclass_t widgetclass_frame;
     ei_widgetclass_name_t name = "frame";
 
-    widgetclass_frame.name = name;
+    // widgetclass_frame.name = name;
     widgetclass_frame.allocfunc = &frame_allocfunc;
     widgetclass_frame.releasefunc = &frame_releasefunc; 
     widgetclass_frame.drawfunc = &frame_drawfunc;
