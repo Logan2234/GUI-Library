@@ -2,6 +2,8 @@
 #include "ei_application.h"
 #include "ei_draw.h"
 
+#include <string.h>
+
 struct ei_widget_t* frame_allocfunc(void)
 {
     ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
@@ -63,9 +65,8 @@ void frame_geomnotifyfunc(struct ei_widget_t* widget)
 ei_widgetclass_t *return_class_frame()
 {
     ei_widgetclass_t widgetclass_frame;
-    ei_widgetclass_name_t name = (ei_widgetclass_name_t) "frame";
 
-    widgetclass_frame.name = name;
+    strcpy(widgetclass_frame.name, "frame");
     widgetclass_frame.allocfunc = &frame_allocfunc;
     widgetclass_frame.releasefunc = &frame_releasefunc; 
     widgetclass_frame.drawfunc = &frame_drawfunc;
