@@ -52,9 +52,9 @@ void frame_geomnotifyfunc(struct ei_widget_t* widget)
 ei_widgetclass_t *return_class_frame()
 {
     ei_widgetclass_t widgetclass_frame;
-    ei_widgetclass_name_t name = "frame";
+    ei_widgetclass_name_t name = (ei_widgetclass_name_t) "frame";
 
-    // widgetclass_frame.name = name;
+    widgetclass_frame.name = name;
     widgetclass_frame.allocfunc = &frame_allocfunc;
     widgetclass_frame.releasefunc = &frame_releasefunc; 
     widgetclass_frame.drawfunc = &frame_drawfunc;
