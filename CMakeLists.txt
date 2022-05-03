@@ -90,7 +90,7 @@ set(LIB_EI_SOURCES
       ${SRC}/ei_geometrymanager.c
 #     ${SRC}/un_fichier_source.c
 #     ${SRC}/un_autre_fichier_source.c
-)
+		src/ei_autre_frame.c include/ei_autre_frame.h)
 
 add_library(ei STATIC			${LIB_EI_SOURCES})
 
