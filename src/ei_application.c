@@ -15,7 +15,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     const ei_surface_t racine_surface = hw_create_window(main_window_size, fullscreen);
     ei_surface_t pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     ei_widget_t *widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
-    // ((ei_widgetclass_t *)widget_racine)->drawfunc(widget_racine, racine_surface, pick_surface, NULL);
 }
 
 void ei_app_run()

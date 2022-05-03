@@ -19,7 +19,8 @@ void frame_drawfunc(struct ei_widget_t* widget,
                     ei_surface_t        pick_surface,
                     ei_rect_t*          clipper)
 {
-    // ei_fill(surface, NULL, surface);
+    ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+    ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
 void frame_setdefaultsfunc(struct ei_widget_t* widget)

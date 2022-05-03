@@ -89,6 +89,7 @@ set(LIB_EI_SOURCES
       ${SRC}/ei_widget.c
       ${SRC}/ei_widgetclass.c
       ${SRC}/ei_geometrymanager.c
+	  ${SRC}/ei_draw.c
 #     ${SRC}/un_fichier_source.c
 #     ${SRC}/un_autre_fichier_source.c
       ${SRC}/ei_autre_frame.c)

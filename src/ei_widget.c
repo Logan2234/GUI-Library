@@ -38,9 +38,6 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
                               ei_widget_destructor_t destructor)
 {
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
-        printf("%s\n",liste_widgetclass->first_widgetclass->name);
-        printf("%s\n", class_name);
-        printf("%d\n", !strcmp(liste_widgetclass->first_widgetclass->name, class_name));
         if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
         {
             ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
