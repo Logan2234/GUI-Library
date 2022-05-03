@@ -32,7 +32,7 @@ if(${APPLE})
 	set(HEADER_PATHS		${HEADER_PATHS}
 					"/opt/local/include/SDL2"
 					"/opt/local/include")
-	set(PLATFORM_DIR		"${ROOT_DIR}/_osx")
+	set(PLATFORM_DIR		"${ROOT_DIR}/_macos")
 	set(EIBASE			${PLATFORM_DIR}/libeibase.a)
 	set(PLATFORM_LIB_FLAGS		${EIBASE}
 					-L/opt/local/lib ${LIB_FLAGS})
