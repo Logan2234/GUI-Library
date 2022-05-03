@@ -1,4 +1,5 @@
 #include "ei_widget.h"
+#include "ei_autre_frame.h"
 
 void ei_frame_configure(ei_widget_t *widget,
                         ei_size_t *requested_size,
@@ -13,7 +14,17 @@ void ei_frame_configure(ei_widget_t *widget,
                         ei_rect_t **img_rect,
                         ei_anchor_t *img_anchor)
 {
-    return NULL;
+    ((ei_frame_t*)widget)->requested_size;
+    ((ei_frame_t*)widget)->color;
+	((ei_frame_t*)widget)->border_width;
+    ((ei_frame_t*)widget)->relief;
+    ((ei_frame_t*)widget)->text;
+    ((ei_frame_t*)widget)->text_font;
+    ((ei_frame_t*)widget)->text_color;
+    ((ei_frame_t*)widget)->text_anchor;
+    ((ei_frame_t*)widget)->img;
+    ((ei_frame_t*)widget)->img_rect;
+    ((ei_frame_t*)widget)->img_anchor;
 }
 
 ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
