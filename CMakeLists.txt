@@ -84,12 +84,15 @@ include_directories(${HEADER_PATHS})
 
 # target ei (libei)
 
-#set(LIB_EI_SOURCES
+set(LIB_EI_SOURCES
+      ${SRC}/ei_application.c
+      ${SRC}/ei_widget.c
+      ${SRC}/ei_geometrymanager.c
 #     ${SRC}/un_fichier_source.c
 #     ${SRC}/un_autre_fichier_source.c
-#)
-#
-#add_library(ei STATIC			${LIB_EI_SOURCES})
+)
+
+add_library(ei STATIC			${LIB_EI_SOURCES})
 
 # target minimal
 
