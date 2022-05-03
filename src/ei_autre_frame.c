@@ -2,8 +2,6 @@
 #include "ei_application.h"
 #include "ei_draw.h"
 
-#include <string.h>
-
 struct ei_widget_t* frame_allocfunc(void)
 {
     ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
@@ -29,12 +27,10 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->wclass = return_class_frame();
     widget->pick_id = 0;
 
-    ei_color_t *noir;
-    noir->red = "0";
-    noir->green = "0";
-    noir->blue = "0";
-    noir->alpha = "0";
-    widget->pick_color = noir;
+    widget->pick_color->red = "0";
+    widget->pick_color->blue = "0";
+    widget->pick_color->green = "0";
+    widget->pick_color->alpha = "0";
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
@@ -65,8 +61,9 @@ void frame_geomnotifyfunc(struct ei_widget_t* widget)
 ei_widgetclass_t *return_class_frame()
 {
     ei_widgetclass_t widgetclass_frame;
+    ei_widgetclass_name_t name = (ei_widgetclass_name_t) "frame";
 
-    strcpy(widgetclass_frame.name, "frame");
+    widgetclass_frame.name = name;
     widgetclass_frame.allocfunc = &frame_allocfunc;
     widgetclass_frame.releasefunc = &frame_releasefunc; 
     widgetclass_frame.drawfunc = &frame_drawfunc;
