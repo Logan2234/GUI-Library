@@ -1,5 +1,8 @@
 #include "ei_widget.h"
 #include "ei_autre_frame.h"
+#include "ei_autre_struct.h"
+
+extern struct liste_widgetclass *liste_widgetclass;
 
 void ei_frame_configure(ei_widget_t *widget,
                         ei_size_t *requested_size,
@@ -32,7 +35,21 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
                               void *user_data,
                               ei_widget_destructor_t destructor)
 {
-    return NULL;
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
+        if (liste_widgetclass->first_widgetclass == class_name)
+        {
+            ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
+            class->wclass = liste_widgetclass->first_widgetclass;
+            class->parent = parent;
+            class->user_data = user_data;
+            class->destructor = destructor;
+            return class;
+        }
+        else
+        {
+            liste_widgetclass = liste_widgetclass->next;
+        }
+    }
 }
 
 
