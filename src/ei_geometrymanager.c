@@ -43,17 +43,17 @@ void ei_place(ei_widget_t *widget,
             top_left -> x = *x;
             top_left -> y = *y - *height/2;
         case ei_anc_northeast:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = *x;
+            top_left -> y = *y;
         case ei_anc_northwest:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = *x - *width;
+            top_left -> y = *y;
         case ei_anc_southeast:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = *x - *width;
+            top_left -> y = *y - *height;
         case ei_anc_southwest:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = *x;
+            top_left -> y = *y - *height;
     }
 }
 
