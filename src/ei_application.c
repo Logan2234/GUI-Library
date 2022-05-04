@@ -24,7 +24,7 @@ void ei_app_run()
 {
     ei_widget_t *racine = ei_app_root_widget();
     hw_surface_lock(racine_surface);
-    // racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
+    racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
     hw_surface_unlock(racine_surface);
    	hw_surface_update_rects(racine_surface, NULL);
     getchar();
