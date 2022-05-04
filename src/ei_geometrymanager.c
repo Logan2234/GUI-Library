@@ -28,21 +28,20 @@ void ei_place(ei_widget_t *widget,
     ei_point_t *top_left;
     switch (anchor){
         case ei_anc_center:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
-        case ei_anc_north:->screen_location->size->width = width; /* parent->screen_location->size->width * rel_width; */
-    widget->screen_location->size->height = heigh
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = x - width/2;
+            top_left -> y = y - height/2;
+        case ei_anc_north:
+            top_left -> x = x - width/2;
+            top_left -> y =y;
         case ei_anc_south:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = x - width/2;
+            top_left -> y =y - height;
         case ei_anc_east:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = x - width;
+            top_left -> y = y - height/2;
         case ei_anc_west:
-            top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
-            top_left -> y =;
+            top_left -> x = x;
+            top_left -> y = y - height/2;
         case ei_anc_northeast:
             top_left -> x = parent->screen_location->top_left->x + rel_x * parent->screen_location->size->width -  ;
             top_left -> y =;
