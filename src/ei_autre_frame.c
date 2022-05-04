@@ -1,17 +1,21 @@
 #include "ei_autre_frame.h"
 #include "ei_application.h"
 #include "ei_draw.h"
+#include "ei_widgetclass.h"
 #include "ei_types.h"
 
-struct ei_widget_t* frame_allocfunc(void)
+struct ei_widget_t* frame_allocfunc(void)/* À revoir avec prof */
 {
-    ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
-    return widget_frame;
+    // ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
+
+    ei_frame_t *widget_frame = calloc(1, sizeof(ei_widget_t) + sizeof(ei_frame_t));
+    return (ei_widget_t*)widget_frame;
 }
 
-void frame_releasefunc(struct ei_widget_t* widget)
+void frame_releasefunc(struct ei_widget_t* widget) /* À revoir avec prof */
 {
-    free(widget);
+
+    free((ei_frame_t*)widget);
     // TODO
 }
 
@@ -58,7 +62,7 @@ void frame_geomnotifyfunc(struct ei_widget_t* widget)
     // TODO
 }
 
-ei_widgetclass_t *return_class_frame()
+ei_widgetclass_t *return_class_frame(void)
 {
     ei_widgetclass_t *widgetclass_frame = calloc(1, sizeof(ei_widgetclass_t));
 
