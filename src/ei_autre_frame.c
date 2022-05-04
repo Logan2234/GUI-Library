@@ -8,7 +8,7 @@ struct ei_widget_t* frame_allocfunc(void)/* À revoir avec prof */
 {
     // ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
 
-    ei_frame_t *widget_frame = calloc(1, sizeof(ei_widget_t) + sizeof(ei_frame_t));
+    ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
     return (ei_widget_t*)widget_frame;
 }
 
@@ -32,8 +32,7 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->wclass = return_class_frame();
     widget->pick_id = 0;
 
-    ei_color_t*	fond = &ei_default_background_color;
-    widget->pick_color = fond;
+    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
@@ -43,16 +42,8 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
     
-    ei_size_t taille;
-    taille.width = 600;
-    taille.height = 600;
-    
-    widget->requested_size = taille;
-    ei_rect_t rect;
-    rect.top_left.x = 0;
-    rect.top_left.y = 0;
-    rect.size = taille;
-    widget->screen_location = rect;
+    widget->requested_size = (ei_size_t){600, 600};
+    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){600, 600}};
     widget->content_rect = NULL;
 }
 

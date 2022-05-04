@@ -5,9 +5,10 @@
 #include "ei_autre_struct.h"
 
 struct liste_widgetclass *liste_widgetclass;
-ei_surface_t racine_surface;
-ei_surface_t pick_surface;
-ei_widget_t *widget_racine;
+static ei_surface_t racine_surface;
+static ei_surface_t pick_surface;
+static ei_widget_t *widget_racine;
+
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
     hw_init();
@@ -18,6 +19,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
     widget_racine->wclass->setdefaultsfunc(widget_racine);
+    ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 void ei_app_run()
