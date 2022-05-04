@@ -3,7 +3,7 @@
 /*
  Configure la géométrie d'un widget à l'aide du gestionnaire de géométrie "placer".
  * Si le widget était déjà géré par un autre gestionnaire de géométrie, alors il est d'abord
-   supprimé du gestionnaire de géométrie précédent. 
+   supprimé du gestionnaire de géométrie précédent. // TODO
  * Si le widget était déjà géré par le "placer", alors cela appelle simplement les mises à jour
    les paramètres placer : les arguments non NULL remplacent les valeurs précédentes.
  * Lorsque les arguments sont passés comme NULL, le placer utilise les valeurs par défaut (détaillées dans
@@ -27,14 +27,13 @@ void ei_place(ei_widget_t *widget,
     int width2;
     int height2;
 
-    if (height == NULL) height2 = widget->requested_size.height;
-    else height2 = *height;
+    height2 = ((height == NULL) ? widget->requested_size.height : *height); 
 
-    if (width == NULL) width2 = widget->requested_size.width;
-    else width2 = *width;
+    width2 = ((width == NULL) ? widget->requested_size.width : *width);
     
     widget->screen_location.size.width = width2; /* parent->screen_location->size->width * rel_width; */
     widget->screen_location.size.height = height2; /*parent->screen_location->size->height * rel_height;*/
+    
     if (anchor == NULL)
     {
             top_left -> x = *x;
