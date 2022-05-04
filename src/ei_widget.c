@@ -20,8 +20,8 @@ void ei_frame_configure(ei_widget_t *widget,
                         ei_anchor_t *img_anchor)
 {
     ((ei_frame_t*)widget)->requested_size = requested_size;
-    // ((ei_frame_t*)widget)->color = color;
-	// ((ei_frame_t*)widget)->border_width = border_width;
+    ((ei_frame_t*)widget)->color = color;
+	((ei_frame_t*)widget)->border_width = border_width;
     ((ei_frame_t*)widget)->relief = relief;
     ((ei_frame_t*)widget)->text = text;
     ((ei_frame_t*)widget)->text_font = text_font;
