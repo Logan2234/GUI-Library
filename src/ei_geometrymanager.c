@@ -22,9 +22,8 @@ void ei_place(ei_widget_t *widget,
               float *rel_height)
 {
     ei_widget_t *parent = widget->parent;
-    widget->screen_location;
-    widget->screen_location.size.width = width; /* parent->screen_location->size->width * rel_width; */
-    widget->screen_location.size.height = height; /*parent->screen_location->size->height * rel_height;*/
+    widget->screen_location.size.width = *width; /* parent->screen_location->size->width * rel_width; */
+    widget->screen_location.size.height = *height; /*parent->screen_location->size->height * rel_height;*/
     ei_point_t *top_left;
     switch (*anchor){
         case ei_anc_center:
@@ -54,6 +53,7 @@ void ei_place(ei_widget_t *widget,
         case ei_anc_southwest:
             top_left -> x = *x;
             top_left -> y = *y - *height;
+    widget->screen_location.top_left = *top_left;
     }
 }
 
