@@ -16,7 +16,6 @@ void frame_releasefunc(struct ei_widget_t* widget) /* À revoir avec prof */
 {
 
     free((ei_frame_t*)widget);
-    // TODO
 }
 
 void frame_drawfunc(struct ei_widget_t* widget,
