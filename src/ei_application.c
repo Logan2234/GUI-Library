@@ -35,7 +35,7 @@ void ei_app_free()
     ei_widgetclass_t *suivant;
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
         suivant = liste_widgetclass->next;
-        liste_widgetclass->first_widgetclass->releasefunc();
+        liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
         liste_widgetclass = suivant;
     }
 }
