@@ -29,7 +29,6 @@ void frame_drawfunc(struct ei_widget_t* widget,
 
 void frame_setdefaultsfunc(struct ei_widget_t* widget)
 {
-    widget->wclass = return_class_frame();
     widget->pick_id = 0;
 
     widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};

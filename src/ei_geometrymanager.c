@@ -27,7 +27,7 @@ void ei_place(ei_widget_t *widget,
     ei_point_t *top_left;
     switch (*anchor){
         case ei_anc_center:
-            top_left -> x = *x - *width/2;
+            top_left -> x = 0;
             top_left -> y = *y - *height/2;
         case ei_anc_north:
             top_left -> x = *x - *width/2;

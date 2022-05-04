@@ -41,7 +41,9 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
         if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
         {
             ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
+            /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
             class->wclass = liste_widgetclass->first_widgetclass;
+            class->wclass->setdefaultsfunc(class); /* Notre nouveau widget prend les paramètres par défaut */
             class->parent = parent;
             class->user_data = user_data;
             class->destructor = destructor;
