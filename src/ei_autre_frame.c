@@ -4,7 +4,7 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 
-struct ei_widget_t* frame_allocfunc(void)/* À revoir avec prof */
+struct ei_widget_t* frame_allocfunc(void)
 {
     // ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
 
@@ -12,7 +12,7 @@ struct ei_widget_t* frame_allocfunc(void)/* À revoir avec prof */
     return (ei_widget_t*)widget_frame;
 }
 
-void frame_releasefunc(struct ei_widget_t* widget) /* À revoir avec prof */
+void frame_releasefunc(struct ei_widget_t* widget)
 {
 
     free((ei_frame_t*)widget);
@@ -33,6 +33,7 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->pick_id = 0;
 
     widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
+
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */

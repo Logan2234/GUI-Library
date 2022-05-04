@@ -40,6 +40,7 @@ void ei_app_free()
         liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
         liste_widgetclass = suivant;
     }
+    free(liste_widgetclass);
 }
 
 ei_widget_t* ei_app_root_widget(void)
