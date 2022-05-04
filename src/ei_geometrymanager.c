@@ -26,8 +26,8 @@ void ei_place(ei_widget_t *widget,
     widget->screen_location.size.width = *width; /* parent->screen_location->size->width * rel_width; */
     widget->screen_location.size.height = *height; /*parent->screen_location->size->height * rel_height;*/
     ei_point_t *top_left;
-    int *width2 = *width;
-    int *height2 = *height;
+    int *width2 = width;
+    int *height2 = height;
     if (*height == NULL){
         *height2 = widget->requested_size.height;
     }
