@@ -21,38 +21,47 @@ void ei_place(ei_widget_t *widget,
               float *rel_width,
               float *rel_height)
 {
+    /* J'ai pas fait avec les relatives uniquement avec les absolus pour tester au début*/
     ei_widget_t *parent = widget->parent;
     widget->screen_location.size.width = *width; /* parent->screen_location->size->width * rel_width; */
     widget->screen_location.size.height = *height; /*parent->screen_location->size->height * rel_height;*/
     ei_point_t *top_left;
+    int *width2 = width;
+    int *height2 = height;
+    if (*height == NULL){
+        *height2 = widget->requested_size.height;
+    }
+    if (*width == NULL){
+        *width2 = widget->requested_size.width;
+    }
     switch (*anchor){
         case ei_anc_center:
-            top_left -> x = 0;
-            top_left -> y = *y - *height/2;
+            top_left->x = *x - *width2/2;
+            top_left->y = *y - *height2/2;
         case ei_anc_north:
-            top_left -> x = *x - *width/2;
-            top_left -> y = *y;
+            top_left->x = *x - *width2/2;
+            top_left->y = *y;
         case ei_anc_south:
-            top_left -> x = *x - *width/2;
-            top_left -> y = *y - *height;
+            top_left -> x = *x - *width2/2;
+            top_left -> y = *y - *height2;
         case ei_anc_east:
-            top_left -> x = *x - *width;
-            top_left -> y = *y - *height/2;
+            top_left -> x = *x - *width2;
+            top_left -> y = *y - *height2/2;
         case ei_anc_west:
             top_left -> x = *x;
-            top_left -> y = *y - *height/2;
+            top_left -> y = *y - *height2/2;
         case ei_anc_northeast:
             top_left -> x = *x;
             top_left -> y = *y;
         case ei_anc_northwest:
-            top_left -> x = *x - *width;
+            top_left -> x = *x - *width2;
             top_left -> y = *y;
         case ei_anc_southeast:
-            top_left -> x = *x - *width;
-            top_left -> y = *y - *height;
+            top_left -> x = *x - *width2;
+            top_left -> y = *y - *height2;
         case ei_anc_southwest:
             top_left -> x = *x;
-            top_left -> y = *y - *height;
+            top_left -> y = *y - *height2;
     widget->screen_location.top_left = *top_left;
     }
 }

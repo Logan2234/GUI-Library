@@ -31,14 +31,13 @@ void ei_app_run()
     getchar();
 }
 
-void ei_app_free()
+void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregistrer les widgets */
 {
-    ei_widgetclass_t *suivant;
+    /*
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
-        suivant = liste_widgetclass->next;
         liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
-        liste_widgetclass = suivant;
-    }
+        liste_widgetclass = liste_widgetclass->next;
+    } */
     free(liste_widgetclass);
 }
 
