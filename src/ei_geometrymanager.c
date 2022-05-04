@@ -35,7 +35,7 @@ void ei_place(ei_widget_t *widget,
 
 void ei_geometrymanager_unmap(ei_widget_t*	widget)
 {
-    include
+    
 }
 
 ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
