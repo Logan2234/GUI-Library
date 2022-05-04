@@ -32,7 +32,12 @@ void ei_app_run()
 
 void ei_app_free()
 {
-    
+    ei_widgetclass_t *suivant;
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
+        suivant = liste_widgetclass->next;
+        liste_widgetclass->first_widgetclass->releasefunc();
+        liste_widgetclass = suivant;
+    }
 }
 
 ei_widget_t* ei_app_root_widget(void)
