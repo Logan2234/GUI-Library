@@ -23,47 +23,60 @@ void ei_place(ei_widget_t *widget,
 {
     /* J'ai pas fait avec les relatives uniquement avec les absolus pour tester au début*/
     ei_widget_t *parent = widget->parent;
-    widget->screen_location.size.width = *width; /* parent->screen_location->size->width * rel_width; */
-    widget->screen_location.size.height = *height; /*parent->screen_location->size->height * rel_height;*/
-    ei_point_t *top_left;
-    int *width2 = width;
-    int *height2 = height;
-    if (*height == NULL){
-        *height2 = widget->requested_size.height;
+    ei_point_t *top_left = malloc(sizeof(ei_point_t));
+    int width2;
+    int height2;
+
+    if (height == NULL) height2 = widget->requested_size.height;
+    else height2 = *height;
+
+    if (width == NULL) width2 = widget->requested_size.width;
+    else width2 = *width;
+    
+    widget->screen_location.size.width = width2; /* parent->screen_location->size->width * rel_width; */
+    widget->screen_location.size.height = height2; /*parent->screen_location->size->height * rel_height;*/
+    if (anchor == NULL)
+    {
+            top_left -> x = *x;
+            top_left -> y = *y;    
     }
-    if (*width == NULL){
-        *width2 = widget->requested_size.width;
+    else
+    {
+        switch (*anchor){
+            case ei_anc_none:
+                top_left -> x = *x;
+                top_left -> y = *y;
+            case ei_anc_center:
+                top_left->x = *x - width2/2;
+                top_left->y = *y - height2/2;
+            case ei_anc_north:
+                top_left->x = *x - width2/2;
+                top_left->y = *y;
+            case ei_anc_south:
+                top_left -> x = *x - width2/2;
+                top_left -> y = *y - height2;
+            case ei_anc_east:
+                top_left -> x = *x - width2;
+                top_left -> y = *y - height2/2;
+            case ei_anc_west:
+                top_left -> x = *x;
+                top_left -> y = *y - height2/2;
+            case ei_anc_northeast:
+                top_left -> x = *x - width2;
+                top_left -> y = *y;
+            case ei_anc_northwest:
+                top_left -> x = *x;
+                top_left -> y = *y;
+            case ei_anc_southeast:
+                top_left -> x = *x - width2;
+                top_left -> y = *y - height2;
+            case ei_anc_southwest:
+                top_left -> x = *x;
+                top_left -> y = *y - height2;
+        }
     }
-    switch (*anchor){
-        case ei_anc_center:
-            top_left->x = *x - *width2/2;
-            top_left->y = *y - *height2/2;
-        case ei_anc_north:
-            top_left->x = *x - *width2/2;
-            top_left->y = *y;
-        case ei_anc_south:
-            top_left -> x = *x - *width2/2;
-            top_left -> y = *y - *height2;
-        case ei_anc_east:
-            top_left -> x = *x - *width2;
-            top_left -> y = *y - *height2/2;
-        case ei_anc_west:
-            top_left -> x = *x;
-            top_left -> y = *y - *height2/2;
-        case ei_anc_northeast:
-            top_left -> x = *x;
-            top_left -> y = *y;
-        case ei_anc_northwest:
-            top_left -> x = *x - *width2;
-            top_left -> y = *y;
-        case ei_anc_southeast:
-            top_left -> x = *x - *width2;
-            top_left -> y = *y - *height2;
-        case ei_anc_southwest:
-            top_left -> x = *x;
-            top_left -> y = *y - *height2;
     widget->screen_location.top_left = *top_left;
-    }
+    free(top_left);
 }
 
 void ei_geometrymanager_unmap(ei_widget_t*	widget)
