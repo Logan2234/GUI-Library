@@ -36,7 +36,7 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
                               ei_widget_t *parent,
                               void *user_data,
                               ei_widget_destructor_t destructor)
-{
+{  
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
         if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
         {

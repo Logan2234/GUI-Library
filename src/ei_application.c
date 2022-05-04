@@ -5,20 +5,28 @@
 #include "ei_autre_struct.h"
 
 struct liste_widgetclass *liste_widgetclass;
-
+ei_surface_t racine_surface;
+ei_surface_t pick_surface;
+ei_widget_t *widget_racine;
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
     hw_init();
     liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
     ei_widgetclass_register(return_class_frame());
     // ei_geometrymanager_register();
-    const ei_surface_t racine_surface = hw_create_window(main_window_size, fullscreen);
-    ei_surface_t pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
-    ei_widget_t *widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
+    racine_surface = hw_create_window(main_window_size, fullscreen);
+    pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
+    widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
+    widget_racine->wclass->setdefaultsfunc(widget_racine);
 }
 
 void ei_app_run()
 {
+    ei_widget_t *racine = ei_app_root_widget();
+    hw_surface_lock(racine_surface);
+    // racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
+    hw_surface_unlock(racine_surface);
+   	hw_surface_update_rects(racine_surface, NULL);
     getchar();
 }
 
@@ -29,5 +37,5 @@ void ei_app_free()
 
 ei_widget_t* ei_app_root_widget(void)
 {
-    return NULL;
+    return widget_racine;
 }

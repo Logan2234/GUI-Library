@@ -28,10 +28,12 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->wclass = return_class_frame();
     widget->pick_id = 0;
 
-    widget->pick_color->red = "0";
-    widget->pick_color->blue = "0";
-    widget->pick_color->green = "0";
-    widget->pick_color->alpha = "0";
+    ei_color_t couleur;
+    couleur.red = "0";
+    couleur.blue = "0";
+    couleur.alpha = "0";
+    couleur.green = "0";
+    widget->pick_color = &couleur;
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
