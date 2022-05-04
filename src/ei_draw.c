@@ -4,6 +4,7 @@
 uint32_t ei_map_rgba (ei_surface_t surface, ei_color_t color)
 {
     uint32_t couleur = 0;
+    
     uint32_t red = color.red - '\0';
     uint32_t blue = (color.blue - '\0');
     uint32_t green = (color.green - '\0');
@@ -14,7 +15,7 @@ uint32_t ei_map_rgba (ei_surface_t surface, ei_color_t color)
     else
     {
         uint32_t alpha = (color.alpha - '\0');
-        couleur; //TODO 
+        couleur; //TODO le fait de gérer la transparence si nécessaire (question: comment avoir la couleur de la surface via surface)
     }
     return couleur;
 
