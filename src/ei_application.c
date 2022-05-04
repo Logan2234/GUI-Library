@@ -24,7 +24,7 @@ void ei_app_run()
 {
     ei_widget_t *racine = ei_app_root_widget();
     hw_surface_lock(racine_surface);
-    // racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
+    racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
     hw_surface_unlock(racine_surface);
    	hw_surface_update_rects(racine_surface, NULL);
     getchar();
@@ -32,7 +32,12 @@ void ei_app_run()
 
 void ei_app_free()
 {
-    
+    ei_widgetclass_t *suivant;
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
+        suivant = liste_widgetclass->next;
+        liste_widgetclass->first_widgetclass->releasefunc();
+        liste_widgetclass = suivant;
+    }
 }
 
 ei_widget_t* ei_app_root_widget(void)
