@@ -22,11 +22,11 @@ void ei_frame_configure(ei_widget_t *widget,
     ((ei_frame_t*)widget)->requested_size = requested_size;
     // ((ei_frame_t*)widget)->color = color;
 	// ((ei_frame_t*)widget)->border_width = border_width;
-    // ((ei_frame_t*)widget)->relief = relief;
+    ((ei_frame_t*)widget)->relief = relief;
     ((ei_frame_t*)widget)->text = text;
     ((ei_frame_t*)widget)->text_font = text_font;
     ((ei_frame_t*)widget)->text_color = text_color;
-    // ((ei_frame_t*)widget)->text_anchor = text_anchor;
+    ((ei_frame_t*)widget)->text_anchor = text_anchor;
     ((ei_frame_t*)widget)->img = img;
     ((ei_frame_t*)widget)->img_rect = img_rect;
     ((ei_frame_t*)widget)->img_anchor = img_anchor;

@@ -29,7 +29,7 @@ void frame_setdefaultsfunc(struct ei_widget_t* widget)
     widget->wclass = return_class_frame();
     widget->pick_id = 0;
 
-    ei_color_t*	fond = ei_default_background_color;
+    ei_color_t*	fond = &ei_default_background_color;
     widget->pick_color = fond;
 
     widget->user_data = NULL;
