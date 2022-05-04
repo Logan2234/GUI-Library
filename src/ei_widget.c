@@ -52,6 +52,7 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
             liste_widgetclass = liste_widgetclass->next;
         }
     }
+    return NULL;
 }
 
 
