@@ -23,10 +23,10 @@ void ei_place(ei_widget_t *widget,
 {
     ei_widget_t *parent = widget->parent;
     widget->screen_location;
-    widget->screen_location->size->width = width; /* parent->screen_location->size->width * rel_width; */
-    widget->screen_location->size->height = height; /*parent->screen_location->size->height * rel_height;*/
+    widget->screen_location.size.width = width; /* parent->screen_location->size->width * rel_width; */
+    widget->screen_location.size.height = height; /*parent->screen_location->size->height * rel_height;*/
     ei_point_t *top_left;
-    switch (anchor){
+    switch (*anchor){
         case ei_anc_center:
             top_left -> x = *x - *width/2;
             top_left -> y = *y - *height/2;
