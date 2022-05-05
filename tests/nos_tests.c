@@ -23,8 +23,10 @@ int test_1()
 {
     ei_app_create(screen_size, EI_FALSE);
     ei_app_run();
+    ei_app_free();
     ei_app_create(screen_size, EI_TRUE);
     ei_app_run();
+    ei_app_free();
     return (EXIT_SUCCESS);
 }
 
@@ -65,7 +67,7 @@ int test_2()
         liste_geometrymanager = liste_geometrymanager->next;
     }
     printf("END\n");
-
+    ei_app_free();
     return (EXIT_SUCCESS);
 }
 
@@ -79,9 +81,10 @@ int test_3()
     ei_widget_t *root = ei_app_root_widget();
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
     printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
-    printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire");
+    printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     ei_app_run();
+    ei_app_free();
     return (EXIT_SUCCESS);
 }
 
@@ -150,7 +153,8 @@ int main(int argc, char **argv)
     // else if (!strcmp(argv[1], "test10"))
     //     retour = test_10();
     else
-        return (EXIT_FAILURE);
+        printf("\n>>> ERROR! Correct format: ./cmake/nos_tests test[1-10]\n");
+    return (EXIT_FAILURE);
 
     return retour;
 }
