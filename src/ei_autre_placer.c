@@ -2,10 +2,12 @@
 
 void placer_runfunc(struct ei_widget_t *widget)
 {
+    // TODO
 }
 
 void placer_releasefunc(struct ei_widget_t *widget)
 {
+    // TODO
 }
 
 ei_geometrymanager_t *return_geometry_manager_placer()

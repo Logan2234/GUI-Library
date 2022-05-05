@@ -24,6 +24,22 @@ void ei_geometrymanager_register (ei_geometrymanager_t* geometrymanager)
     }
 }
 
+void ei_geometrymanager_unmap(ei_widget_t*	widget)
+{
+    // TODO  
+}
+
+ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
+{
+    // TODO
+}
+
+void ei_register_placer_manager (void)
+{
+    // TODO
+}
+
+
 /*
  Configure la géométrie d'un widget à l'aide du gestionnaire de géométrie "placer".
  * Si le widget était déjà géré par un autre gestionnaire de géométrie, alors il est d'abord
@@ -128,19 +144,3 @@ void ei_place(ei_widget_t *widget,
     free(top_left);
     free(parent);
 }
-
-void ei_geometrymanager_unmap(ei_widget_t*	widget)
-{
-    
-}
-
-ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
-{
-
-}
-
-void ei_register_placer_manager (void)
-{
-
-}
-
