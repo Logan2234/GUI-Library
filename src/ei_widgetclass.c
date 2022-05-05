@@ -6,9 +6,8 @@ extern struct liste_widgetclass *liste_widgetclass;
 void ei_widgetclass_register(ei_widgetclass_t *widgetclass)
 {
     if (liste_widgetclass->first_widgetclass == NULL)
-    {
         liste_widgetclass->first_widgetclass = widgetclass;
-    }
+
     else
     {
         struct liste_widgetclass *sent = liste_widgetclass;
@@ -28,9 +27,8 @@ void ei_widgetclass_register(ei_widgetclass_t *widgetclass)
 ei_widgetclass_t *ei_widgetclass_from_name(ei_widgetclass_name_t name)
 {
     while (strcmp(liste_widgetclass->first_widgetclass->name, name) && liste_widgetclass->next != NULL)
-    {
         liste_widgetclass = liste_widgetclass->next;
-    }
+
     if (!strcmp(liste_widgetclass->first_widgetclass->name, name))
         return liste_widgetclass->first_widgetclass;
 }

@@ -8,8 +8,6 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
 
-
-
 /* Variables globales à ces tests */
 
 extern struct liste_widgetclass *liste_widgetclass;
@@ -17,11 +15,12 @@ extern struct liste_geometrymanager *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
 
-/* 
+/*
     Test basique avec affichage d'une fenêtre vide de taille 600x600
     puis en plein écran
 */
-int test_1(){
+int test_1()
+{
     ei_app_create(screen_size, EI_FALSE);
     ei_app_run();
     ei_app_create(screen_size, EI_TRUE);
@@ -29,20 +28,21 @@ int test_1(){
     return (EXIT_SUCCESS);
 }
 
-/* 
-    Test pour savoir si tout les widgets et geometry manager sont enregistrés 
+/*
+    Test pour savoir si tout les widgets et geometry manager sont enregistrés
 */
-int test_2(){
+int test_2()
+{
     printf("\n===== AVANT APPEL DE ei_app_create =====\n");
     printf("Widget class: ");
-    while(liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
     {
         printf("%s -> ", liste_widgetclass->first_widgetclass->name);
         liste_widgetclass = liste_widgetclass->next;
     }
     printf("END\n");
     printf("Geometry manager: ");
-    while(liste_geometrymanager != NULL && liste_geometrymanager->geometrymanager_cell != NULL)
+    while (liste_geometrymanager != NULL && liste_geometrymanager->geometrymanager_cell != NULL)
     {
         printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
         liste_geometrymanager = liste_geometrymanager->next;
@@ -52,14 +52,14 @@ int test_2(){
 
     printf("END\n\n===== APRÈS APPEL DE ei_app_create =====\n");
     printf("Widget class: ");
-    while(liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
     {
         printf("%s -> ", liste_widgetclass->first_widgetclass->name);
         liste_widgetclass = liste_widgetclass->next;
     }
     printf("END\n");
     printf("Geometry manager: ");
-    while(liste_geometrymanager != NULL && liste_geometrymanager->geometrymanager_cell != NULL)
+    while (liste_geometrymanager != NULL && liste_geometrymanager->geometrymanager_cell != NULL)
     {
         printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
         liste_geometrymanager = liste_geometrymanager->next;
@@ -72,8 +72,9 @@ int test_2(){
 /* Test des fonctions:
    - ei_app_root_widget qui récupère le widget frame racine
    - ei_frame_configure qui change les paramètres de ce frame racine */
-int test_3(){
-	root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
+int test_3()
+{
+    root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
     ei_app_create(screen_size, EI_FALSE);
     ei_widget_t *root = ei_app_root_widget();
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
@@ -86,15 +87,13 @@ int test_3(){
 
 /*  */
 
-
-
 /*
  main --
  Main function of the tests.
  */
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    
+
     screen_size = (ei_size_t){800, 800};
 
     // int test_10(){
@@ -130,17 +129,28 @@ int main(int argc, char** argv)
 
     int retour;
 
-    if (!strcmp(argv[1], "test1")) retour = test_1();
-    else if (!strcmp(argv[1], "test2")) retour = test_2();
-    else if (!strcmp(argv[1], "test3")) retour = test_3();
-    // else if (!strcmp(argv[1], "test4")) retour = test_4();
-    // else if (!strcmp(argv[1], "test5")) retour = test_5();
-    // else if (!strcmp(argv[1], "test6")) retour = test_6();
-    // else if (!strcmp(argv[1], "test7")) retour = test_7();
-    // else if (!strcmp(argv[1], "test8")) retour = test_8();
-    // else if (!strcmp(argv[1], "test9")) retour = test_9();
-    // else if (!strcmp(argv[1], "test10")) retour = test_10();
-    else return (EXIT_FAILURE);
+    if (!strcmp(argv[1], "test1"))
+        retour = test_1();
+    else if (!strcmp(argv[1], "test2"))
+        retour = test_2();
+    else if (!strcmp(argv[1], "test3"))
+        retour = test_3();
+    // else if (!strcmp(argv[1], "test4"))
+    //     retour = test_4();
+    // else if (!strcmp(argv[1], "test5"))
+    //     retour = test_5();
+    // else if (!strcmp(argv[1], "test6"))
+    //     retour = test_6();
+    // else if (!strcmp(argv[1], "test7"))
+    //     retour = test_7();
+    // else if (!strcmp(argv[1], "test8"))
+    //     retour = test_8();
+    // else if (!strcmp(argv[1], "test9"))
+    //     retour = test_9();
+    // else if (!strcmp(argv[1], "test10"))
+    //     retour = test_10();
+    else
+        return (EXIT_FAILURE);
 
-	return retour;
+    return retour;
 }

@@ -32,7 +32,7 @@ void ei_app_run()
     hw_surface_lock(racine_surface);
     racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
     hw_surface_unlock(racine_surface);
-   	hw_surface_update_rects(racine_surface, NULL);
+    hw_surface_update_rects(racine_surface, NULL);
     getchar();
 }
 
@@ -47,7 +47,7 @@ void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregis
     free(liste_geometrymanager);
 }
 
-ei_widget_t* ei_app_root_widget(void)
+ei_widget_t *ei_app_root_widget(void)
 {
     return widget_racine;
 }
