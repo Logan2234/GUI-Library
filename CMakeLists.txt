@@ -137,7 +137,7 @@ target_link_libraries(minesweeper	ei ${PLATFORM_LIB_FLAGS})
 add_executable(parsing			${TESTS_SRC}/parsing.c)
 target_link_libraries(parsing		ei ${PLATFORM_LIB_FLAGS})
 
-# target minimal
+# target nos_tests
 
 add_executable(nos_tests 			${TESTS_SRC}/nos_tests.c)
 target_link_libraries(nos_tests		ei ${PLATFORM_LIB_FLAGS})
