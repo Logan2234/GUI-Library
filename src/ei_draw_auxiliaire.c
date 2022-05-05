@@ -17,7 +17,7 @@ ei_linked_point_t* ei_draw_arc (ei_point_t center,
     liste_point->point.y = (int) rayon * sin(angle_debut);
     ei_linked_point_t *suivant;
     suivant = liste_point;
-    for (i = 1; i <= longueur_arc; i++){
+    for (uint32_t i = 1; i <= longueur_arc; i++){
         int x = (int) rayon * cos(angle_debut + i * pas);
         int y = (int) rayon * sin(angle_debut + i * pas);
         while (suivant->next != NULL){
