@@ -39,3 +39,11 @@ void ei_fill	(ei_surface_t surface,
         *pixel_ptr++ = couleur;
     }
 }
+
+void ei_draw_polygon (ei_surface_t	surface,
+                      const ei_linked_point_t*	first_point,
+                      ei_color_t			color,
+                      const ei_rect_t*		clipper)
+{
+    // TODO
+}
