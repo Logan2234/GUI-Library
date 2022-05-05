@@ -5,6 +5,32 @@
 
 extern struct liste_widgetclass *liste_widgetclass;
 
+ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
+                              ei_widget_t *parent,
+                              void *user_data,
+                              ei_widget_destructor_t destructor)
+{
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
+    {
+        if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
+        {
+            ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
+            /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
+            class->wclass = liste_widgetclass->first_widgetclass;
+            class->wclass->setdefaultsfunc(class); /* Notre nouveau widget prend les paramètres par défaut */
+            class->parent = parent;
+            class->user_data = user_data;
+            class->destructor = destructor;
+            return class;
+        }
+        else
+        {
+            liste_widgetclass = liste_widgetclass->next;
+        }
+    }
+    return NULL;
+}
+
 void ei_frame_configure(ei_widget_t *widget,
                         ei_size_t *requested_size,
                         const ei_color_t *color,
@@ -63,28 +89,20 @@ void ei_button_configure(ei_widget_t *widget,
     ((ei_button_t *)widget)->user_param = user_param;
 }
 
-ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
-                              ei_widget_t *parent,
-                              void *user_data,
-                              ei_widget_destructor_t destructor)
+void ei_toplevel_configure(ei_widget_t *widget,
+                           ei_size_t *requested_size,
+                           ei_color_t *color,
+                           int *border_width,
+                           char **title,
+                           ei_bool_t *closable,
+                           ei_axis_set_t *resizable,
+                           ei_size_t **min_size)
 {
-    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
-    {
-        if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
-        {
-            ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
-            /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
-            class->wclass = liste_widgetclass->first_widgetclass;
-            class->wclass->setdefaultsfunc(class); /* Notre nouveau widget prend les paramètres par défaut */
-            class->parent = parent;
-            class->user_data = user_data;
-            class->destructor = destructor;
-            return class;
-        }
-        else
-        {
-            liste_widgetclass = liste_widgetclass->next;
-        }
-    }
-    return NULL;
+    ((ei_toplevel_t *)widget)->requested_size = requested_size;
+    ((ei_toplevel_t *)widget)->color = color;
+    ((ei_toplevel_t *)widget)->border_width = border_width;
+    ((ei_toplevel_t *)widget)->title = title;
+    ((ei_toplevel_t *)widget)->closable = closable;
+    ((ei_toplevel_t *)widget)->resizable = resizable;
+    ((ei_toplevel_t *)widget)->min_size = min_size;
 }
