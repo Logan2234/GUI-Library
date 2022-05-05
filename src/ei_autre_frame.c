@@ -6,8 +6,6 @@
 
 struct ei_widget_t* frame_allocfunc(void)
 {
-    // ei_widget_t *widget_frame = calloc(1, sizeof(ei_widget_t));
-
     ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
     return (ei_widget_t*)widget_frame;
 }
