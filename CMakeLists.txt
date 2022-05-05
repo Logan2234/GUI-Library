@@ -93,7 +93,7 @@ set(LIB_EI_SOURCES
 	  ${SRC}/ei_autre_placer.c
       ${SRC}/ei_autre_frame.c
 	  ${SRC}/ei_autre_button.c 
-	  ${SRC}/ei_draw_auxiliaire.c)
+	  ${SRC}/ei_autre_draw.c)
 
 add_library(ei STATIC			${LIB_EI_SOURCES})
 
