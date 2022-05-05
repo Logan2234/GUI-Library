@@ -1,16 +1,16 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
 
-extern struct liste_geometrymanager *liste_geometry_manager;
+extern struct liste_geometrymanager *liste_geometrymanager;
 
 void ei_geometrymanager_register (ei_geometrymanager_t* geometrymanager)
 {
-    if (liste_geometry_manager->geometrymanager_cell == NULL){
-        liste_geometry_manager->geometrymanager_cell = geometrymanager;
+    if (liste_geometrymanager->geometrymanager_cell == NULL){
+        liste_geometrymanager->geometrymanager_cell = geometrymanager;
     }
     else
     {
-        struct liste_geometrymanager *sent = liste_geometry_manager;
+        struct liste_geometrymanager *sent = liste_geometrymanager;
         while (sent->next != NULL)
         {
             sent = sent->next;
