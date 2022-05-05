@@ -16,3 +16,13 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
  * Entrée : rectangle ei_rect_t, rayon et position. 0 si c'est tout le rectangle, 1 la partie haute, 2 partie base
  * Sortie : liste chainée */
 ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle, uint32_t rayon, uint32_t orientation);
+
+/* Fonction pour dessiner un button
+ * Entrée : celles de ei_draw_polygon mais avec un rectangle et un rayon à la place du firstpoint
+ * Sortie : rien. Le button est dessiné */
+void ei_draw_button		(ei_surface_t			surface,
+                            ei_rect_t* rectangle,
+                            uint32_t rayon,
+                            ei_color_t			color,
+                            const ei_rect_t*		clipper);
+// TODO
