@@ -11,6 +11,6 @@
  *
  * Return : liste chainée de points formant un arc */
 ei_linked_point_t* ei_draw_arc (ei_point_t center,
-                                int rayon,
+                                uint32_t rayon,
                                 float angle_debut,
                                 float angle_fin);

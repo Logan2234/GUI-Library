@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-/*
+
 ei_linked_point_t* ei_draw_arc (ei_point_t center,
                                 uint32_t rayon,
                                 float angle_debut,
@@ -33,4 +33,3 @@ ei_linked_point_t* ei_draw_arc (ei_point_t center,
     }
     return liste_point;
 }
-*/
