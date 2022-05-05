@@ -1,9 +1,7 @@
-#include "ei_widget.h"
-#include "ei_autre_frame.h"
-#include "ei_autre_button.h"
-#include "ei_autre_struct.h"
-
 #include <string.h>
+
+#include "ei_widget.h"
+#include "ei_autre_struct.h"
 
 extern struct liste_widgetclass *liste_widgetclass;
 

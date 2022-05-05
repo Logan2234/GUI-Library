@@ -1,4 +1,4 @@
-#include "ei_autre_frame.h"
+#include "ei_autre_struct.h"
 #include "ei_application.h"
 #include "ei_draw.h"
 #include "ei_widgetclass.h"

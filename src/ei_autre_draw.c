@@ -1,9 +1,9 @@
-#include "ei_draw.h"
-#include "hw_interface.h"
-#include "ei_autre_draw.h"
 #include <math.h>
 #include <stdlib.h>
 
+#include "ei_draw.h"
+#include "hw_interface.h"
+#include "ei_autre_draw.h"
 
 ei_linked_point_t* ei_draw_arc (ei_point_t center,
                                 uint32_t rayon,

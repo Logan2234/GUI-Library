@@ -1,8 +1,6 @@
 #include "ei_application.h"
 #include "ei_geometrymanager.h"
-#include "ei_autre_frame.h"
 #include "ei_widgetclass.h"
-#include "ei_autre_button.h"
 #include "ei_autre_struct.h"
 
 struct liste_widgetclass *liste_widgetclass;
