@@ -51,7 +51,7 @@ typedef struct ei_toplevel_t
     char **title;
     ei_bool_t *closable;
     ei_axis_set_t *resizable;
-    ei_size_t **min_size
+    ei_size_t **min_size;
 } ei_toplevel_t;
 
 ei_widgetclass_t *return_class_toplevel(); /* Fonction de retour de la class toplevel */

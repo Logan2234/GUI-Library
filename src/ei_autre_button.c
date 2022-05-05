@@ -12,7 +12,6 @@ struct ei_widget_t *button_allocfunc(void)
 
 void button_releasefunc(struct ei_widget_t *widget)
 {
-
     free((ei_button_t *)widget);
 }
 

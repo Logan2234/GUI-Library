@@ -12,15 +12,11 @@ void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
     {
         struct liste_geometrymanager *sent = liste_geometrymanager;
         while (sent->next != NULL)
-        {
             sent = sent->next;
-            if (sent->geometrymanager_cell == NULL)
-            {
-                struct liste_geometrymanager *new_cell = calloc(1, sizeof(struct liste_geometrymanager));
-                new_cell->geometrymanager_cell = geometrymanager;
-                sent->next = new_cell;
-            }
-        }
+            
+        struct liste_geometrymanager *new_cell = calloc(1, sizeof(struct liste_geometrymanager));
+        new_cell->geometrymanager_cell = geometrymanager;
+        sent->next = new_cell;
     }
 }
 

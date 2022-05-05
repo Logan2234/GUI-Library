@@ -20,7 +20,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_widgetclass_register(return_class_frame());
     ei_widgetclass_register(return_class_button());
     ei_widgetclass_register(return_class_toplevel());
-    
     /* Enregistrement des différents gestionnaires de géométrie */
     ei_geometrymanager_register(return_geometry_manager_placer());
     
