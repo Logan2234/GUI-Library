@@ -13,13 +13,18 @@ static ei_widget_t *widget_racine;
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
     hw_init();
+    
     liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
     liste_geometrymanager = calloc(1, sizeof(struct liste_geometrymanager));
+    
     /* Enregistrement des différentes classes de widget */
     ei_widgetclass_register(return_class_frame());
     ei_widgetclass_register(return_class_button());
+    ei_widgetclass_register(return_class_toplevel());
+    
     /* Enregistrement des différents gestionnaires de géométrie */
     ei_geometrymanager_register(return_geometry_manager_placer());
+    
     /* Création du widget root et de ses surfaces */
     widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
     racine_surface = hw_create_window(main_window_size, fullscreen);
@@ -40,8 +45,9 @@ void ei_app_run()
     }
 }
 
-void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregistrer les widgets */ // TODO
+void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregistrer les widgets */ 
 {
+    // TODO
     /*
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
         liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
