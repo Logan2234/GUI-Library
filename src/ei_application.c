@@ -5,6 +5,7 @@
 #include "ei_autre_struct.h"
 
 struct liste_widgetclass *liste_widgetclass;
+struct liste_geometrymanager *liste_geometrymanager;
 static ei_surface_t racine_surface;
 static ei_surface_t pick_surface;
 static ei_widget_t *widget_racine;
@@ -14,7 +15,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     hw_init();
     liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
     ei_widgetclass_register(return_class_frame());
-    // ei_geometrymanager_register();
+    ei_geometrymanager_register(return_geometry_manager_placer());
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
