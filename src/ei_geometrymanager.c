@@ -138,6 +138,6 @@ void ei_place(ei_widget_t *widget,
         }
     }
     widget->screen_location.top_left = *top_left;
-    free(top_left);
-    free(parent);
+    //free(top_left);
+    //free(parent);
 }
