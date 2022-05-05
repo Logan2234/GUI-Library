@@ -1,5 +1,6 @@
 #include "ei_widget.h"
 #include "ei_autre_frame.h"
+#include "ei_autre_button.h"
 #include "ei_autre_struct.h"
 
 #include <string.h>
@@ -30,6 +31,38 @@ void ei_frame_configure(ei_widget_t *widget,
     ((ei_frame_t*)widget)->img = img;
     ((ei_frame_t*)widget)->img_rect = img_rect;
     ((ei_frame_t*)widget)->img_anchor = img_anchor;
+}
+
+void ei_button_configure(ei_widget_t*	    widget,
+                                            ei_size_t*		requested_size,
+                                            const ei_color_t*	color,
+                                            int*			border_width,
+                                            int*			corner_radius,
+                                            ei_relief_t*		relief,
+                                            char**			text,
+                                            ei_font_t*		text_font,
+                                            ei_color_t*		text_color,
+                                            ei_anchor_t*		text_anchor,
+                                            ei_surface_t*		img,
+                                            ei_rect_t**		img_rect,
+                                            ei_anchor_t*		img_anchor,
+                                            ei_callback_t*		callback,
+                                            void**			user_param)
+{
+    ((ei_button_t*)widget)->requested_size = requested_size;
+    ((ei_button_t*)widget)->color = color;
+    ((ei_button_t*)widget)->border_width = border_width;
+    ((ei_button_t*)widget)->corner_radius = corner_radius;
+    ((ei_button_t*)widget)->relief = relief;
+    ((ei_button_t*)widget)->text = text;
+    ((ei_button_t*)widget)->text_font = text_font;
+    ((ei_button_t*)widget)->text_color = text_color;
+    ((ei_button_t*)widget)->text_anchor = text_anchor;
+    ((ei_button_t*)widget)->img = img;
+    ((ei_button_t*)widget)->img_rect = img_rect;
+    ((ei_button_t*)widget)->img_anchor = img_anchor;
+    ((ei_button_t*)widget)->callback = callback;
+    ((ei_button_t*)widget)->user_param = user_param;
 }
 
 ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
