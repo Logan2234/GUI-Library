@@ -22,12 +22,15 @@ void ei_place(ei_widget_t *widget,
               float *rel_height)
 {
     /* J'ai pas fait avec les relatives uniquement avec les absolus pour tester au début*/
-    ei_point_t *top_left = (ei_point_t)(0,0);
+    ei_point_t *top_left;
+    top_left->x =0;
+    top_left->y = 0;
     ei_widget_t *parent = widget->parent;
-    int width_parent = 0;
-    int height_parent = 0;
+    int width_parent;
+    int height_parent;
     if (parent != NULL){
-        top_left->x = parent->screen_location.top_left.y;
+        //printf("%d", top_left->x);
+        top_left->x = parent->screen_location.top_left.x;
         top_left->y = parent->screen_location.top_left.x;
         width_parent = parent->screen_location.size.width;
         height_parent = parent->screen_location.size.height;
@@ -39,7 +42,8 @@ void ei_place(ei_widget_t *widget,
     height2 = ((height == NULL) ? widget->requested_size.height : *height); 
     height2 += *rel_height;
     width2 = ((width == NULL) ? widget->requested_size.width : *width);
-    
+    width2 += *rel_widtht;
+
     widget->screen_location.size.width = width2; /* parent->screen_location->size->width * rel_width; */
     widget->screen_location.size.height = height2; /*parent->screen_location->size->height * rel_height;*/
     
