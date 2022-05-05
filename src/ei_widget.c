@@ -5,6 +5,20 @@
 
 extern struct liste_widgetclass *liste_widgetclass;
 
+void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
+{
+    if (pere->children_head == NULL)
+    {
+        pere->children_head = fils;
+        pere->children_tail = fils;
+    }
+    else
+    {
+        pere->children_tail->next_sibling = fils;
+        pere->children_tail = fils;
+    }
+}
+
 ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
                               ei_widget_t *parent,
                               void *user_data,
@@ -15,18 +29,21 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
         if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
         {
             ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
+
             /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
             class->wclass = liste_widgetclass->first_widgetclass;
             class->wclass->setdefaultsfunc(class); /* Notre nouveau widget prend les paramètres par défaut */
             class->parent = parent;
             class->user_data = user_data;
             class->destructor = destructor;
+
+            /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils */
+            ajout_relation_parent(parent, class);
+
             return class;
         }
         else
-        {
             liste_widgetclass = liste_widgetclass->next;
-        }
     }
     return NULL;
 }
