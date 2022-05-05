@@ -22,13 +22,22 @@ void ei_place(ei_widget_t *widget,
               float *rel_height)
 {
     /* J'ai pas fait avec les relatives uniquement avec les absolus pour tester au début*/
+    ei_point_t *top_left = (ei_point_t)(0,0);
     ei_widget_t *parent = widget->parent;
-    ei_point_t *top_left = malloc(sizeof(ei_point_t));
+    int width_parent = 0;
+    int height_parent = 0;
+    if (parent != NULL){
+        top_left->x = parent->screen_location.top_left.y;
+        top_left->y = parent->screen_location.top_left.x;
+        width_parent = parent->screen_location.size.width;
+        height_parent = parent->screen_location.size.height;
+    }
+
     int width2;
     int height2;
 
     height2 = ((height == NULL) ? widget->requested_size.height : *height); 
-
+    height2 += *rel_height;
     width2 = ((width == NULL) ? widget->requested_size.width : *width);
     
     widget->screen_location.size.width = width2; /* parent->screen_location->size->width * rel_width; */
@@ -36,15 +45,15 @@ void ei_place(ei_widget_t *widget,
     
     if (anchor == NULL)
     {
-            top_left -> x = *x;
-            top_left -> y = *y;    
+            top_left -> x += *x + *rel_x * width_parent;
+            top_left -> y += *y + *rel_y * height_parent;    
     }
     else
     {
         switch (*anchor){
             case ei_anc_none:
-                top_left -> x = *x;
-                top_left -> y = *y;
+                top_left -> x = *x + *rel_x;
+                top_left -> y = *y + *rel_y;
             case ei_anc_center:
                 top_left->x = *x - width2/2;
                 top_left->y = *y - height2/2;
