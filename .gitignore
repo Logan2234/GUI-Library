@@ -80,3 +80,10 @@ cmake-build-release
 cmake/frame
 cmake/minimal
 cmake/nos_tests
+cmake/button
+cmake/freq_counter
+cmake/hello_world
+cmake/minesweeper
+cmake/parsing
+cmake/puzzle
+cmake/two048
