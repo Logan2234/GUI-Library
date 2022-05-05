@@ -52,6 +52,8 @@ void ei_app_free()
     //     liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
     //     liste_widgetclass = liste_widgetclass->next;
     // }
+    ei_widget_t *current_widget = ei_app_root_widget();
+    // while;
 
     /* On libère la liste chaînée des widget class */
     while (liste_widgetclass != NULL)
@@ -74,3 +76,20 @@ ei_widget_t *ei_app_root_widget(void)
 {
     return widget_racine;
 }
+
+ei_surface_t ei_app_root_surface(void)
+{
+    return racine_surface;
+}
+
+void ei_app_invalidate_rect(ei_rect_t* rect)
+{
+    // TODO
+}
+
+void ei_app_quit_request(void)
+{
+    // TODO
+}
+
+

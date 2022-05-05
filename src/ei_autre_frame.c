@@ -12,7 +12,6 @@ struct ei_widget_t *frame_allocfunc(void)
 
 void frame_releasefunc(struct ei_widget_t *widget)
 {
-
     free((ei_frame_t *)widget);
 }
 
