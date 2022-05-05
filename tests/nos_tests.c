@@ -15,27 +15,47 @@ extern struct liste_geometrymanager *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
 
+/* 
+    Fonction qui va nous servir pour les tests
+    Elle permet d'afficher toutes les relations père-fils des widgets
+*/
+void print_widget_and_family(ei_widget_t *widget){
+    ei_widget_t *current_widget = widget;
+    if (current_widget->next_sibling != NULL)
+        print_widget_and_family(current_widget->next_sibling);
+
+    if (current_widget->children_head != NULL)
+        print_widget_and_family(current_widget->children_head);
+
+    if (widget->parent != NULL)
+        printf("%s -> %s\n", widget->parent->wclass->name, widget->wclass->name);
+    else
+        printf("Racine: %s\n", widget->wclass->name);
+}
+
 /*
-    Test basique avec affichage d'une fenêtre vide de taille 600x600
-    puis en plein écran
+    Test des fonctions:
+    - ei_app_create
+    - ei_app_run
 */
 int test_1()
 {
     ei_app_create(screen_size, EI_FALSE);
     ei_app_run();
-    ei_app_free();
     ei_app_create(screen_size, EI_TRUE);
     ei_app_run();
-    ei_app_free();
     return (EXIT_SUCCESS);
 }
 
 /*
-    Test pour savoir si tout les widgets et geometry manager sont enregistrés
+    Test des fonctions:
+    - ei_widgetclass_register
+    - ei_geometrymanager_register
+    - ei_app_free pour les listes chaînées des geometry managers et des widget class
 */
 int test_2()
 {
-    printf("\n===== AVANT APPEL DE ei_app_create =====\n");
+    printf("\n===== BEFORE CALLING ei_app_create =====\n");
     printf("Widget class: ");
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
     {
@@ -49,10 +69,13 @@ int test_2()
         printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
         liste_geometrymanager = liste_geometrymanager->next;
     }
+
+    printf("END\n========================================\n\nPress RETURN to continue and register widget class and geometry manager\n");
+    getchar();
 
     ei_app_create(screen_size, EI_FALSE);
 
-    printf("END\n\n===== APRÈS APPEL DE ei_app_create =====\n");
+    printf("===== AFTER CALLING ei_app_create =====\n");
     printf("Widget class: ");
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
     {
@@ -66,14 +89,36 @@ int test_2()
         printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
         liste_geometrymanager = liste_geometrymanager->next;
     }
-    printf("END\n");
+    
+    printf("END\n=======================================\n\nPress RETURN to continue and free widget class and geometry manager\n");
+    getchar();
+
     ei_app_free();
+    
+    printf("===== AFTER CALLING ei_app_free =====\n");
+    printf("Widget class: ");
+    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
+    {
+        printf("%s -> ", liste_widgetclass->first_widgetclass->name);
+        liste_widgetclass = liste_widgetclass->next;
+    }
+    printf("END\n");
+    printf("Geometry manager: ");
+    while (liste_geometrymanager != NULL && liste_geometrymanager->geometrymanager_cell != NULL)
+    {
+        printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
+        liste_geometrymanager = liste_geometrymanager->next;
+    }
+    printf("END\n=====================================\n");
+
     return (EXIT_SUCCESS);
 }
 
-/* Test des fonctions:
-   - ei_app_root_widget qui récupère le widget frame racine
-   - ei_frame_configure qui change les paramètres de ce frame racine */
+/* 
+    Test des fonctions:
+    - ei_app_root_widget
+    - ei_frame_configure
+*/
 int test_3()
 {
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
@@ -88,7 +133,63 @@ int test_3()
     return (EXIT_SUCCESS);
 }
 
-/*  */
+/* 
+    Test des fonctions:
+    - ei_widget_create pour les trois widgets définis
+    - ei_app_free avec les widgets
+*/
+int test_4()
+{
+    ei_app_create(screen_size, EI_FALSE);
+
+    printf("===== BEFORE CREATING WIDGETS =====\n\n");
+
+    ei_widget_t *root = ei_app_root_widget();
+
+    print_widget_and_family(root);
+
+    printf("\n===== AFTER CREATING WIDGETS =====\n\n");
+    /* On créé les widgets comme ci:
+                    -> FRAME -> (BUTTON -> TOPLEVEL) & (FRAME)
+        FRAME(root) -> BUTTON -> (FRAME) & (BUTTON -> TOPLEVEL)
+                    -> TOPLEVEL -> (BUTTON) & (FRAME) & (BUTTON)
+    */
+
+    printf("On créé l'arbre de widgets suivant:\n(il faut lire du bas à droite vers le haut à gauche)\n\n\
+    \t\t-> FRAME -> BUTTON -> TOPLEVEL\n\
+    \t\t\t\t\b\b\b\b\b\b\b-> FRAME\n\n\
+    FRAME(root) -> BUTTON -> FRAME\n\
+    \t\t\t\t\b\b\b\b\b\b-> BUTTON -> TOPLEVEL\n\n\
+    \t\t\t\t\b\b\b\b-> BUTTON\n\
+    \t\t-> TOPLEVEL -> FRAME\n\
+    \t\t\t\t\b\b\b\b-> BUTTON\n\n");
+
+    printf("Press RETURN to continue create widgets\n");
+    getchar();
+
+    ei_widget_t *frame_root = ei_widget_create("frame", root, NULL, NULL);
+    ei_widget_t *button_root = ei_widget_create("button", root, NULL, NULL);
+    
+    ei_widget_t *button = ei_widget_create("button", frame_root, NULL, NULL);
+    ei_widget_t *frame = ei_widget_create("frame", frame_root, NULL, NULL);
+    ei_widget_t *toplevel = ei_widget_create("toplevel", button, NULL, NULL);
+    
+    ei_widget_t *frame2 = ei_widget_create("frame", button_root, NULL, NULL);
+    ei_widget_t *button2 = ei_widget_create("button", button_root, NULL, NULL);
+    ei_widget_t *toplevel2 = ei_widget_create("toplevel", button2, NULL, NULL);
+
+    ei_widget_t *toplevel_root = ei_widget_create("toplevel", root, NULL, NULL);
+    ei_widget_t *button3 = ei_widget_create("button", toplevel_root, NULL, NULL);
+    ei_widget_t *frame3 = ei_widget_create("frame", toplevel_root, NULL, NULL);
+    ei_widget_t *button4 = ei_widget_create("button", toplevel_root, NULL, NULL);
+
+    print_widget_and_family(root);
+
+    ei_app_free();
+
+    return (EXIT_SUCCESS);
+}
+
 
 /*
  main --
@@ -138,8 +239,8 @@ int main(int argc, char **argv)
         retour = test_2();
     else if (!strcmp(argv[1], "test3"))
         retour = test_3();
-    // else if (!strcmp(argv[1], "test4"))
-    //     retour = test_4();
+    else if (!strcmp(argv[1], "test4"))
+        retour = test_4();
     // else if (!strcmp(argv[1], "test5"))
     //     retour = test_5();
     // else if (!strcmp(argv[1], "test6"))
