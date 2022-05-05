@@ -71,8 +71,12 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+.DS_Store
 .idea
+cmake-build-debug
+cmake-build-release
 
+# Executable
 cmake/frame
 cmake/minimal
 cmake/nos_tests
