@@ -1,6 +1,7 @@
 #include "ei_application.h"
 #include "ei_geometrymanager.h"
 #include "ei_widgetclass.h"
+#include "ei_event.h"
 #include "ei_autre_struct.h"
 
 struct liste_widgetclass *liste_widgetclass;
@@ -33,7 +34,10 @@ void ei_app_run()
     racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    getchar();
+    struct ei_event_t* event = malloc(sizeof(ei_event_t));
+    while(event->type != ei_ev_mouse_move) {
+        hw_event_wait_next(event);
+    }
 }
 
 void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregistrer les widgets */ // TODO
