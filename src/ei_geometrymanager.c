@@ -46,7 +46,6 @@ void ei_place(ei_widget_t *widget,
 
     widget->screen_location.size.width = width2; /* parent->screen_location->size->width * rel_width; */
     widget->screen_location.size.height = height2; /*parent->screen_location->size->height * rel_height;*/
-    
     if (anchor == NULL)
     {
             top_left -> x += *x + *rel_x * width_parent;
