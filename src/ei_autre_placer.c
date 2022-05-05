@@ -15,4 +15,6 @@ ei_geometrymanager_t *return_geometry_manager_placer()
     placer->runfunc = &placer_runfunc;
     placer->releasefunc = &placer_releasefunc;
     placer->next = NULL;
+
+    return placer;
 }

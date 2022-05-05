@@ -46,6 +46,7 @@ void ei_app_free() /* Il faut créer une liste chainée ou jsp mais pour enregis
         liste_widgetclass = liste_widgetclass->next;
     } */
     free(liste_widgetclass);
+    free(liste_geometrymanager);
 }
 
 ei_widget_t* ei_app_root_widget(void)

@@ -12,3 +12,5 @@ struct liste_geometrymanager
     ei_geometrymanager_t *geometrymanager_cell;
     struct liste_geometrymanager *next;
 };
+
+ei_geometrymanager_t *return_geometry_manager_placer();
