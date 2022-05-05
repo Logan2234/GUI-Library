@@ -38,22 +38,26 @@ void ei_app_run()
     racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    struct ei_event_t *event = malloc(sizeof(ei_event_t));
-    while (event->type != ei_ev_mouse_move)
-    {
-        hw_event_wait_next(event);
-    }
+    getchar();
+}
+
+void free_widgets_and_family(ei_widget_t *widget)
+{
+    ei_widget_t *current_widget = widget;
+    if (current_widget->next_sibling != NULL)
+        free_widgets_and_family(current_widget->next_sibling);
+
+    if (current_widget->children_head != NULL)
+        free_widgets_and_family(current_widget->children_head);
+
+    (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
+    free(widget);
 }
 
 void ei_app_free()
 {
-    // TODO Il faut créer une liste chainée ou jsp mais pour enregistrer les widgets
-    // while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL){
-    //     liste_widgetclass->first_widgetclass->releasefunc(liste_widgetclass->first_widgetclass);
-    //     liste_widgetclass = liste_widgetclass->next;
-    // }
-    ei_widget_t *current_widget = ei_app_root_widget();
-    // while;
+    /* On supprime tout les widgets */
+    free_widgets_and_family(ei_app_root_widget());
 
     /* On libère la liste chaînée des widget class */
     while (liste_widgetclass != NULL)
@@ -70,6 +74,9 @@ void ei_app_free()
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
+
+    /* On libère les ressources créées par hw_init */
+    hw_quit();
 }
 
 ei_widget_t *ei_app_root_widget(void)
@@ -82,7 +89,7 @@ ei_surface_t ei_app_root_surface(void)
     return racine_surface;
 }
 
-void ei_app_invalidate_rect(ei_rect_t* rect)
+void ei_app_invalidate_rect(ei_rect_t *rect)
 {
     // TODO
 }
@@ -91,5 +98,3 @@ void ei_app_quit_request(void)
 {
     // TODO
 }
-
-

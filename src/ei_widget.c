@@ -24,26 +24,27 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
                               void *user_data,
                               ei_widget_destructor_t destructor)
 {
-    while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
+    struct liste_widgetclass *sent = liste_widgetclass;
+    while (sent != NULL && sent->first_widgetclass != NULL)
     {
-        if (!strcmp(liste_widgetclass->first_widgetclass->name, class_name))
+        if (!strcmp(sent->first_widgetclass->name, class_name))
         {
-            ei_widget_t *class = liste_widgetclass->first_widgetclass->allocfunc();
+            ei_widget_t *class = sent->first_widgetclass->allocfunc();
 
             /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
-            class->wclass = liste_widgetclass->first_widgetclass;
+            class->wclass = sent->first_widgetclass;
             class->wclass->setdefaultsfunc(class); /* Notre nouveau widget prend les paramètres par défaut */
             class->parent = parent;
             class->user_data = user_data;
             class->destructor = destructor;
 
-            /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils */
-            ajout_relation_parent(parent, class);
+            /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
+            (parent != NULL) ? ajout_relation_parent(parent, class) : NULL;
 
             return class;
         }
         else
-            liste_widgetclass = liste_widgetclass->next;
+            sent = sent->next;
     }
     return NULL;
 }
