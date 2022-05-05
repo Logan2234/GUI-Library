@@ -137,6 +137,11 @@ target_link_libraries(minesweeper	ei ${PLATFORM_LIB_FLAGS})
 add_executable(parsing			${TESTS_SRC}/parsing.c)
 target_link_libraries(parsing		ei ${PLATFORM_LIB_FLAGS})
 
+# target minimal
+
+add_executable(nos_tests 			${TESTS_SRC}/nos_tests.c)
+target_link_libraries(nos_tests		ei ${PLATFORM_LIB_FLAGS})
+
 # target to build the documentation
 
 add_custom_target(doc doxygen		${DOCS_DIR}/doxygen.cfg WORKING_DIRECTORY ${ROOT_DIR})

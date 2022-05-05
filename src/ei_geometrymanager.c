@@ -1,4 +1,28 @@
 #include "ei_geometrymanager.h"
+#include "ei_autre_struct.h"
+
+extern struct liste_geometrymanager *liste_geometrymanager;
+
+void ei_geometrymanager_register (ei_geometrymanager_t* geometrymanager)
+{
+    if (liste_geometrymanager->geometrymanager_cell == NULL){
+        liste_geometrymanager->geometrymanager_cell = geometrymanager;
+    }
+    else
+    {
+        struct liste_geometrymanager *sent = liste_geometrymanager;
+        while (sent->next != NULL)
+        {
+            sent = sent->next;
+            if (sent->geometrymanager_cell == NULL)
+            {
+                struct liste_geometrymanager *new_cell = calloc(1, sizeof(struct liste_geometrymanager));
+                new_cell->geometrymanager_cell = geometrymanager;
+                sent->next = new_cell;
+            }
+        }
+    }
+}
 
 /*
  Configure la géométrie d'un widget à l'aide du gestionnaire de géométrie "placer".
@@ -114,12 +138,6 @@ ei_geometrymanager_t* ei_geometrymanager_from_name(ei_geometrymanager_name_t nam
 {
 
 }
-
-void ei_geometrymanager_register (ei_geometrymanager_t* geometrymanager)
-{
-
-}
-
 
 void ei_register_placer_manager (void)
 {
