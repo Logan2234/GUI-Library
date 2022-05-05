@@ -36,45 +36,114 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
 }
 
 ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
-                                    uint32_t rayon)
+                                    uint32_t rayon,
+                                    uint32_t orientation)
 {
-    ei_point_t premier_point;
-    premier_point.x = rectangle->top_left.x + (int) rayon;
-    premier_point.y = rectangle->top_left.y + (int) rayon;
-    ei_linked_point_t* liste_point;
-    liste_point = ei_draw_arc(premier_point, rayon, 3.1415, 1.57075);
-    ei_linked_point_t *suivant;
-    suivant = liste_point;
-    while (suivant->next != NULL){
+    if (orientation == 0) {     /* Cas où on dessine toute la forme */
+
+        ei_point_t premier_point;
+        premier_point.x = rectangle->top_left.x + (int) rayon;
+        premier_point.y = rectangle->top_left.y + (int) rayon;
+        ei_linked_point_t *liste_point;
+        liste_point = ei_draw_arc(premier_point, rayon, 3.1415, 1.57075);
+        ei_linked_point_t *suivant;
+        suivant = liste_point;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        ei_linked_point_t *nouveau;
+        premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
+        premier_point.y = rectangle->top_left.y + (int) rayon;
+        nouveau = ei_draw_arc(premier_point, rayon, 1.57075, 0);
+        suivant->next = nouveau;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
+        premier_point.y = rectangle->top_left.y + rectangle->size.height - (int) rayon;
+        nouveau = ei_draw_arc(premier_point, rayon, 0, -1.57075);
+        suivant->next = nouveau;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        premier_point.x = rectangle->top_left.x + (int) rayon;
+        premier_point.y = rectangle->top_left.y + rectangle->size.height - (int) rayon;
         suivant = suivant->next;
+        nouveau = ei_draw_arc(premier_point, rayon, -1.57075, -3.1415);
+        suivant->next = nouveau;
+        return liste_point;
     }
-    ei_linked_point_t *nouveau;
-    nouveau->point.x = suivant->point.x + rectangle->size.width;
-    nouveau->point.y = suivant->point.y;
-    nouveau->next = NULL;
-    suivant->next = nouveau;
-    suivant = suivant->next;
-    nouveau = ei_draw_arc(suivant->point, rayon, 1.57075, 0);
-    suivant->next = nouveau;
-    while (suivant->next != NULL){
+    if (orientation == 1) {     /* Cas où on dessine que la partie haute */
+        int h = rectangle->size.height / 2;
+        ei_point_t premier_point;
+        premier_point.x = rectangle->top_left.x + (int) rayon;
+        premier_point.y = rectangle->top_left.y + (int) rayon;
+        ei_linked_point_t *liste_point;
+        liste_point = ei_draw_arc(premier_point, rayon, 3.1415, 1.57075);
+        ei_linked_point_t *suivant;
+        suivant = liste_point;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        ei_linked_point_t *nouveau;
+        premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
+        premier_point.y = rectangle->top_left.y + (int) rayon;
+        nouveau = ei_draw_arc(premier_point, rayon, 1.57075, 0.7854);
+        suivant->next = nouveau;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        nouveau->point.x = suivant->point.x - h + r * (1 - cos(0.7854));
+        nouveau->point.y = suivant->point.y + h - r * (1 - sin(0.7854));
+        nouveau->next = NULL;
+        suivant->next = nouveau;
         suivant = suivant->next;
-    }
-    nouveau->point.x = suivant->point.x;
-    nouveau->point.y = suivant->point.y + rectangle->size.height;
-    nouveau->next = NULL;
-    suivant->next = nouveau;
-    suivant = suivant->next;
-    nouveau = ei_draw_arc(suivant->point, rayon, 0, -1.57075);
-    suivant->next = nouveau;
-    while (suivant->next != NULL){
+        nouveau->point.x = suivant->point.x - rectangle->size.width + 2 * h;
+        nouveau->point.y = suivant->point.y;
+        nouveau->next = NULL;
+        suivant->next = nouveau;
         suivant = suivant->next;
+        premier_point.x = suivant->point.x - h + r;
+        premier_point.y = suivant->point.y + h - r;
+        nouveau = ei_draw_arc(premier_point, rayon, -2.3562, -3.1415);
+        suivant->next = nouveau;
+        return liste_point;
     }
-    nouveau->point.x = suivant->point.x - rectangle->size.width;
-    nouveau->point.y = suivant->point.y;
-    nouveau->next = NULL;
-    suivant->next = nouveau;
-    suivant = suivant->next;
-    nouveau = ei_draw_arc(suivant->point, rayon, -1.57075, -3.1415);
-    suivant->next = nouveau;
-    return liste_point;
+    if (orientation == 2) {     /* Cas où on dessine que la partie basse */
+        int h = rectangle->size.height / 2;
+        ei_point_t premier_point;
+        premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
+        premier_point.y = rectangle->top_left.y + (int) rayon;
+        ei_linked_point_t *liste_point;
+        liste_point = ei_draw_arc(premier_point, rayon, 0.7854, 0);
+        ei_linked_point_t *suivant;
+        suivant = liste_point;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        ei_linked_point_t *nouveau;
+        premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
+        premier_point.y = rectangle->top_left.y + rectangle->size.height - (int) rayon;
+        nouveau = ei_draw_arc(premier_point, rayon, 0, -1.57075);
+        suivant->next = nouveau;
+        while (suivant->next != NULL) {
+            suivant = suivant->next;
+        }
+        premier_point.x = rectangle->top_left.x + (int) rayon;
+        premier_point.y = rectangle->top_left.y + rectangle->size.height - (int) rayon;
+        suivant = suivant->next;
+        nouveau = ei_draw_arc(premier_point, rayon, -1.57075, -2.3562);
+        suivant->next = nouveau;
+        nouveau->point.x = suivant->point.x + h - r * (1 - cos(0.7854));
+        nouveau->point.y = suivant->point.y - h + r * (1 - sin(0.7854));
+        nouveau->next = NULL;
+        suivant->next = nouveau;
+        suivant = suivant->next;
+        nouveau->point.x = suivant->point.x + rectangle->size.width - 2 * h;
+        nouveau->point.y = suivant->point.y;
+        nouveau->next = NULL;
+        suivant->next = nouveau;
+        return liste_point;
+    }
+    return NULL;
 }
