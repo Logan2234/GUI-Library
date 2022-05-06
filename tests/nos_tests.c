@@ -194,6 +194,7 @@ int test_5()
 {
 	ei_size_t	screen_size		= {600, 600};
 	ei_color_t	root_bgcol		= {0x52, 0x7f, 0xb4, 0xff};
+	ei_color_t	root_bgcol2		= {0xff, 0xff, 0xb4, 0xff};
 
 	ei_widget_t*	frame;
 	ei_widget_t*	frame2;
@@ -201,9 +202,8 @@ int test_5()
 	ei_size_t	frame_size2		= {30,20};
 	int		frame_x			= 150;
 	int		frame_y			= 200;
-	int		frame_z			= 0;
-	float		frame_x_rel			= 1;
-	float		frame_y_rel			= 1;
+	float		frame_x_rel			= 0;
+	float		frame_y_rel			= 0;
 	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
 	ei_relief_t	frame_relief		= ei_relief_raised;
 	int		frame_border_width	= 6;
@@ -218,11 +218,13 @@ int test_5()
 			    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
 			    NULL, NULL, NULL);
 	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
-	frame2 = ei_widget_create("frame", frame, NULL, NULL);
-	ei_frame_configure(frame2, &frame_size2, &root_bgcol,
+	
+    frame2 = ei_widget_create("frame", frame, NULL, NULL);
+	ei_frame_configure(frame2, &frame_size2, &root_bgcol2,
 			    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
 			    NULL, NULL, NULL);
 	ei_place(frame2, NULL, NULL, NULL, NULL, NULL, &frame_x_rel, &frame_y_rel, NULL, NULL );
+
 	/* Run the application's main loop. */
 	ei_app_run();
 

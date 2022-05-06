@@ -8,17 +8,16 @@ uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
     uint32_t red = color.red - '\0';
     uint32_t blue = (color.blue - '\0');
     uint32_t green = (color.green - '\0');
+    int red_i, green_i, blue_i, alpha_i;
+    hw_surface_get_channel_indices(surface, &red_i, &green_i, &blue_i, &alpha_i);
     if (!hw_surface_has_alpha(surface))
     {
-        couleur = (color.red - '\0') * 256 * 256 + (color.blue - '\0') + (color.green - '\0') * 256;
+        couleur += (red_i == 0) ? (color.red - '\0') : (red_i == 1) ? (color.red - '\0') * 256 : (color.red - '\0') * 256 * 256;  
+        couleur += (blue_i == 0) ? (color.blue - '\0') : (blue_i == 1) ? (color.blue - '\0') * 256 : (color.blue - '\0') * 256 * 256;  
+        couleur += (green_i == 0) ? (color.green - '\0') : (green_i == 1) ? (color.green - '\0') * 256 : (color.green - '\0') * 256 * 256;  
     }
     else
     {
-        int red_i;
-        int green_i;
-        int blue_i;
-        int alpha_i;
-        hw_surface_get_channel_indices(surface, &red_i, &green_i, &blue_i, &alpha_i);
         uint32_t alpha = (color.alpha - '\0');
         couleur = 0; // TODO le fait de gérer la transparence si nécessaire
     }
