@@ -31,18 +31,29 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
+void draw_widgets_and_family(ei_widget_t *widget)
+{
+    ei_widget_t *current_widget = widget;
+    if (current_widget->next_sibling != NULL)
+        draw_widgets_and_family(current_widget->next_sibling);
+
+    if (current_widget->children_head != NULL)
+        draw_widgets_and_family(current_widget->children_head);
+    widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL);
+}
+
 void ei_app_run()
 {
-    ei_widget_t *racine = ei_app_root_widget();
     hw_surface_lock(racine_surface);
-    racine->wclass->drawfunc(racine, racine_surface, pick_surface, NULL);
+    // hw_surface_get_buffer(racine_surface); // TODO A utiliser qq part
+    draw_widgets_and_family(widget_racine);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
     struct ei_event_t* event = malloc(sizeof(ei_event_t));
     while(event->type != ei_ev_mouse_buttondown) {
         hw_event_wait_next(event);
     }
-
+    free(event);
 }
 
 void free_widgets_and_family(ei_widget_t *widget)
@@ -60,8 +71,11 @@ void free_widgets_and_family(ei_widget_t *widget)
 
 void ei_app_free()
 {
+    /* On libère les surfaces */
+    hw_surface_free(pick_surface);
+
     /* On supprime tout les widgets */
-    free_widgets_and_family(ei_app_root_widget());
+    free_widgets_and_family(widget_racine);
 
     /* On libère la liste chaînée des widget class */
     while (liste_widgetclass != NULL)

@@ -21,11 +21,12 @@ void ei_widgetclass_register(ei_widgetclass_t *widgetclass)
 
 ei_widgetclass_t *ei_widgetclass_from_name(ei_widgetclass_name_t name)
 {
-    while (strcmp(liste_widgetclass->first_widgetclass->name, name) && liste_widgetclass->next != NULL)
-        liste_widgetclass = liste_widgetclass->next;
+    struct liste_widgetclass *sent = liste_widgetclass;
+    while (strcmp(sent->first_widgetclass->name, name) && sent->next != NULL)
+        sent = sent->next;
 
-    if (!strcmp(liste_widgetclass->first_widgetclass->name, name))
-        return liste_widgetclass->first_widgetclass;
+    if (!strcmp(sent->first_widgetclass->name, name))
+        return sent->first_widgetclass;
 }
 
 void ei_frame_register_class(void)

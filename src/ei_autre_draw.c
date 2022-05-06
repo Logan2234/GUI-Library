@@ -7,12 +7,12 @@
 
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
 {
+    ei_linked_point_t *liste_point;
+    ei_linked_point_t *suivant;
     float longueur_arc = abs((float)rayon * (angle_fin - angle_debut));
     float pas = (angle_fin - angle_debut) / longueur_arc;
-    ei_linked_point_t *liste_point;
     liste_point->point.x = (int)rayon * cos(angle_debut);
     liste_point->point.y = (int)rayon * sin(angle_debut);
-    ei_linked_point_t *suivant;
     suivant = liste_point;
     for (uint32_t i = 1; i <= longueur_arc; i++)
     {

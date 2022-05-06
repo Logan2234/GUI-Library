@@ -27,7 +27,12 @@ void ei_geometrymanager_unmap(ei_widget_t *widget)
 
 ei_geometrymanager_t *ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
 {
-    // TODO
+    struct liste_geometrymanager *sent = liste_geometrymanager;
+    while (strcmp(sent->geometrymanager_cell->name, name) && sent->next != NULL)
+        sent = sent->next;
+
+    if (!strcmp(sent->geometrymanager_cell->name, name))
+        return sent->geometrymanager_cell;
 }
 
 void ei_register_placer_manager(void)
@@ -138,6 +143,4 @@ void ei_place(ei_widget_t *widget,
         }
     }
     widget->screen_location.top_left = *top_left;
-    //free(top_left);
-    //free(parent);
 }

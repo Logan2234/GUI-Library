@@ -2,8 +2,10 @@
 
 #include "ei_widget.h"
 #include "ei_autre_struct.h"
+#include "ei_geometrymanager.h"
 
 extern struct liste_widgetclass *liste_widgetclass;
+extern struct liste_geometrymanager *liste_geometrymanager;
 
 void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 {
@@ -37,7 +39,8 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
             class->parent = parent;
             class->user_data = user_data;
             class->destructor = destructor;
-
+            class->geom_params = (ei_geometry_param_t *)(liste_geometrymanager->geometrymanager_cell);
+            
             /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
             (parent != NULL) ? ajout_relation_parent(parent, class) : NULL;
 
