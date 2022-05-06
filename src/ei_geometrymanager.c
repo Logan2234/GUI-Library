@@ -87,7 +87,7 @@ void ei_place(ei_widget_t *widget,
     if (parent != NULL)
     {
         top_left->x = ((rel_x == NULL) ? 0 : parent->screen_location.top_left.x);
-        top_left->y = ((rel_y == NULL) ? 0 : parent->screen_location.top_left.x);
+        top_left->y = ((rel_y == NULL) ? 0 : parent->screen_location.top_left.y);
         width_parent = parent->screen_location.size.width;
         height_parent = parent->screen_location.size.height;
     }
