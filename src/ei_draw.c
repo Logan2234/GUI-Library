@@ -32,13 +32,13 @@ void ei_fill(ei_surface_t surface,
     uint32_t couleur = ei_map_rgba(surface, *color);
     ei_point_t depart = clipper->top_left;
     ei_size_t main_window_size = hw_surface_get_size(surface);
-    uint32_t *pixel_ptr = (uint32_t *)(hw_surface_get_buffer(surface) + (depart.x + depart.y * main_window_size.width));
+    uint32_t *pixel_ptr = (uint32_t *)(hw_surface_get_buffer(surface)) + (depart.x + depart.y * main_window_size.width);
     for (uint32_t i = 0; i < clipper->size.height; i++)
     {
         for (uint32_t j = 0; j < clipper->size.width; j++)
         {
             *pixel_ptr++ = couleur;
         }
-        pixel_ptr = pixel_ptr + main_window_size.width - clipper->size.width;
+        pixel_ptr += main_window_size.width - clipper->size.width;
     }
 }
