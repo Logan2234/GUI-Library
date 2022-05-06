@@ -93,7 +93,15 @@ void ei_place(ei_widget_t *widget,
     rel_y2 = ((rel_y == NULL) ? 0 : *rel_y);
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
     rel_height2 = ((rel_height == NULL) ? 0 : *rel_height);
-    height2 = ((height == NULL) ? widget->requested_size.height : *height);
+    if (height == NULL){
+        height2 = widget->requested_size.height;
+        printf("on est la\n");
+        printf("taille requise : %i\n", widget->requested_size.height);
+    }
+    else {
+        height2 = *height;
+    }
+    //height2 = ((height == NULL) ? widget->requested_size.height : *height);
     height2 += rel_height2 * height_parent;
     width2 = ((width == NULL) ? widget->requested_size.width : *width);
     width2 += rel_width2 * width_parent;
