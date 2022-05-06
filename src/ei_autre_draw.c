@@ -163,23 +163,13 @@ void ei_draw_button	(ei_surface_t surface, ei_button_t* bouton, int* x, int* y, 
     ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int) ((float)2 / 3) * *(bouton->corner_radius), 1);
 
 
-    ei_color_t color;
-    color.alpha = "0xFF";
-    color.blue = "0x64";
-    color.red = "0x64";
-    color.green = "0x64";
+    ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
     ei_draw_polygon(surface, partie_haute, color, clipper);
 
-    color.alpha = "0xFF";
-    color.blue = "0xB4";
-    color.red = "0xB4";
-    color.green = "0xB4";
+    ei_color_t	color		= {0xB4, 0xB4, 0xB4, 0xff};
     ei_draw_polygon(surface, partie_basse, color, clipper);
 
-    color.alpha = "0xFF";
-    color.blue = "0x8B";
-    color.red = "0x8B";
-    color.green = "0x8B";
+    ei_color_t	color		= {0x8B, 0x8B, 0x8B, 0xff};
     ei_draw_polygon(surface, partie_milieu, color, clipper);
 
 }
