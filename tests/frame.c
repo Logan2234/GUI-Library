@@ -29,8 +29,8 @@ int main(int argc, char** argv)
 	/* Create the application and change the color of the background. */
 	ei_app_create(screen_size, EI_FALSE);
 	printf("Logan tu pues\n");
-    printf("MAIS ARRÊTEZ DE MODIFIER LE FRAME ! \n")
-    printf("Mais tu pues aussi Nils. \n")
+    printf("MAIS ARRÊTEZ DE MODIFIER LE FRAME ! \n");
+    printf("Mais tu pues aussi Nils. \n");
 	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	/* Create, configure and place the frame on screen. */
