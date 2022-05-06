@@ -2,6 +2,7 @@
 #include "ei_draw.h"
 #include "ei_widgetclass.h"
 #include "ei_types.h"
+#include "ei_autre_draw.h"
 #include "ei_autre_struct.h"
 
 struct ei_widget_t *button_allocfunc(void)
@@ -20,13 +21,6 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
     // TODO
 }
 
-/* À vérifier */
-void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
-{
-    // TODO
-    // ei_fill(surface, ((ei_button_t *)widget)->color, clipper);
-    // ei_fill(pick_surface, widget->pick_color, clipper);
-}
 
 void button_setdefaultsfunc(struct ei_widget_t *widget) /* À reviser */
 {
@@ -54,7 +48,7 @@ ei_widgetclass_t *return_class_button(void)
     strcpy(widgetclass_button->name, "button");
     widgetclass_button->allocfunc = &button_allocfunc;
     widgetclass_button->releasefunc = &button_releasefunc;
-    widgetclass_button->drawfunc = &button_drawfunc;
+    widgetclass_button->drawfunc = &ei_draw_button;
     widgetclass_button->setdefaultsfunc = &button_setdefaultsfunc;
     widgetclass_button->geomnotifyfunc = &button_geomnotifyfunc;
     widgetclass_button->next = NULL;
