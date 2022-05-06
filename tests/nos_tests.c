@@ -121,6 +121,7 @@ int test_2()
 */
 int test_3()
 {
+
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
     ei_app_create(screen_size, EI_FALSE);
     ei_widget_t *root = ei_app_root_widget();
@@ -192,7 +193,6 @@ int test_4()
 
 int test_5()
 {
-	ei_size_t	screen_size		= {600, 600};
 	ei_color_t	root_bgcol		= {0x52, 0x7f, 0xb4, 0xff};
 	ei_color_t	root_bgcol2		= {0xff, 0xff, 0xb4, 0xff};
 
@@ -239,6 +239,7 @@ int test_5()
  */
 int main(int argc, char **argv)
 {
+    screen_size = (ei_size_t){600, 600};
     int retour;
 
     if (!strcmp(argv[1], "test1"))
