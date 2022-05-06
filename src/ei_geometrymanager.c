@@ -82,8 +82,8 @@ void ei_place(ei_widget_t *widget,
     int y2;
     int width2;
     int height2;
-    int rel_x2;
-    int rel_y2;
+    float rel_x2;
+    float rel_y2;
     int rel_height2;
     int rel_width2;
 
