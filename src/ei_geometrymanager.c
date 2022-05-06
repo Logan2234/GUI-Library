@@ -107,35 +107,45 @@ void ei_place(ei_widget_t *widget,
         switch (*anchor)
         {
         case ei_anc_none:
-            top_left->x = x2 + rel_x2 * width_parent;
-            top_left->y = y2 + rel_y2 * height_parent;
+            top_left->x += x2 + rel_x2 * width_parent;
+            top_left->y += y2 + rel_y2 * height_parent;
+            break;
         case ei_anc_center:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
-            top_left->y = y2 + rel_y2 * height_parent - height2 / 2;
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
+            top_left->y += y2 + rel_y2 * height_parent - height2 / 2;
+            break;
         case ei_anc_north:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
-            top_left->y = y2 + rel_y2 * height_parent;
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
+            top_left->y += y2 + rel_y2 * height_parent;
+            break;
         case ei_anc_south:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
-            top_left->y = y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2) / 2;
+            top_left->y += y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            break;
         case ei_anc_east:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2);
-            top_left->y = y2 + rel_y2 * height_parent - (height2 + rel_height2) / 2;
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2);
+            top_left->y += y2 + rel_y2 * height_parent - (height2 + rel_height2) / 2;
+            break;
         case ei_anc_west:
-            top_left->x = x2 + rel_x2 * width_parent;
-            top_left->y = y2 + rel_y2 * height_parent - (height2 + rel_height2) / 2;
+            top_left->x += x2 + rel_x2 * width_parent;
+            top_left->y += y2 + rel_y2 * height_parent - (height2 + rel_height2) / 2;
+            break;
         case ei_anc_northeast:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2);
-            top_left->y = y2 + rel_y2 * height_parent;
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2);
+            top_left->y += y2 + rel_y2 * height_parent;
+            break;
         case ei_anc_northwest:
-            top_left->x = x2 + rel_x2 * width_parent;
-            top_left->y = y2 + rel_y2 * height_parent;
+            top_left->x += x2 + rel_x2 * width_parent;
+            top_left->y += y2 + rel_y2 * height_parent;
+            break;
         case ei_anc_southeast:
-            top_left->x = x2 + rel_x2 * width_parent - (width2 + rel_width2);
-            top_left->y = y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            top_left->x += x2 + rel_x2 * width_parent - (width2 + rel_width2);
+            top_left->y += y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            break;
         case ei_anc_southwest:
-            top_left->x = x2 + rel_x2 * width_parent;
-            top_left->y = y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            top_left->x += x2 + rel_x2 * width_parent;
+            top_left->y += y2 + rel_y2 * height_parent - (height2 + rel_height2);
+            break;
         }
     }
     widget->screen_location.top_left = *top_left;
