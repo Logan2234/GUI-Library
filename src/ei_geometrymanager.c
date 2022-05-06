@@ -80,8 +80,8 @@ void ei_place(ei_widget_t *widget,
     int rel_height2;
     int rel_width2;
 
-    x2 = ((x == NULL) ? 0 : *x);
-    y2 = ((y == NULL) ? 0 : *y);
+    x2 = ((x == NULL) ? widget->screen_location.top_left.x : *x);
+    y2 = ((y == NULL) ? widget->screen_location.top_left.y : *y);
     rel_x2 = ((rel_x == NULL) ? 0 : *rel_x);
     rel_y2 = ((rel_y == NULL) ? 0 : *rel_y);
 
@@ -95,14 +95,10 @@ void ei_place(ei_widget_t *widget,
 
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
     rel_height2 = ((rel_height == NULL) ? 0 : *rel_height);
-    if (height == NULL){
-        height2 = widget->requested_size.height;
-    }
-    else {
-        height2 = *height;
-    }
-    //height2 = ((height == NULL) ? widget->requested_size.height : *height);
+    
+    height2 = ((height == NULL) ? widget->requested_size.height : *height);
     height2 += rel_height2 * height_parent;
+    
     width2 = ((width == NULL) ? widget->requested_size.width : *width);
     width2 += rel_width2 * width_parent;
 
@@ -111,8 +107,8 @@ void ei_place(ei_widget_t *widget,
     widget->screen_location.size.height = height2;
     if (anchor == NULL)
     {
-        top_left->x += *x + rel_x2 * width_parent;
-        top_left->y += *y + rel_y2 * height_parent;
+        top_left->x += x2 + rel_x2 * width_parent;
+        top_left->y += y2 + rel_y2 * height_parent;
     }
     else
     {
