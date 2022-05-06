@@ -36,7 +36,6 @@ int main(int argc, char** argv)
 			    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
 			    NULL, NULL, NULL);
 	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
-	printf("%i\n", frame->screen_location.size.height);
 	/* Run the application's main loop. */
 	ei_app_run();
 

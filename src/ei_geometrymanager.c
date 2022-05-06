@@ -95,8 +95,6 @@ void ei_place(ei_widget_t *widget,
     rel_height2 = ((rel_height == NULL) ? 0 : *rel_height);
     if (height == NULL){
         height2 = widget->requested_size.height;
-        printf("on est la\n");
-        printf("taille requise : %i\n", widget->requested_size.height);
     }
     else {
         height2 = *height;
