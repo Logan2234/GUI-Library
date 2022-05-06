@@ -5,7 +5,6 @@
 typedef struct ei_frame_t
 {
     ei_widget_t widget;
-    ei_size_t *requested_size;
     const ei_color_t *color;
     int *border_width;
     ei_relief_t *relief;
@@ -24,7 +23,6 @@ ei_widgetclass_t *return_class_frame(); /* Fonction de retour de la class frame 
 typedef struct ei_button_t
 {
     ei_widget_t widget;
-    ei_size_t *requested_size;
     const ei_color_t *color;
     int *border_width;
     int *corner_radius;
@@ -46,7 +44,6 @@ ei_widgetclass_t *return_class_button(); /* Fonction de retour de la class butto
 typedef struct ei_toplevel_t
 {
     ei_widget_t widget;
-    ei_size_t *requested_size;
     ei_color_t *color;
     int *border_width;
     char **title;

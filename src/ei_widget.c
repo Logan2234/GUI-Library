@@ -65,7 +65,7 @@ void ei_frame_configure(ei_widget_t *widget,
                         ei_rect_t **img_rect,
                         ei_anchor_t *img_anchor)
 {
-    ((ei_frame_t *)widget)->requested_size = requested_size;
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     ((ei_frame_t *)widget)->color = color;
     ((ei_frame_t *)widget)->border_width = border_width;
     ((ei_frame_t *)widget)->relief = relief;
@@ -94,7 +94,7 @@ void ei_button_configure(ei_widget_t *widget,
                          ei_callback_t *callback,
                          void **user_param)
 {
-    ((ei_button_t *)widget)->requested_size = requested_size;
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     ((ei_button_t *)widget)->color = color;
     ((ei_button_t *)widget)->border_width = border_width;
     ((ei_button_t *)widget)->corner_radius = corner_radius;
@@ -119,7 +119,7 @@ void ei_toplevel_configure(ei_widget_t *widget,
                            ei_axis_set_t *resizable,
                            ei_size_t **min_size)
 {
-    ((ei_toplevel_t *)widget)->requested_size = requested_size;
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     ((ei_toplevel_t *)widget)->color = color;
     ((ei_toplevel_t *)widget)->border_width = border_width;
     ((ei_toplevel_t *)widget)->title = title;

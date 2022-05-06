@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "ei_draw.h"
-#include "hw_interface.h"
 #include "ei_autre_draw.h"
 
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
@@ -153,7 +152,7 @@ void ei_draw_button	(ei_surface_t surface, ei_button_t* bouton, int* x, int* y, 
     ei_rect_t *rectangle;
     rectangle->top_left.x = *x;
     rectangle->top_left.y = *y;
-    rectangle->size = *(bouton->requested_size);
+    rectangle->size = (bouton->widget.requested_size);
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
     rectangle->top_left.x = *x + ((int) ((float)1 / 3) * *(bouton->corner_radius));

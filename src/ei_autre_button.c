@@ -3,7 +3,6 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 #include "ei_autre_draw.h"
-#include "ei_autre_struct.h"
 
 struct ei_widget_t *button_allocfunc(void)
 {

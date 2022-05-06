@@ -4,10 +4,7 @@
 
 #endif // PROJET_C_EI_AUTRE_DRAW_H
 
-#include "ei_widgetclass.h"
-#include "ei_widget.h"
 #include "ei_autre_struct.h"
-
 
 /* Fonction qui crée un arc à partir d'un centre, un rayon et des angles de début et fin
  *

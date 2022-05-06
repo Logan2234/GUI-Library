@@ -42,7 +42,6 @@ void draw_widgets_and_family(ei_widget_t *widget)
         draw_widgets_and_family(current_widget->children_head);
     printf("%d\n", widget->screen_location.size.height);
     printf("coucou toi\n");
-
 }
 
 void ei_app_run()
