@@ -64,30 +64,25 @@ void ei_place(ei_widget_t *widget,
     /* Initialisation des variables pour contrer les NULL */
     ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
 
-    ei_widget_t *parent = widget->parent;
     int width_parent = widget->requested_size.width;
     int height_parent = widget->requested_size.height;
 
-    int x2;
-    int y2;
-    int width2;
-    int height2;
-    float rel_x2;
-    float rel_y2;
-    int rel_height2;
-    int rel_width2;
+    int x2, y2;
+    int width2, height2;
+    float rel_x2, rel_y2;
+    int rel_height2, rel_width2;
 
     x2 = ((x == NULL) ? widget->screen_location.top_left.x : *x);
     y2 = ((y == NULL) ? widget->screen_location.top_left.y : *y);
     rel_x2 = ((rel_x == NULL) ? 0 : *rel_x);
     rel_y2 = ((rel_y == NULL) ? 0 : *rel_y);
 
-    if (parent != NULL)
+    if (widget->parent != NULL)
     {
-        top_left->x = ((rel_x != NULL) ? parent->screen_location.top_left.x : 0);
-        top_left->y = ((rel_y == NULL) ? parent->screen_location.top_left.y : 0);
-        width_parent = parent->screen_location.size.width;
-        height_parent = parent->screen_location.size.height;
+        top_left->x = ((rel_x != NULL) ? widget->parent->screen_location.top_left.x : 0);
+        top_left->y = ((rel_y != NULL) ? widget->parent->screen_location.top_left.y : 0);
+        width_parent = widget->parent->screen_location.size.width;
+        height_parent = widget->parent->screen_location.size.height;
     }
 
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
