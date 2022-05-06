@@ -62,9 +62,7 @@ void ei_place(ei_widget_t *widget,
               float *rel_height)
 {
     /* Initialisation des variables pour contrer les NULL */
-    ei_point_t *top_left;
-    top_left->x = 0;
-    top_left->y = 0;
+    ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
 
     ei_widget_t *parent = widget->parent;
     int width_parent = widget->requested_size.width;
@@ -86,8 +84,8 @@ void ei_place(ei_widget_t *widget,
 
     if (parent != NULL)
     {
-        top_left->x = ((rel_x == NULL) ? 0 : parent->screen_location.top_left.x);
-        top_left->y = ((rel_y == NULL) ? 0 : parent->screen_location.top_left.y);
+        top_left->x = ((rel_x != NULL) ? parent->screen_location.top_left.x : 0);
+        top_left->y = ((rel_y == NULL) ? parent->screen_location.top_left.y : 0);
         width_parent = parent->screen_location.size.width;
         height_parent = parent->screen_location.size.height;
     }
@@ -146,4 +144,5 @@ void ei_place(ei_widget_t *widget,
         }
     }
     widget->screen_location.top_left = *top_left;
+    free(top_left);
 }
