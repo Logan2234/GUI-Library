@@ -13,7 +13,7 @@ void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
         struct liste_geometrymanager *sent = liste_geometrymanager;
         while (sent->next != NULL)
             sent = sent->next;
-            
+
         struct liste_geometrymanager *new_cell = calloc(1, sizeof(struct liste_geometrymanager));
         new_cell->geometrymanager_cell = geometrymanager;
         sent->next = new_cell;
@@ -70,7 +70,6 @@ void ei_place(ei_widget_t *widget,
     int width_parent = widget->requested_size.width;
     int height_parent = widget->requested_size.height;
 
-
     int x2;
     int y2;
     int width2;
@@ -86,24 +85,24 @@ void ei_place(ei_widget_t *widget,
     rel_y2 = ((rel_y == NULL) ? 0 : *rel_y);
 
     if (parent != NULL)
-    {   
-        top_left->x = ((rel_x2 == NULL) ? 0 : parent->screen_location.top_left.x);
-        top_left->y = ((rel_y2 == NULL) ? 0 : parent->screen_location.top_left.x);
+    {
+        top_left->x = ((rel_x == NULL) ? 0 : parent->screen_location.top_left.x);
+        top_left->y = ((rel_y == NULL) ? 0 : parent->screen_location.top_left.x);
         width_parent = parent->screen_location.size.width;
         height_parent = parent->screen_location.size.height;
     }
 
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
     rel_height2 = ((rel_height == NULL) ? 0 : *rel_height);
-    
+
     height2 = ((height == NULL) ? widget->requested_size.height : *height);
     height2 += rel_height2 * height_parent;
-    
+
     width2 = ((width == NULL) ? widget->requested_size.width : *width);
     width2 += rel_width2 * width_parent;
 
     /* Maintenant on remplace dans les données de widgets */
-    widget->screen_location.size.width = width2;  
+    widget->screen_location.size.width = width2;
     widget->screen_location.size.height = height2;
     if (anchor == NULL)
     {
