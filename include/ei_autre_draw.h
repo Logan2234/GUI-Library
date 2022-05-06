@@ -19,4 +19,4 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle, uint32_t rayon, uint8
 /* Fonction pour dessiner un button
  * Entrée : celles de ei_draw_polygon mais avec un rectangle et un rayon à la place du firstpoint
  * Sortie : rien. Le button est dessiné */
-void ei_draw_button	(ei_surface_t surface, ei_button_t* bouton, int* x, int* y, const ei_rect_t* clipper);
+void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper);

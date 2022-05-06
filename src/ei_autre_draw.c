@@ -147,16 +147,20 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
 }
 
 /* Pour l'instant, le bouton n'est que relevé */
-void ei_draw_button	(ei_surface_t surface, ei_button_t* bouton, int* x, int* y, const ei_rect_t* clipper)
+void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
+
+
+    ei_button_t* bouton = (ei_button_t *) widget;
+    int x = widget->screen_location.top_left.x;
+    int y = widget->screen_location.top_left.y;
     ei_rect_t *rectangle;
-    rectangle->top_left.x = *x;
-    rectangle->top_left.y = *y;
+    *rectangle = widget->screen_location;
     rectangle->size = (bouton->widget.requested_size);
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
-    rectangle->top_left.x = *x + ((int) ((float)1 / 3) * *(bouton->corner_radius));
-    rectangle->top_left.y = *y + ((int) ((float)1 / 3) * *(bouton->corner_radius));
+    rectangle->top_left.x = x + ((int) ((float)1 / 3) * *(bouton->corner_radius));
+    rectangle->top_left.y = y + ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->size.width -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->size.height -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
     ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int) ((float)2 / 3) * *(bouton->corner_radius), 1);
