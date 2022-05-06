@@ -94,8 +94,8 @@ void ei_place(ei_widget_t *widget,
     width2 += rel_width2 * width_parent;
 
     /* Maintenant on remplace dans les données de widgets */
-    widget->screen_location.size.width = width2;   /* parent->screen_location->size->width * rel_width; */
-    widget->screen_location.size.height = height2; /*parent->screen_location->size->height * rel_height;*/
+    widget->screen_location.size.width = width2;  
+    widget->screen_location.size.height = height2;
     if (anchor == NULL)
     {
         top_left->x += *x + rel_x2 * width_parent;
