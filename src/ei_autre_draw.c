@@ -166,10 +166,10 @@ void ei_draw_button	(ei_surface_t surface, ei_button_t* bouton, int* x, int* y, 
     ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
     ei_draw_polygon(surface, partie_haute, color, clipper);
 
-    ei_color_t	color		= {0xB4, 0xB4, 0xB4, 0xff};
-    ei_draw_polygon(surface, partie_basse, color, clipper);
+    ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
+    ei_draw_polygon(surface, partie_basse, color2, clipper);
 
-    ei_color_t	color		= {0x8B, 0x8B, 0x8B, 0xff};
-    ei_draw_polygon(surface, partie_milieu, color, clipper);
+    ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
+    ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
 }
