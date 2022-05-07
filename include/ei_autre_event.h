@@ -18,3 +18,5 @@ typedef struct liste_events_widgets
 void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param);
 
 void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget);
+
+void recherche_traitants_event(struct liste_events_widgets *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget);
