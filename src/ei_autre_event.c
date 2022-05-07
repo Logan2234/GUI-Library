@@ -1,10 +1,10 @@
 #include "ei_autre_event.h"
 
-void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_event_t event, ei_callback_t callback, void *user_param)
+void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param)
 {
     struct liste_events_widgets *nouveau;
     nouveau->widget = widget;
-    nouveau->event = event;
+    nouveau->eventtype = eventtype;
     nouveau->callback = callback;
     nouveau->user_param = user_param;
     nouveau->next = NULL;

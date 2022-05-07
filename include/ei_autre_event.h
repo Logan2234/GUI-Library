@@ -9,12 +9,12 @@
 typedef struct liste_events_widgets
 {
     ei_widget_t widget;
-    ei_event_t event;
+    ei_eventtype_t eventtype;
     ei_callback_t callback;
     void *user_param;
     struct liste_events_widgets* next;
 } liste_events;
 
-void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_event_t event, ei_callback_t callback, void *user_param);
+void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param);
 
 void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget);
