@@ -46,6 +46,25 @@ void ei_unbind(ei_eventtype_t eventtype,
                ei_callback_t callback,
                void *user_param)
 {
-    // TODO
+    if (liste_widget != NULL) {
+        struct liste_events_widgets *suivant = liste_widget;
+        struct liste_events_widgets *ancien;
+        if (suivant->widget.pick_id == widget->pick_id && suivant->callback == callback && suivant->user_param == user_param && suivant->eventtype == eventtype) {
+            liste_widget = liste_widget->next;
+            return;
+        }
+        while (suivant->next != NULL) {
+            if (suivant->next->widget.pick_id == widget->pick_id && suivant->callback == callback && suivant->user_param == user_param && suivant->eventtype == eventtype) {
+                suivant->next = suivant->next->next;
+                return;
+            } else {
+                ancien = suivant;
+                suivant = suivant->next;
+            }
+        }
+        if (suivant->widget.pick_id == widget->pick_id && suivant->callback == callback && suivant->user_param == user_param && suivant->eventtype == eventtype) {
+            ancien->next = NULL;
+        }
+    }
 }
 
