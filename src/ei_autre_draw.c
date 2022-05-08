@@ -115,8 +115,7 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
         ei_point_t premier_point;
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int) rayon;
         premier_point.y = rectangle->top_left.y + (int) rayon;
-        ei_linked_point_t *liste_point;
-        liste_point = ei_draw_arc(premier_point, rayon, (float) 0.7854, (float) 0);
+        ei_linked_point_t *liste_point = ei_draw_arc(premier_point, rayon, (float) 0.7854, (float) 0);
         ei_linked_point_t *suivant = liste_point;
         while (suivant->next != NULL) {
             suivant = suivant->next;
@@ -131,9 +130,7 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
         }
         premier_point.x = rectangle->top_left.x + (int) rayon;
         premier_point.y = rectangle->top_left.y + rectangle->size.height - (int) rayon;
-        suivant = suivant->next;
-        nouveau = ei_draw_arc(premier_point, rayon, (float) -1.57075, (float) -2.3562);
-        suivant->next = nouveau;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float) -1.57075, (float) -2.3562);
         nouveau->point.x = suivant->point.x + h - (int)((float)rayon * (1. - (float) cos(0.7854)));
         nouveau->point.y = suivant->point.y - h + (int)((float)rayon * (1. - (float) sin(0.7854)));
         nouveau->next = NULL;
@@ -168,12 +165,14 @@ void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
 
     ei_button_t* bouton = (ei_button_t *) widget;
+    int x = widget->screen_location.top_left.x;
+    int y = widget->screen_location.top_left.y;
     ei_rect_t *rectangle = &(widget->screen_location);
     rectangle->size = (bouton->widget.requested_size);
 
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
-/*
+
     rectangle->top_left.x = x + ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->top_left.y = y + ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->size.width -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
@@ -190,10 +189,8 @@ void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
-    int x = widget->screen_location.top_left.x;
-    int y = widget->screen_location.top_left.y;
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
-     */
+
 }
