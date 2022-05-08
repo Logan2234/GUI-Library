@@ -10,7 +10,9 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
     ei_linked_point_t *suivant;
     int longueur_arc = abs((int)((float)rayon * (angle_fin - angle_debut)));
     float pas = (angle_fin - angle_debut) / (float) longueur_arc;
-    liste_point->point.x = center.x + (int)((float) rayon * cosf(angle_debut));
+    /*
+    liste_point->point.x = center.x + (int)((float) rayon * (float) cos(angle_debut));
+
     liste_point->point.y = center.y + (int)((float) rayon * sinf(angle_debut));
     suivant = liste_point;
     for (uint32_t i = 1; i <= longueur_arc; i++)
@@ -30,6 +32,7 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
             suivant->next = nouveau;
         }
     }
+     */
     return liste_point;
 }
 
@@ -73,11 +76,12 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
     }
     if (orientation == 1) {     /* Cas où on dessine que la partie haute */
         int h = rectangle->size.height / 2;
+        ei_linked_point_t *liste_point;
         ei_point_t premier_point;
         premier_point.x = rectangle->top_left.x + (int) rayon;
         premier_point.y = rectangle->top_left.y + (int) rayon;
-        ei_linked_point_t *liste_point;
         liste_point = ei_draw_arc(premier_point, rayon, (float) 3.1415, (float) 1.57075);
+        /*
         ei_linked_point_t *suivant;
         suivant = liste_point;
         while (suivant->next != NULL) {
@@ -105,6 +109,7 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
         premier_point.y = suivant->point.y + h - (int) rayon;
         nouveau = ei_draw_arc(premier_point, rayon, (float) -2.3562, (float) -3.1415);
         suivant->next = nouveau;
+        */
         return liste_point;
     }
     if (orientation == 2) {     /* Cas où on dessine que la partie basse */
@@ -147,18 +152,19 @@ ei_linked_point_t* ei_rounded_frame (ei_rect_t* rectangle,
 }
 
 /* Pour l'instant, le bouton n'est que relevé */
+
 void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
 
 
     ei_button_t* bouton = (ei_button_t *) widget;
-    int x = widget->screen_location.top_left.x;
-    int y = widget->screen_location.top_left.y;
-    ei_rect_t *rectangle;
-    *rectangle = widget->screen_location;
+    ei_rect_t *rectangle = &(widget->screen_location);
     rectangle->size = (bouton->widget.requested_size);
+
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
+    /*
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
+
     rectangle->top_left.x = x + ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->top_left.y = y + ((int) ((float)1 / 3) * *(bouton->corner_radius));
     rectangle->size.width -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
@@ -174,5 +180,7 @@ void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
     ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
-
+*/
+    int x = widget->screen_location.top_left.x;
+    int y = widget->screen_location.top_left.y;
 }
