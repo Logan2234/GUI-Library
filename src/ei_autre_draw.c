@@ -179,12 +179,14 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
     ei_color_t color3 = {0x8B, 0x8B, 0x8B, 0xff};
     
+    /* On dessine d'abord les parties hautes et basses */
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
-
+    
     ei_draw_polygon(surface, partie_haute, color, clipper);
     ei_draw_polygon(surface, partie_basse, color2, clipper);
 
+    /* Puis on dessine un plus petit rounded rectangle par dessus */
     rectangle->top_left.x += *((ei_toplevel_t *)widget)->border_width;
     rectangle->top_left.y += *((ei_toplevel_t *)widget)->border_width;
     rectangle->size.width -= 2 * *((ei_toplevel_t *)widget)->border_width;
@@ -192,6 +194,14 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2 * (float)(*(bouton->corner_radius)) / 3), 0);
 
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
+
+    /* Gestion de l'affichage du text sur le bouton */
+    ei_color_t text_color = *((ei_button_t *)widget)->text_color;
+    char **text = ((ei_button_t *)widget)->text;
+    ei_point_t point = widget->screen_location.top_left;
+    ei_font_t font = *((ei_button_t *)widget)->text_font;
+
+    ei_draw_text(surface, &point, *text, &font, text_color, NULL);
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
