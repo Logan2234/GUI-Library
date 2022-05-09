@@ -3,12 +3,14 @@
 #include "ei_widgetclass.h"
 #include "ei_event.h"
 #include "ei_autre_struct.h"
+#include "ei_autre_event.h"
 
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
 static ei_surface_t racine_surface;
 static ei_surface_t pick_surface;
 static ei_widget_t *widget_racine;
+extern struct liste_events_widgets *liste_widget;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -48,9 +50,21 @@ void ei_app_run()
     draw_widgets_and_family(widget_racine);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    struct ei_event_t* event = malloc(sizeof(ei_event_t));
-    while(event->type != ei_ev_mouse_buttondown) {
+    /*struct ei_event_t* event = malloc(sizeof(ei_event_t));
+     while(event->type != ei_ev_mouse_buttondown) {
         hw_event_wait_next(event);
+    } TRUC DE NILS
+    free(event);*/
+    struct ei_event_t* event = malloc(sizeof(ei_event_t));
+    while (!ei_app_quit_request())
+    {
+        hw_event_wait_next(event);
+        if (event->type < 5){
+            recherche_traitants_event(liste_widget, event, EI_FALSE, NULL);
+        } else {
+            // TODO
+            // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
+        }
     }
     free(event);
 }
