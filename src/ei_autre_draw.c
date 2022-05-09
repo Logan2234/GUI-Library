@@ -52,7 +52,7 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
                                     uint8_t orientation)
 {
     if (orientation == 0) /* Cas où on dessine toute la forme */
-    { 
+    {
         ei_point_t premier_point;
         premier_point.x = rectangle->top_left.x + (int)rayon;
         premier_point.y = rectangle->top_left.y + (int)rayon;
@@ -79,7 +79,7 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         return liste_point;
     }
     if (orientation == 1) /* Cas où on dessine que la partie haute */
-    { 
+    {
         int h = rectangle->size.height / 2;
         ei_linked_point_t *liste_point;
         ei_point_t premier_point;
@@ -108,14 +108,15 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         nouveau2->point.y = suivant->point.y + rectangle->size.height - 2 * h;
         suivant->next = nouveau2;
         suivant = suivant->next;
-        
+
         premier_point.x = suivant->point.x - h + (int)rayon;
         premier_point.y = suivant->point.y + h - (int)rayon;
-        suivant->next = ei_draw_arc(premier_point, rayon, (float)-2.3562, (float)-3.1415);;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)-2.3562, (float)-3.1415);
+        ;
         return liste_point;
     }
     if (orientation == 2) /* Cas où on dessine que la partie basse */
-    { 
+    {
         int h = rectangle->size.height / 2;
         ei_point_t premier_point;
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int)rayon;
@@ -173,26 +174,33 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 {
     ei_button_t *bouton = (ei_button_t *)widget;
     ei_rect_t *rectangle = &(widget->screen_location);
-    
+
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
-    ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
+    ei_color_t color = {0x64, 0x64, 0x64, 0xff};
     ei_draw_polygon(surface, partie_haute, color, clipper);
-    
+
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
     ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
     ei_draw_polygon(surface, partie_basse, color2, clipper);
-    
-    rectangle->top_left.x += *(bouton->corner_radius)/2;
-    rectangle->top_left.y += *(bouton->corner_radius)/2;
+
+    rectangle->top_left.x += *(bouton->corner_radius) / 2;
+    rectangle->top_left.y += *(bouton->corner_radius) / 2;
     rectangle->size.width -= *(bouton->corner_radius);
     rectangle->size.height -= *(bouton->corner_radius);
 
-    ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2*(float)(*(bouton->corner_radius))/3), 0);
+    ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2 * (float)(*(bouton->corner_radius)) / 3), 0);
 
-    ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
+    ei_color_t color3 = {0x8B, 0x8B, 0x8B, 0xff};
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
-    //  free_linked_point_pointeur(partie_haute);
-    //  free_linked_point_pointeur(partie_basse);
-    //  free_linked_point_pointeur(partie_milieu);
+    ei_color_t color = *((ei_button_t *)widget)->text_color;
+    const char *text = ((ei_button_t *)widget)->text;
+    const ei_point_t *point = widget->screen_location.top_left;
+    ei_font_t font = *((ei_button_t *)widget)->text_font;
+
+    ei_draw_text(surface, point, text, font, color, NULL);
+
+    free_linked_point_pointeur(partie_haute);
+    free_linked_point_pointeur(partie_basse);
+    free_linked_point_pointeur(partie_milieu);
 }
