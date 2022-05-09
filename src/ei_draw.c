@@ -53,7 +53,6 @@ void ei_fill(ei_surface_t surface,
                 if (pixel_ptr > last_pixel_of_current_line)
                 {
                     z = j;
-                    printf("%d\n", z);
                     break;
                 }
                 *pixel_ptr++ = couleur;
@@ -76,7 +75,6 @@ void ei_fill(ei_surface_t surface,
             }
 
         }
-        printf("%d\n",a);
     }
     else
     {
