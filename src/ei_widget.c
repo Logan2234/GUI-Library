@@ -66,16 +66,16 @@ void ei_frame_configure(ei_widget_t *widget,
                         ei_anchor_t *img_anchor)
 {
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
-    ((ei_frame_t *)widget)->color = color;
-    ((ei_frame_t *)widget)->border_width = border_width;
-    ((ei_frame_t *)widget)->relief = relief;
+    ((ei_frame_t *)widget)->color = (color != NULL) ? color : &ei_default_background_color;
+    ((ei_frame_t *)widget)->border_width = (border_width != NULL) ? border_width : 0;
+    ((ei_frame_t *)widget)->relief = (relief != NULL) ? relief : ei_relief_none;
     ((ei_frame_t *)widget)->text = text;
-    ((ei_frame_t *)widget)->text_font = text_font;
-    ((ei_frame_t *)widget)->text_color = text_color;
-    ((ei_frame_t *)widget)->text_anchor = text_anchor;
+    ((ei_frame_t *)widget)->text_font = (text_font != NULL) ? text_font : ei_default_font;
+    ((ei_frame_t *)widget)->text_color = (text_color != NULL) ? text_color : &ei_font_default_color;
+    ((ei_frame_t *)widget)->text_anchor = (text_anchor != NULL) ? text_anchor : ei_anc_center;
     ((ei_frame_t *)widget)->img = img;
     ((ei_frame_t *)widget)->img_rect = img_rect;
-    ((ei_frame_t *)widget)->img_anchor = img_anchor;
+    ((ei_frame_t *)widget)->img_anchor = (img_anchor != NULL) ? img_anchor : ei_anc_center;
 }
 
 void ei_button_configure(ei_widget_t *widget,
@@ -95,17 +95,17 @@ void ei_button_configure(ei_widget_t *widget,
                          void **user_param)
 {
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
-    ((ei_button_t *)widget)->color = color;
-    ((ei_button_t *)widget)->border_width = border_width;
-    ((ei_button_t *)widget)->corner_radius = corner_radius;
-    ((ei_button_t *)widget)->relief = relief;
+    ((ei_button_t *)widget)->color = (color != NULL) ? color : &ei_default_background_color;
+    ((ei_button_t *)widget)->border_width = (border_width != NULL) ? border_width : k_default_button_border_width;
+    ((ei_button_t *)widget)->corner_radius = (corner_radius != NULL) ? corner_radius : 0;
+    ((ei_button_t *)widget)->relief = (relief != NULL) ? relief : ei_relief_raised;
     ((ei_button_t *)widget)->text = text;
-    ((ei_button_t *)widget)->text_font = text_font;
-    ((ei_button_t *)widget)->text_color = text_color;
-    ((ei_button_t *)widget)->text_anchor = text_anchor;
+    ((ei_button_t *)widget)->text_font = (text_font != NULL) ? text_font : ei_default_font;
+    ((ei_button_t *)widget)->text_color = (text_color != NULL) ? text_color : &ei_font_default_color;
+    ((ei_button_t *)widget)->text_anchor = (text_anchor != NULL) ? text_anchor : ei_anc_center;
     ((ei_button_t *)widget)->img = img;
     ((ei_button_t *)widget)->img_rect = img_rect;
-    ((ei_button_t *)widget)->img_anchor = img_anchor;
+    ((ei_button_t *)widget)->img_anchor = (img_anchor != NULL) ? img_anchor : ei_anc_center;
     ((ei_button_t *)widget)->callback = callback;
     ((ei_button_t *)widget)->user_param = user_param;
 }
@@ -119,11 +119,11 @@ void ei_toplevel_configure(ei_widget_t *widget,
                            ei_axis_set_t *resizable,
                            ei_size_t **min_size)
 {
-    widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
-    ((ei_toplevel_t *)widget)->color = color;
-    ((ei_toplevel_t *)widget)->border_width = border_width;
-    ((ei_toplevel_t *)widget)->title = title;
-    ((ei_toplevel_t *)widget)->closable = closable;
-    ((ei_toplevel_t *)widget)->resizable = resizable;
-    ((ei_toplevel_t *)widget)->min_size = min_size;
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : (ei_size_t){320, 240};
+    ((ei_toplevel_t *)widget)->color = (color != NULL) ? color : &ei_default_background_color;
+    ((ei_toplevel_t *)widget)->border_width = (border_width != NULL) ? border_width : 4;
+    ((ei_toplevel_t *)widget)->title = (title != NULL) ? title : "Toplevel";
+    ((ei_toplevel_t *)widget)->closable = (closable != NULL) ? closable : EI_TRUE;
+    ((ei_toplevel_t *)widget)->resizable = (resizable != NULL) ? resizable : ei_axis_both;
+    ((ei_toplevel_t *)widget)->min_size = (min_size != NULL) ? min_size : &(ei_size_t){160, 120};
 }

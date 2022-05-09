@@ -71,9 +71,7 @@ void ei_fill(ei_surface_t surface,
     else
     {
         for (uint32_t i = 0; i < main_window_size.width * main_window_size.height; i++)
-        {
             *origine++ = couleur;
-        }
     }
 }
 
@@ -91,6 +89,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
     printf("coucou\n");
     //ei_copy_surface(surface, &dest, *surface_source, &source, color.alpha);
     }
+
 }
 
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
