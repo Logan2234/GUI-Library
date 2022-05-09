@@ -21,10 +21,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
     }
 }
 
-ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
-                              ei_widget_t *parent,
-                              void *user_data,
-                              ei_widget_destructor_t destructor)
+ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *parent, void *user_data, ei_widget_destructor_t destructor)
 {
     struct liste_widgetclass *sent = liste_widgetclass;
     while (sent != NULL && sent->first_widgetclass != NULL)
@@ -52,10 +49,9 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name,
     return NULL;
 }
 
-void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei_color_t *color,
-                        int *border_width, ei_relief_t *relief, char **text,
-                        ei_font_t *text_font, ei_color_t *text_color, ei_anchor_t *text_anchor,
-                        ei_surface_t *img, ei_rect_t **img_rect, ei_anchor_t *img_anchor)
+void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei_color_t *color, int *border_width,
+                        ei_relief_t *relief, char **text, ei_font_t *text_font, ei_color_t *text_color,
+                        ei_anchor_t *text_anchor, ei_surface_t *img, ei_rect_t **img_rect, ei_anchor_t *img_anchor)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
@@ -109,14 +105,8 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     bouton->user_param = user_param;
 }
 
-void ei_toplevel_configure(ei_widget_t *widget,
-                           ei_size_t *requested_size,
-                           ei_color_t *color,
-                           int *border_width,
-                           char **title,
-                           ei_bool_t *closable,
-                           ei_axis_set_t *resizable,
-                           ei_size_t **min_size)
+void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_color_t *color, int *border_width,
+                           char **title, ei_bool_t *closable, ei_axis_set_t *resizable, ei_size_t **min_size)
 {
     const int constante = 4;
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
