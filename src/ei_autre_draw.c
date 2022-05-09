@@ -61,28 +61,21 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         while (suivant->next != NULL)
             suivant = suivant->next;
 
-        ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int)rayon;
         premier_point.y = rectangle->top_left.y + (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)1.57075, (float)0);
-        suivant->next = nouveau;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)1.57075, (float)0);
         while (suivant->next != NULL)
             suivant = suivant->next;
 
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int)rayon;
         premier_point.y = rectangle->top_left.y + rectangle->size.height - (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)0, (float)-1.57075);
-        suivant->next = nouveau;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)0, (float)-1.57075);
         while (suivant->next != NULL)
             suivant = suivant->next;
 
         premier_point.x = rectangle->top_left.x + (int)rayon;
         premier_point.y = rectangle->top_left.y + rectangle->size.height - (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)-1.57075, (float)-3.1415);
-        suivant->next = nouveau;
-        // TEMP
-        ei_draw_polygon(ei_app_root_surface(), liste_point, ei_default_background_color, NULL);
-        //
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)-1.57075, (float)-3.1415);
         return liste_point;
     }
     if (orientation == 1) /* Cas où on dessine que la partie haute */
@@ -93,35 +86,32 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         premier_point.x = rectangle->top_left.x + (int)rayon;
         premier_point.y = rectangle->top_left.y + (int)rayon;
         liste_point = ei_draw_arc(premier_point, rayon, (float)3.1415, (float)1.57075);
-
         ei_linked_point_t *suivant = liste_point;
         while (suivant->next != NULL)
             suivant = suivant->next;
 
-        ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int)rayon;
         premier_point.y = rectangle->top_left.y + (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)1.57075, (float)0.7854);
-        suivant->next = nouveau;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)1.57075, (float)0.7854);
         while (suivant->next != NULL)
             suivant = suivant->next;
 
+        ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
         nouveau->point.x = suivant->point.x - h + (int)((float)rayon * (1. - (float)cos(0.7854)));
         nouveau->point.y = suivant->point.y + h - (int)((float)rayon * (1. - (float)sin(0.7854)));
         nouveau->next = NULL;
         suivant->next = nouveau;
         suivant = suivant->next;
 
-        nouveau->point.x = suivant->point.x - rectangle->size.width + 2 * h;
-        nouveau->point.y = suivant->point.y;
-        nouveau->next = NULL;
-        suivant->next = nouveau;
+        ei_linked_point_t *nouveau2 = malloc(sizeof(ei_linked_point_t));
+        nouveau2->point.x = suivant->point.x - rectangle->size.width + 2 * h;
+        nouveau2->point.y = suivant->point.y + rectangle->size.height - 2 * h;
+        suivant->next = nouveau2;
         suivant = suivant->next;
+        
         premier_point.x = suivant->point.x - h + (int)rayon;
         premier_point.y = suivant->point.y + h - (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)-2.3562, (float)-3.1415);
-        suivant->next = nouveau;
-
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)-2.3562, (float)-3.1415);;
         return liste_point;
     }
     if (orientation == 2) /* Cas où on dessine que la partie basse */
@@ -135,27 +125,30 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         while (suivant->next != NULL)
             suivant = suivant->next;
 
-        ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
         premier_point.x = rectangle->top_left.x + rectangle->size.width - (int)rayon;
         premier_point.y = rectangle->top_left.y + rectangle->size.height - (int)rayon;
-        nouveau = ei_draw_arc(premier_point, rayon, (float)0, (float)-1.57075);
-        suivant->next = nouveau;
+        suivant->next = ei_draw_arc(premier_point, rayon, (float)0, (float)-1.57075);
         while (suivant->next != NULL)
             suivant = suivant->next;
 
         premier_point.x = rectangle->top_left.x + (int)rayon;
         premier_point.y = rectangle->top_left.y + rectangle->size.height - (int)rayon;
         suivant->next = ei_draw_arc(premier_point, rayon, (float)-1.57075, (float)-2.3562);
+        while (suivant->next != NULL)
+            suivant = suivant->next;
+
+        ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
         nouveau->point.x = suivant->point.x + h - (int)((float)rayon * (1. - (float)cos(0.7854)));
         nouveau->point.y = suivant->point.y - h + (int)((float)rayon * (1. - (float)sin(0.7854)));
         nouveau->next = NULL;
         suivant->next = nouveau;
         suivant = suivant->next;
-        nouveau->point.x = suivant->point.x + rectangle->size.width - 2 * h;
-        nouveau->point.y = suivant->point.y;
-        nouveau->next = NULL;
-        suivant->next = nouveau;
 
+        ei_linked_point_t *nouveau2 = malloc(sizeof(ei_linked_point_t));
+        nouveau2->point.x = suivant->point.x + rectangle->size.width - 2 * h;
+        nouveau2->point.y = suivant->point.y;
+        nouveau2->next = NULL;
+        suivant->next = nouveau2;
         return liste_point;
     }
     return NULL;
@@ -178,37 +171,28 @@ void free_linked_point_pointeur(ei_linked_point_t *liste)
 
 void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
-
-    printf("putain \n");
     ei_button_t *bouton = (ei_button_t *)widget;
-    int x = widget->screen_location.top_left.x;
-    int y = widget->screen_location.top_left.y;
     ei_rect_t *rectangle = &(widget->screen_location);
+    
+    ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
+    ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
+    ei_draw_polygon(surface, partie_haute, color, clipper);
+    
+    ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
+    ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
+    ei_draw_polygon(surface, partie_basse, color2, clipper);
+    
+    rectangle->top_left.x += *(bouton->corner_radius)/2;
+    rectangle->top_left.y += *(bouton->corner_radius)/2;
+    rectangle->size.width -= *(bouton->corner_radius);
+    rectangle->size.height -= *(bouton->corner_radius);
 
-    // ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
-    // ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
+    ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2*(float)(*(bouton->corner_radius))/3), 0);
 
-    // rectangle->top_left.x = x + ((int) ((float)1 / 3) * *(bouton->corner_radius));
-    // rectangle->top_left.y = y + ((int) ((float)1 / 3) * *(bouton->corner_radius));
-    // rectangle->size.width -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
-    // rectangle->size.height -= 2 * ((int) ((float)1 / 3) * *(bouton->corner_radius));
-    ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(((float)2 / 3) * (float)(*(bouton->corner_radius))), 0);
+    ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
+    ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
-    /* hw_surface_lock(surface);
-     //ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
-     //ei_draw_polygon(surface, partie_haute, color, clipper);
-
-     //ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
-     //ei_draw_polygon(surface, partie_basse, color2, clipper);
-
-     ei_color_t color3		= {0x8B, 0x8B, 0x8B, 0xff};
-     ei_draw_polygon(surface, partie_milieu, color3, clipper);
-
-     hw_surface_unlock(surface);
-     hw_surface_update_rects(surface, NULL);
-
-     //free_linked_point_pointeur(partie_haute);
-     //free_linked_point_pointeur(partie_basse);
-     free_linked_point_pointeur(partie_milieu);
- */
+    //  free_linked_point_pointeur(partie_haute);
+    //  free_linked_point_pointeur(partie_basse);
+    //  free_linked_point_pointeur(partie_milieu);
 }
