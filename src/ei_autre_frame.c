@@ -69,9 +69,10 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         new_clipper->size.width -= 2 * border_size;
         ei_fill(surface, ((ei_frame_t *)widget)->color, new_clipper);
     }
-    else{
-        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);}
+    else ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
     ei_fill(pick_surface, widget->pick_color, clipper);
+    (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, &widget->screen_location.top_left, ((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
+    ei_surface_t *image = (((ei_frame_t *)widget)->img != NULL) ? hw_image_load(((ei_frame_t *)widget)->img, surface) : NULL;
 }
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
