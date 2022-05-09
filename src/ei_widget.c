@@ -84,7 +84,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                          ei_anchor_t *text_anchor, ei_surface_t *img, ei_rect_t **img_rect,
                          ei_anchor_t *img_anchor, ei_callback_t *callback, void **user_param)
 {
-    ei_button_t *bouton = (ei_frame_t *)widget;
+    ei_button_t *bouton = (ei_button_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     bouton->color = (color != NULL) ? color : (bouton->color == NULL) ? &ei_default_background_color
                                                                       : bouton->color;
@@ -92,7 +92,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                                                                                                   : bouton->border_width;
     bouton->corner_radius = (corner_radius != NULL) ? corner_radius : (bouton->corner_radius == NULL) ? (int *)&k_default_button_corner_radius
                                                                                                       : bouton->corner_radius;
-    bouton->relief = (relief != NULL) ? relief : (bouton->relief == NULL) ? ei_relief_raised
+    bouton->relief = (relief != NULL) ? relief : (bouton->relief == NULL) ? (ei_relief_t *)ei_relief_raised
                                                                           : bouton->relief;
     bouton->text = text;
     bouton->text_font = (text_font != NULL) ? text_font : (bouton->text_font == NULL) ? ei_default_font
@@ -123,9 +123,9 @@ void ei_toplevel_configure(ei_widget_t *widget,
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240}
                                                                                                               : widget->requested_size;
     toplevel->color = (color != NULL) ? color : (&toplevel->color == NULL) ? (ei_color_t *)&ei_default_background_color
-                                                                           : &toplevel->color;
+                                                                           : toplevel->color;
     toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante
-                                                                                                      : &toplevel->border_width;
+                                                                                                      : toplevel->border_width;
     toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? (char **)"Toplevel"
                                                                           : toplevel->title;
     toplevel->closable = (closable != NULL) ? closable : (toplevel->closable == NULL) ? (ei_bool_t *)EI_TRUE
