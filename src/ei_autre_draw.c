@@ -196,12 +196,13 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
     /* Gestion de l'affichage du text sur le bouton */
+    //widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     ei_color_t text_color = *((ei_button_t *)widget)->text_color;
     char **text = ((ei_button_t *)widget)->text;
     ei_point_t point = widget->screen_location.top_left;
-    ei_font_t font = *((ei_button_t *)widget)->text_font;
+    //ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (NULL) : *((ei_button_t *)widget)->text_font;
 
-    ei_draw_text(surface, &point, *text, &font, text_color, NULL);
+    ei_draw_text(surface, &point, *text, NULL, text_color, NULL);
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
