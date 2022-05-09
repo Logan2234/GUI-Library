@@ -17,19 +17,60 @@ void frame_releasefunc(struct ei_widget_t *widget)
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
-    if (((ei_frame_t *)widget)->relief != ei_relief_none && ((ei_frame_t *)widget)->border_width > 0)
+    int h = widget->requested_size.height/2;
+    if (((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
     {
-        if (((ei_frame_t *)widget)->relief == ei_relief_raised)
-        {
+        ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
+        zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
+        zone_rectangle->next->next = calloc(1, sizeof(ei_linked_point_t));
+        zone_rectangle->next->next->next = calloc(1, sizeof(ei_linked_point_t));
+        zone_rectangle->next->next->next->next = calloc(1, sizeof(ei_linked_point_t));
 
+        /* D'abord on ajoute le point supérieur gauche */
+        zone_rectangle->point = widget->screen_location.top_left;
+        /* Puis le coin supérieur droit */
+        zone_rectangle->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y};
+        /* Ajout des points intermédiaires */
+        zone_rectangle->next->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width - h, widget->screen_location.top_left.y + h};
+        zone_rectangle->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x + h, widget->screen_location.top_left.y + h};
+        /* Et enfin le coin inférieur gauche pour créer la partie supérieure */
+        zone_rectangle->next->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x, widget->screen_location.top_left.y + widget->requested_size.height};
+
+        if (*((ei_frame_t *)widget)->relief == ei_relief_raised)
+        {
+            ei_draw_polygon(surface, zone_rectangle, ei_default_light_background_color, NULL);
+
+            /* Le premier point devient le point en bas à droite pour dessiner la partie inférieure */
+            zone_rectangle->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y + widget->requested_size.height};
+
+            ei_draw_polygon(surface, zone_rectangle, ei_default_dark_background_color, NULL);
         }
         else
         {
-            
+            ei_draw_polygon(surface, zone_rectangle, ei_default_dark_background_color, NULL);
+
+            /* Le premier point devient le point en bas à droite pour dessiner la partie inférieure */
+            zone_rectangle->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y + widget->requested_size.height};
+
+            ei_draw_polygon(surface, zone_rectangle, ei_default_light_background_color, NULL);
         }
+        free(zone_rectangle->next->next->next->next);
+        free(zone_rectangle->next->next->next);
+        free(zone_rectangle->next->next);
+        free(zone_rectangle->next);
+        free(zone_rectangle);
+
+        /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
+        ei_rect_t *new_clipper = clipper;
+        int border_size = *((ei_frame_t *)widget)->border_width;
+        new_clipper->top_left.x += border_size;
+        new_clipper->top_left.y += border_size;
+        new_clipper->size.height -= 2 * border_size;
+        new_clipper->size.width -= 2 * border_size;
+        ei_fill(surface, ((ei_frame_t *)widget)->color, new_clipper);
     }
-    else
-        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+    else{
+        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);}
     ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
@@ -40,15 +81,14 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
 
     widget->user_data = NULL;
-    widget->destructor = NULL; /* Il faut créer la fonction */
+    widget->destructor = NULL;
     widget->parent = NULL;
     widget->children_head = NULL;
     widget->children_tail = NULL;
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
-
-    widget->requested_size = (ei_size_t){600, 600};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){600, 600}};
+    widget->requested_size = (ei_size_t){0, 0};
+    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){0, 0}};
     widget->content_rect = NULL;
 }
 
