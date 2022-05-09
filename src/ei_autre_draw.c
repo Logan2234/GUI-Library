@@ -180,7 +180,7 @@ void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int) ((float)2 / 3) * *(bouton->corner_radius), 1);
 
 
-    /*
+
     hw_surface_lock(surface);
     ei_color_t	color		= {0x64, 0x64, 0x64, 0xff};
     ei_draw_polygon(surface, partie_haute, color, clipper);
@@ -196,5 +196,5 @@ void ei_draw_button	(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
-*/
+
 }
