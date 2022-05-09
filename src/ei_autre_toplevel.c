@@ -36,8 +36,8 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
 
-    widget->requested_size = (ei_size_t){300, 300};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){300, 300}};
+    widget->requested_size = (ei_size_t){320, 240};
+    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
     widget->content_rect = NULL;
 }
 
