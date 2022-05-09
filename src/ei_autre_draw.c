@@ -183,10 +183,10 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
     ei_draw_polygon(surface, partie_basse, color2, clipper);
 
-    rectangle->top_left.x += *(bouton->corner_radius) / 2;
-    rectangle->top_left.y += *(bouton->corner_radius) / 2;
-    rectangle->size.width -= *(bouton->corner_radius);
-    rectangle->size.height -= *(bouton->corner_radius);
+    rectangle->top_left.x += *((ei_toplevel_t *)widget)->border_width;
+    rectangle->top_left.y += *((ei_toplevel_t *)widget)->border_width;
+    rectangle->size.width -= 2 * *((ei_toplevel_t *)widget)->border_width;
+    rectangle->size.height -= 2 * *((ei_toplevel_t *)widget)->border_width;
 
     ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2 * (float)(*(bouton->corner_radius)) / 3), 0);
 
