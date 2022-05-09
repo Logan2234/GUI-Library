@@ -18,8 +18,8 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     // TODO
-    // ei_fill(surface, ((ei_toplevel_t *)widget)->color, clipper);
-    // ei_fill(pick_surface, widget->pick_color, clipper);
+    ei_fill(surface, ((ei_toplevel_t *)widget)->color, clipper);
+    ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)

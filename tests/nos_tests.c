@@ -15,11 +15,12 @@ extern struct liste_geometrymanager *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
 
-/* 
+/*
     Fonction qui va nous servir pour les tests
     Elle permet d'afficher toutes les relations père-fils des widgets
 */
-void print_widget_and_family(ei_widget_t *widget){
+void print_widget_and_family(ei_widget_t *widget)
+{
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
         print_widget_and_family(current_widget->next_sibling);
@@ -89,12 +90,12 @@ int test_2()
         printf("%s -> ", liste_geometrymanager->geometrymanager_cell->name);
         liste_geometrymanager = liste_geometrymanager->next;
     }
-    
+
     printf("END\n=======================================\n\nPress RETURN to continue and free widget class and geometry manager\n");
     getchar();
 
     ei_app_free();
-    
+
     printf("===== AFTER CALLING ei_app_free =====\n");
     printf("Widget class: ");
     while (liste_widgetclass != NULL && liste_widgetclass->first_widgetclass != NULL)
@@ -114,7 +115,7 @@ int test_2()
     return (EXIT_SUCCESS);
 }
 
-/* 
+/*
     Test des fonctions:
     - ei_app_root_widget
     - ei_frame_configure
@@ -134,7 +135,7 @@ int test_3()
     return (EXIT_SUCCESS);
 }
 
-/* 
+/*
     Test des fonctions:
     - ei_widget_create pour les trois widgets définis
     - ei_app_free avec les widgets
@@ -170,11 +171,11 @@ int test_4()
 
     ei_widget_t *frame_root = ei_widget_create("frame", root, NULL, NULL);
     ei_widget_t *button_root = ei_widget_create("button", root, NULL, NULL);
-    
+
     ei_widget_t *button = ei_widget_create("button", frame_root, NULL, NULL);
     ei_widget_t *frame = ei_widget_create("frame", frame_root, NULL, NULL);
     ei_widget_t *toplevel = ei_widget_create("toplevel", button, NULL, NULL);
-    
+
     ei_widget_t *frame2 = ei_widget_create("frame", button_root, NULL, NULL);
     ei_widget_t *button2 = ei_widget_create("button", button_root, NULL, NULL);
     ei_widget_t *toplevel2 = ei_widget_create("toplevel", button2, NULL, NULL);
@@ -193,45 +194,45 @@ int test_4()
 
 int test_5()
 {
-	ei_color_t	root_bgcol		= {0x52, 0x7f, 0xb4, 0xff};
-	ei_color_t	root_bgcol2		= {0xff, 0xff, 0xb4, 0xff};
+    ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
+    ei_color_t root_bgcol2 = {0xff, 0xff, 0xb4, 0xff};
 
-	ei_widget_t*	frame;
-	ei_widget_t*	frame2;
-	ei_size_t	frame_size		= {500,500};
-	ei_size_t	frame_size2		= {100,100};
-	int		frame_x			= 750;
-	int		frame_y			= 750;
-	float		frame_x_rel			= 0.5;
-	float		frame_y_rel			= 0.5;
-	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
-	ei_relief_t	frame_relief		= ei_relief_raised;
-	int		frame_border_width	= 6;
+    ei_widget_t *frame;
+    ei_widget_t *frame2;
+    ei_size_t frame_size = {500, 500};
+    ei_size_t frame_size2 = {100, 100};
+    int frame_x = 750;
+    int frame_y = 750;
+    float frame_x_rel = 0.5;
+    float frame_y_rel = 0.5;
+    ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
+    ei_relief_t frame_relief = ei_relief_raised;
+    int frame_border_width = 6;
     ei_anchor_t ancre = ei_anc_center;
 
-	/* Create the application and change the color of the background. */
-	ei_app_create(screen_size, EI_FALSE);
-	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    /* Create the application and change the color of the background. */
+    ei_app_create(screen_size, EI_FALSE);
+    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
-	/* Create, configure and place the frame on screen. */
-	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-	ei_frame_configure(frame, &frame_size, &frame_color,
-			    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
-			    NULL, NULL, NULL);
-	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
-	
+    /* Create, configure and place the frame on screen. */
+    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+    ei_frame_configure(frame, &frame_size, &frame_color,
+                       &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL);
+    ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
+
     frame2 = ei_widget_create("frame", frame, NULL, NULL);
-	ei_frame_configure(frame2, &frame_size2, &root_bgcol2,
-			    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
-			    NULL, NULL, NULL);
-	ei_place(frame2, &ancre, NULL, NULL, NULL, NULL, &frame_x_rel, &frame_y_rel, NULL, NULL);
-	/* Run the application's main loop. */
-	ei_app_run();
+    ei_frame_configure(frame2, &frame_size2, &root_bgcol2,
+                       &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL);
+    ei_place(frame2, &ancre, NULL, NULL, NULL, NULL, &frame_x_rel, &frame_y_rel, NULL, NULL);
+    /* Run the application's main loop. */
+    ei_app_run();
 
-	/* We just exited from the main loop. Terminate the application (cleanup). */
-	ei_app_free();
+    /* We just exited from the main loop. Terminate the application (cleanup). */
+    ei_app_free();
 
-	return (EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 /*
  main --

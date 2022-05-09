@@ -17,7 +17,7 @@ void frame_releasefunc(struct ei_widget_t *widget)
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
-    int h = widget->requested_size.height/2;
+    int h = widget->requested_size.height / 2;
     if (((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
@@ -69,14 +69,15 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         new_clipper->size.width -= 2 * border_size;
         ei_fill(surface, ((ei_frame_t *)widget)->color, new_clipper);
     }
-    else ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
-    
+    else
+        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+
     /* Dessin du texte si nécessaire */
     (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, ((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
-    
+
     /* Dessin de l'image si nécessaire */
     ei_surface_t *image = (((ei_frame_t *)widget)->img != NULL) ? hw_image_load(((ei_frame_t *)widget)->img, surface) : NULL;
-    
+
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, clipper);
 }

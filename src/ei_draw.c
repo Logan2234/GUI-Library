@@ -79,19 +79,19 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
                   const char *text, ei_font_t font,
                   ei_color_t color, const ei_rect_t *clipper)
 {
-    if (text != NULL){
-    ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
-    ei_rect_t source = hw_surface_get_rect(surface_source);
-    ei_rect_t dest;
-    dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
-    dest.top_left.x = where->x;
-    dest.top_left.y = where->y;
-    // printf("%d\n", dest.size.width);
-    // printf("%d\n", source.size.width);
-    // printf("%d\n", hw_surface_get_buffer(&surface_source));
-    ei_copy_surface(surface, &dest, &surface_source, &source, color.alpha);
+    if (text != NULL)
+    {
+        ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
+        ei_rect_t source = hw_surface_get_rect(surface_source);
+        ei_rect_t dest;
+        dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
+        dest.top_left.x = where->x;
+        dest.top_left.y = where->y;
+        // printf("%d\n", dest.size.width);
+        // printf("%d\n", source.size.width);
+        // printf("%d\n", hw_surface_get_buffer(&surface_source));
+        ei_copy_surface(surface, &dest, &surface_source, &source, color.alpha);
     }
-
 }
 
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
@@ -100,7 +100,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     // ei_size_t main_window_size = hw_surface_get_size(source);
     uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
     uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
-    
+
     if (dst_rect != NULL)
     {
         ei_point_t depart_dst = dst_rect->top_left;

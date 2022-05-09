@@ -73,4 +73,3 @@ void ei_unbind(ei_eventtype_t eventtype,
      */
     // TODO
 }
-

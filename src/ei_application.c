@@ -48,8 +48,9 @@ void ei_app_run()
     draw_widgets_and_family(widget_racine);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    struct ei_event_t* event = malloc(sizeof(ei_event_t));
-    while(event->type != ei_ev_mouse_buttondown) {
+    struct ei_event_t *event = malloc(sizeof(ei_event_t));
+    while (event->type != ei_ev_mouse_buttondown)
+    {
         hw_event_wait_next(event);
     }
     free(event);

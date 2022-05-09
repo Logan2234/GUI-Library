@@ -20,7 +20,6 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
     // TODO
 }
 
-
 void button_setdefaultsfunc(struct ei_widget_t *widget) /* À reviser */
 {
     widget->pick_id = 0;
