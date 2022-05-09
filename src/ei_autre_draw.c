@@ -199,10 +199,9 @@ void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     // widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     ei_color_t text_color = *((ei_button_t *)widget)->text_color;
     char **text = ((ei_button_t *)widget)->text;
-    // ei_point_t point = widget->screen_location.top_left;
-    // ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (NULL) : *((ei_button_t *)widget)->text_font;
-
-    ei_draw_text(surface, NULL, NULL, NULL, text_color, NULL);
+    ei_point_t point = widget->screen_location.top_left;
+    // ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
+    ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
