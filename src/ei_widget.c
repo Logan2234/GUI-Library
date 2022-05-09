@@ -66,16 +66,16 @@ void ei_frame_configure(ei_widget_t *widget,
                         ei_anchor_t *img_anchor)
 {
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
-    ((ei_frame_t *)widget)->color = color;
-    ((ei_frame_t *)widget)->border_width = border_width;
-    ((ei_frame_t *)widget)->relief = relief;
+    ((ei_frame_t *)widget)->color = (color != NULL) ? color : &ei_default_background_color;
+    ((ei_frame_t *)widget)->border_width = (border_width != NULL) ? border_width : 0;
+    ((ei_frame_t *)widget)->relief = (relief != NULL) ? relief : ei_relief_none;
     ((ei_frame_t *)widget)->text = text;
-    ((ei_frame_t *)widget)->text_font = text_font;
-    ((ei_frame_t *)widget)->text_color = text_color;
-    ((ei_frame_t *)widget)->text_anchor = text_anchor;
+    ((ei_frame_t *)widget)->text_font = (text_font != NULL) ? text_font : ei_default_font;
+    ((ei_frame_t *)widget)->text_color = (text_color != NULL) ? text_color : &ei_font_default_color;
+    ((ei_frame_t *)widget)->text_anchor = (text_anchor != NULL) ? text_anchor : ei_anc_center;
     ((ei_frame_t *)widget)->img = img;
     ((ei_frame_t *)widget)->img_rect = img_rect;
-    ((ei_frame_t *)widget)->img_anchor = img_anchor;
+    ((ei_frame_t *)widget)->img_anchor = (img_anchor != NULL) ? img_anchor : ei_anc_center;
 }
 
 void ei_button_configure(ei_widget_t *widget,
