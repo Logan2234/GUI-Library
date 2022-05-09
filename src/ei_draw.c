@@ -71,9 +71,7 @@ void ei_fill(ei_surface_t surface,
     else
     {
         for (uint32_t i = 0; i < main_window_size.width * main_window_size.height; i++)
-        {
             *origine++ = couleur;
-        }
     }
 }
 
@@ -81,6 +79,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
                   const char *text, ei_font_t font,
                   ei_color_t color, const ei_rect_t *clipper)
 {
+
 }
 
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,

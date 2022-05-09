@@ -17,7 +17,19 @@ void frame_releasefunc(struct ei_widget_t *widget)
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
-    ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+    if (((ei_frame_t *)widget)->relief != ei_relief_none && ((ei_frame_t *)widget)->border_width > 0)
+    {
+        if (((ei_frame_t *)widget)->relief == ei_relief_raised)
+        {
+
+        }
+        else
+        {
+            
+        }
+    }
+    else
+        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
     ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
