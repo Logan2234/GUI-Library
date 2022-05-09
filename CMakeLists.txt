@@ -111,7 +111,7 @@ target_link_libraries(frame		ei ${PLATFORM_LIB_FLAGS})
 
 # target button
 
-add_executable(button			${TESTS_SRC}/button.c)
+add_executable(button			${TESTS_SRC}/button.c tests/test_buton.c)
 target_link_libraries(button		ei ${PLATFORM_LIB_FLAGS})
 
 # target hello_world
@@ -143,6 +143,11 @@ target_link_libraries(parsing		ei ${PLATFORM_LIB_FLAGS})
 
 add_executable(nos_tests 			${TESTS_SRC}/nos_tests.c)
 target_link_libraries(nos_tests		ei ${PLATFORM_LIB_FLAGS})
+
+# target test button
+
+add_executable(test_buton 			${TESTS_SRC}/test_buton.c)
+target_link_libraries(test_buton		ei ${PLATFORM_LIB_FLAGS})
 
 # target to build the documentation
 
