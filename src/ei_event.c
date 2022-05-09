@@ -11,6 +11,7 @@ void ei_bind(ei_eventtype_t eventtype,
              ei_callback_t callback,
              void *user_param)
 {
+    /*
     struct liste_events_widgets *suivant = liste_widget;
     while (suivant->next != NULL)
     {
@@ -38,6 +39,8 @@ void ei_bind(ei_eventtype_t eventtype,
         nouveau->next = NULL;
         suivant->next = nouveau;
     }
+     */
+    // TODO
 }
 
 void ei_unbind(ei_eventtype_t eventtype,
@@ -46,6 +49,7 @@ void ei_unbind(ei_eventtype_t eventtype,
                ei_callback_t callback,
                void *user_param)
 {
+    /*
     if (liste_widget != NULL) {
         struct liste_events_widgets *suivant = liste_widget;
         struct liste_events_widgets *ancien;
@@ -66,5 +70,7 @@ void ei_unbind(ei_eventtype_t eventtype,
             ancien->next = NULL;
         }
     }
+     */
+    // TODO
 }
 

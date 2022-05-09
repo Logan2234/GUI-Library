@@ -87,3 +87,4 @@ cmake/minesweeper
 cmake/parsing
 cmake/puzzle
 cmake/two048
+cmake/test_buton

@@ -33,9 +33,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
-    if (widget->parent == NULL)
-        widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL);
-    widget->wclass->drawfunc(widget, racine_surface, pick_surface, &(widget->screen_location));
+    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL) : widget->wclass->drawfunc(widget, racine_surface, pick_surface, &(widget->screen_location));
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
         draw_widgets_and_family(current_widget->next_sibling);
