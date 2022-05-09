@@ -86,8 +86,10 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
     dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
     dest.top_left.x = where->x;
     dest.top_left.y = where->y;
-    printf("coucou\n");
-    //ei_copy_surface(surface, &dest, *surface_source, &source, color.alpha);
+    // printf("%d\n", dest.size.width);
+    // printf("%d\n", source.size.width);
+    // printf("%d\n", hw_surface_get_buffer(&surface_source));
+    ei_copy_surface(surface, &dest, &surface_source, &source, color.alpha);
     }
 
 }
@@ -95,48 +97,52 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
 {
-    ei_size_t main_window_size = hw_surface_get_size(source);
-    uint32_t *origine = (uint32_t *)hw_surface_get_buffer(source);
-    uint32_t couleur = 0;
+    // ei_size_t main_window_size = hw_surface_get_size(source);
+    uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
+    uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
+    
     if (dst_rect != NULL)
     {
-        ei_point_t depart = dst_rect->top_left;
-        uint32_t *pixel_ptr = origine + (depart.x + depart.y * main_window_size.width);
-        uint32_t *last_pixel_of_current_line = origine + (depart.y + 1) * main_window_size.width;
+        ei_point_t depart_dst = dst_rect->top_left;
+        ei_point_t depart_src = src_rect->top_left;
+        uint32_t *pixel_ptr_dest = origine_dest + (depart_dst.x + depart_dst.y * dst_rect->size.width);
+        uint32_t *last_pixel_of_current_line_dest = origine_dest + (depart_dst.y + 1) * dst_rect->size.width;
+        uint32_t *pixel_ptr_src = origine_src + (depart_src.x + depart_src.y * src_rect->size.width);
+        uint32_t *last_pixel_of_current_line_src = origine_src + (depart_src.y + 1) * src_rect->size.width;
         uint32_t last_value_of_j = 0;
-        for (uint32_t i = 0; i < src_rect->size.height; i++)
+        for (uint32_t i = 0; i < dst_rect->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
-            for (uint32_t j = 0; j < src_rect->size.width; j++)
+            for (uint32_t j = 0; j < dst_rect->size.width; j++)
             {
                 /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
-                if (pixel_ptr > origine + main_window_size.width * main_window_size.height)
+                if (pixel_ptr_dest > origine_dest + dst_rect->size.width * dst_rect->size.height)
                     break;
 
-                if (pixel_ptr == last_pixel_of_current_line)
+                if (pixel_ptr_dest == last_pixel_of_current_line_dest)
                 {
                     last_value_of_j = j;
                     break;
                 }
-                *pixel_ptr++ = couleur;
+                *pixel_ptr_dest++ = *pixel_ptr_src++;
             }
-            if (pixel_ptr == last_pixel_of_current_line && last_value_of_j != 0)
-                pixel_ptr += main_window_size.width - last_value_of_j;
+            if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
+                pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
 
             else
-                pixel_ptr += main_window_size.width - src_rect->size.width;
+                pixel_ptr_dest += dst_rect->size.width - dst_rect->size.width;
 
-            last_pixel_of_current_line += main_window_size.width;
+            last_pixel_of_current_line_dest += dst_rect->size.width;
 
-            if (pixel_ptr > origine + main_window_size.width * main_window_size.height)
+            if (pixel_ptr_dest > origine_dest + dst_rect->size.width * dst_rect->size.height)
                 break;
         }
     }
     else
     {
-        for (uint32_t i = 0; i < main_window_size.width * main_window_size.height; i++)
+        for (uint32_t i = 0; i < dst_rect->size.width * dst_rect->size.height; i++)
         {
-            *origine++ = couleur;
+            *origine_dest++ = *origine_src++;
         }
     }
 }
