@@ -27,9 +27,7 @@ uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
     return couleur;
 }
 
-void ei_fill(ei_surface_t surface,
-             const ei_color_t *color,
-             const ei_rect_t *clipper)
+void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *clipper)
 {
     ei_size_t main_window_size = hw_surface_get_size(surface);
     uint32_t *origine = (uint32_t *)hw_surface_get_buffer(surface);

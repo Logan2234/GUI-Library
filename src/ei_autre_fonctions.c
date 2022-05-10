@@ -1,7 +1,8 @@
 #include "ei_autre_fonctions.h"
+#include "hw_interface.h"
 
-extern racine_surface;
-extern pick_surface;
+extern ei_surface_t racine_surface;
+extern ei_surface_t pick_surface;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {

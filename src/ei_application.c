@@ -9,12 +9,11 @@
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
 struct liste_eventtypes_t *liste_events_widgets;
+ei_surface_t racine_surface;
+ei_surface_t pick_surface;
+ei_widget_t *widget_racine;
 ei_bool_t arret = EI_FALSE;
 uint32_t widget_id = 0;
-
-static ei_surface_t racine_surface;
-static ei_surface_t pick_surface;
-static ei_widget_t *widget_racine;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {

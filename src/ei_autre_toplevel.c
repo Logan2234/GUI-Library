@@ -4,7 +4,7 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 
-extern widget_id;
+extern int widget_id;
 
 struct ei_widget_t *toplevel_allocfunc(void)
 {
