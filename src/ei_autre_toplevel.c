@@ -18,8 +18,8 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     // TODO
-    // ei_fill(surface, ((ei_toplevel_t *)widget)->color, clipper);
-    // ei_fill(pick_surface, widget->pick_color, clipper);
+    ei_fill(surface, ((ei_toplevel_t *)widget)->color, clipper);
+    ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
@@ -36,8 +36,8 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
 
-    widget->requested_size = (ei_size_t){300, 300};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){300, 300}};
+    widget->requested_size = (ei_size_t){320, 240};
+    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
     widget->content_rect = NULL;
 }
 

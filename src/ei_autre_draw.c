@@ -4,18 +4,11 @@
 #include "ei_draw.h"
 #include "ei_application.h"
 #include "ei_autre_draw.h"
+#include "ei_autre_struct.h"
 
-void print_liste(ei_linked_point_t *liste)
-{
-    ei_linked_point_t *sent = liste;
-    while (sent != NULL)
-    {
-        printf(" %i , %i  \n", sent->point.x, sent->point.y);
-        sent = sent->next;
-    }
-    printf("\n");
-}
-
+/* Fonction qui crée un arc à partir d'un centre, un rayon et des angles de début et fin
+ *
+ * Return : liste chainée de points formant un arc */
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
 {
     ei_linked_point_t *liste_point = malloc(sizeof(ei_linked_point_t));
@@ -47,9 +40,10 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
     return liste_point;
 }
 
-ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
-                                    uint32_t rayon,
-                                    uint8_t orientation)
+/* Renvoie liste chainée de points représentant la forme d'un rectangle aux angles arrondis.
+ * Entrée : rectangle ei_rect_t, rayon et position. 0 si c'est tout le rectangle, 1 la partie haute, 2 partie base
+ * Sortie : liste chainée */
+ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle, uint32_t rayon, uint8_t orientation)
 {
     if (orientation == 0) /* Cas où on dessine toute la forme */
     {
@@ -153,47 +147,4 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle,
         return liste_point;
     }
     return NULL;
-}
-
-void free_linked_point_pointeur(ei_linked_point_t *liste)
-{
-    ei_linked_point_t *courant = liste;
-    ei_linked_point_t *suivant = liste->next;
-    while (suivant != NULL)
-    {
-        free(courant);
-        courant = suivant;
-        suivant = suivant->next;
-    }
-    free(courant);
-}
-
-/* Pour l'instant, le bouton n'est que relevé */
-
-void ei_draw_button(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
-{
-    ei_button_t *bouton = (ei_button_t *)widget;
-    ei_rect_t *rectangle = &(widget->screen_location);
-
-    ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
-    ei_color_t color = {0x64, 0x64, 0x64, 0xff};
-    ei_draw_polygon(surface, partie_haute, color, clipper);
-
-    ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
-    ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
-    ei_draw_polygon(surface, partie_basse, color2, clipper);
-
-    rectangle->top_left.x += *((ei_toplevel_t *)widget)->border_width;
-    rectangle->top_left.y += *((ei_toplevel_t *)widget)->border_width;
-    rectangle->size.width -= 2 * *((ei_toplevel_t *)widget)->border_width;
-    rectangle->size.height -= 2 * *((ei_toplevel_t *)widget)->border_width;
-
-    ei_linked_point_t *partie_milieu = ei_rounded_frame(rectangle, (int)(2 * (float)(*(bouton->corner_radius)) / 3), 0);
-
-    ei_color_t color3 = {0x8B, 0x8B, 0x8B, 0xff};
-    ei_draw_polygon(surface, partie_milieu, color3, clipper);
-
-    free_linked_point_pointeur(partie_haute);
-    free_linked_point_pointeur(partie_basse);
-    free_linked_point_pointeur(partie_milieu);
 }
