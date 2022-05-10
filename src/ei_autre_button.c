@@ -55,7 +55,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     char **text = ((ei_button_t *)widget)->text;
     ei_point_t point = widget->screen_location.top_left;
     ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
-    // ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
+    ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
@@ -69,9 +69,9 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
 
 void button_setdefaultsfunc(struct ei_widget_t *widget) /* À reviser */
 {
-    widget->pick_id = 0;
+    widget->pick_id = 1;
 
-    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
+    widget->pick_color = &(ei_color_t){0xff, 0x00, 0x00, 0xff};
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */

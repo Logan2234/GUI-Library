@@ -24,9 +24,9 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 {
-    widget->pick_id = 0;
+    widget->pick_id = 2;
 
-    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
+    widget->pick_color = &(ei_color_t){0x00, 0xff, 0x00, 0xff};
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
