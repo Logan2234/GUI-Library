@@ -41,7 +41,28 @@ typedef struct ei_button_t
     void **user_param;
 } ei_button_t;
 
+
 ei_widgetclass_t *return_class_button(); /* Fonction de retour de la class button */
+
+/* Extension 1 : radiobutton */
+typedef struct ei_radiobutton_t
+{
+    ei_widget_t widget;
+    const ei_color_t *color;
+    int *border_width;
+    ei_relief_t *relief;
+    char **text;  // Il faudrait faire une liste de textes ?
+    ei_font_t *text_font;
+    ei_color_t *text_color;
+    ei_anchor_t *text_anchor;
+    ei_surface_t *img;
+    ei_rect_t **img_rect;
+    ei_anchor_t *img_anchor;
+    ei_callback_t *callback;  // Il faudrait faire une liste de callbacks ?
+    void **user_param;
+} ei_radiobutton_t;
+
+ei_widgetclass_t *return_class_radiobutton(); /* Fonction de retour de la class radiobutton */
 
 /* Everything about toplevel */
 typedef struct ei_toplevel_t

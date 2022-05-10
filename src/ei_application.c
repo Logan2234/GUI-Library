@@ -10,7 +10,8 @@ struct liste_geometrymanager *liste_geometrymanager;
 static ei_surface_t racine_surface;
 static ei_surface_t pick_surface;
 static ei_widget_t *widget_racine;
-extern struct liste_events_widgets *liste_widget;
+struct liste_eventtypes_t *liste_events_widgets = malloc(sizeof(liste_eventtypes_t));
+ei_bool_t arret = EI_FALSE;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -56,16 +57,21 @@ void ei_app_run()
     } TRUC DE NILS
     free(event);*/
     struct ei_event_t* event = malloc(sizeof(ei_event_t));
-    while (!ei_app_quit_request())
+    while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
         if (event->type < 5){
-            recherche_traitants_event(liste_widget, event, EI_FALSE, NULL);
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
         } else {
             // TODO
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
     }
+    // On doit faire ça ?
+    hw_surface_lock(racine_surface);
+    draw_widgets_and_family(widget_racine);
+    hw_surface_unlock(racine_surface);
+    hw_surface_update_rects(racine_surface, NULL);
     free(event);
 }
 

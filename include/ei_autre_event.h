@@ -4,6 +4,7 @@
 #endif //PROJETC_IG_EI_AUTRE_EVENT_H
 
 #include "ei_event.h"
+#include "ei_application.h"
 
 /* Liste chainée liant widgets, events et callback */
 typedef struct liste_events_widgets
@@ -15,8 +16,16 @@ typedef struct liste_events_widgets
     struct liste_events_widgets* next;
 } liste_events;
 
+/* Liste chainée de eventype menant vers de liste_events_widgets */
+typedef struct liste_eventtypes_t
+{
+    ei_eventtype_t eventtype;
+    struct liste_events_widgets* liste;
+    struct liste_eventtypes_t* next;
+} liste_eventtypes_t;
+
 void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param);
 
 void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget);
 
-void recherche_traitants_event(struct liste_events_widgets *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget);
+void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget);
