@@ -85,61 +85,88 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
         ei_rect_t source = hw_surface_get_rect(surface_source);
         ei_rect_t dest;
         dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
+
         dest.top_left.x = where->x;
         dest.top_left.y = where->y;
         // printf("%d\n", dest.size.width);
         // printf("%d\n", source.size.width);
         // printf("%d\n", hw_surface_get_buffer(&surface_source));
-        ei_copy_surface(surface, &dest, &surface_source, &source, color.alpha);
+        ei_copy_surface(surface, &dest, surface_source, &source, color.alpha);
     }
 }
 
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
 {
-    // ei_size_t main_window_size = hw_surface_get_size(source);
+    ei_size_t main_window_size_dest = hw_surface_get_size(destination);
+    ei_size_t main_window_size_src = hw_surface_get_size(source);
     uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
+    origine_dest += dst_rect->top_left.x + dst_rect->top_left.y * main_window_size_dest.width;
     uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
-
+    int ir; int ig;int ib;int ia;
+    hw_surface_get_channel_indices(source, &ir, &ig, &ib, &ia);
     if (dst_rect != NULL)
     {
         ei_point_t depart_dst = dst_rect->top_left;
         ei_point_t depart_src = src_rect->top_left;
+
         uint32_t *pixel_ptr_dest = origine_dest + (depart_dst.x + depart_dst.y * dst_rect->size.width);
-        uint32_t *last_pixel_of_current_line_dest = origine_dest + (depart_dst.y + 1) * dst_rect->size.width;
         uint32_t *pixel_ptr_src = origine_src + (depart_src.x + depart_src.y * src_rect->size.width);
+
+        uint32_t *last_pixel_of_current_line_dest = origine_dest + (depart_dst.y + 1) * dst_rect->size.width;
         uint32_t *last_pixel_of_current_line_src = origine_src + (depart_src.y + 1) * src_rect->size.width;
+
         uint32_t last_value_of_j = 0;
-        for (uint32_t i = 0; i < dst_rect->size.height; i++)
+
+        for (uint32_t i = 0; i < src_rect->size.height ; i++)
         {
             /* On dessine toutes la partie rectangulaire */
-            for (uint32_t j = 0; j < dst_rect->size.width; j++)
+            for (uint32_t j = 0; j < src_rect->size.width; j++)
             {
                 /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
-                if (*pixel_ptr_dest > *origine_dest + dst_rect->size.width * dst_rect->size.height)
-                    break;
-                //if (*pixel_ptr_src > *origine_src + src_rect->size.width * src_rect->size.height)
-                //   break;
+                //if (*pixel_ptr_dest > *origine_dest + dst_rect->size.width * dst_rect->size.height)
+                  //   break;
+                //if (pixel_ptr_src > origine_src + src_rect->size.width * src_rect->size.height)
+                  //  break;
 
-                if (pixel_ptr_dest == last_pixel_of_current_line_dest)
-                {
-                    last_value_of_j = j;
-                    break;
-                }
-                *pixel_ptr_dest++ = pixel_ptr_src++;
-                //*pixel_ptr_dest++;
-                //*pixel_ptr_src++;
+                // if (pixel_ptr_dest == last_pixel_of_current_line_dest)
+                // {
+                //     last_value_of_j = j;
+                //     break;
+                // }
+                printf(" i : %i\n", i);
+                printf(" j : %i\n", j);
+                printf("avant : %i\n", *pixel_ptr_dest);
+                printf("source : %i\n", *pixel_ptr_src);
+                uint8_t *dest = (uint8_t *) pixel_ptr_dest;
+                uint8_t *src = (uint8_t *) pixel_ptr_src;
+
+                *(dest + ig) = *(src + ia) * *(src + ig) + (255- *(src + ia)) * *(dest + ig) /255;
+                *(dest + ir) = *(src + ia) * *(src + ir) + (255- *(src + ia)) * *(dest + ir) /255;
+                *(dest + ib) = *(src + ia) * *(src + ib) + (255- *(src + ia)) * *(dest + ib) /255;
+
+                *pixel_ptr_dest = (ir == 0) ? (*(dest + ir)) : (ir == 1) ? (*(dest + ir) - '\0') * 256
+                                                                            : (*(dest + ir) - '\0') * 256 * 256;
+                *pixel_ptr_dest += (ib == 0) ? (*(dest + ib)) : (ib == 1) ? (*(dest + ib) - '\0') * 256
+                                                                               : (*(dest + ib) - '\0') * 256 * 256;
+                *pixel_ptr_dest += (ig == 0) ? (*(dest + ig)) : (ig == 1) ? (*(dest + ig) - '\0') * 256
+                                                                                  : (*(dest + ig) - '\0') * 256 * 256;
+                printf("apres : %i\n", *pixel_ptr_dest);
+                *pixel_ptr_dest++;
+                *pixel_ptr_src++;
             }
             if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
-                pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
+            pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
+                //pixel_ptr_src += src_rect->size.width - last_value_of_j;}
 
             else
-                pixel_ptr_dest += dst_rect->size.width - dst_rect->size.width;
+                pixel_ptr_dest += main_window_size_dest.width - dst_rect->size.width;
+                //pixel_ptr_src += main_window_size_src.width - src_rect->size.width;
 
             last_pixel_of_current_line_dest += dst_rect->size.width;
 
-            // if (*pixel_ptr_dest > *origine_dest + dst_rect->size.width * dst_rect->size.height)
-            //     break;
+            //if (pixel_ptr_dest > origine_dest + dst_rect->size.width * dst_rect->size.height)
+                //break;
         }
     }
     else
