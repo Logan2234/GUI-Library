@@ -73,7 +73,10 @@ void ei_app_run()
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
     free(event);
+    free_liste_eventtypes(liste_events_widgets);
 }
+
+
 
 void free_widgets_and_family(ei_widget_t *widget)
 {

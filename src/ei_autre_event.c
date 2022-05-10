@@ -77,3 +77,24 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
         }
     }
 }
+
+void free_liste_event_widget(struct liste_events_widgets *liste){
+    struct liste_events_widgets *courant = liste;
+    struct liste_events_widgets *suivant = liste;
+    while (suivant != NULL) {
+        courant = suivant;
+        suivant = suivant->next;
+        free(courant);
+    }
+}
+
+void free_liste_eventtypes(struct liste_eventtypes_t *liste){
+    struct liste_eventtypes_t *courant = liste;
+    struct liste_eventtypes_t *suivant = liste;
+    while (suivant != NULL) {
+        courant = suivant;
+        suivant = suivant->next;
+        free_liste_event_widget(courant->liste);
+        free(courant);
+    }
+}
