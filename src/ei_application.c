@@ -7,10 +7,10 @@
 
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
+struct liste_eventtypes_t *liste_events_widgets;
 static ei_surface_t racine_surface;
 static ei_surface_t pick_surface;
 static ei_widget_t *widget_racine;
-struct liste_eventtypes_t *liste_events_widgets = malloc(sizeof(liste_eventtypes_t));
 ei_bool_t arret = EI_FALSE;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
@@ -19,11 +19,13 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 
     liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
     liste_geometrymanager = calloc(1, sizeof(struct liste_geometrymanager));
+    liste_events_widgets = calloc(1, sizeof(liste_eventtypes_t));
 
     /* Enregistrement des différentes classes de widget */
     ei_widgetclass_register(return_class_frame());
     ei_widgetclass_register(return_class_button());
     ei_widgetclass_register(return_class_toplevel());
+    
     /* Enregistrement des différents gestionnaires de géométrie */
     ei_geometrymanager_register(return_geometry_manager_placer());
 
@@ -51,18 +53,21 @@ void ei_app_run()
     draw_widgets_and_family(widget_racine);
     hw_surface_unlock(racine_surface);
     hw_surface_update_rects(racine_surface, NULL);
+    
     /*struct ei_event_t* event = malloc(sizeof(ei_event_t));
      while(event->type != ei_ev_mouse_buttondown) {
         hw_event_wait_next(event);
     } TRUC DE NILS
     free(event);*/
-    struct ei_event_t* event = malloc(sizeof(ei_event_t));
+    
+    struct ei_event_t* event = calloc(1, sizeof(ei_event_t));
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
         if (event->type < 5){
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
-        } else {
+        } 
+        else {
             // TODO
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
