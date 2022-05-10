@@ -3,6 +3,7 @@
 #include "ei_draw.h"
 #include "ei_widgetclass.h"
 #include "ei_types.h"
+#include "ei_autre_fonctions.h"
 
 extern int widget_id;
 
@@ -26,9 +27,11 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 {
-    widget->pick_id = 0;
-
-    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0x00};
+    widget->pick_id = widget_id;
+    ei_color_t pick_color = int_to_color(widget_id);
+    widget->pick_color = &pick_color;
+    
+    widget_id++;
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */

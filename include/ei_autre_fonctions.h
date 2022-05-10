@@ -22,3 +22,8 @@ void free_linked_point_pointeur(ei_linked_point_t *liste);
  * entre le père et le fils.
  */
 void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils);
+
+/*
+ * Transforme un entier en une couleur, pour les id des widgets
+ */
+ei_color_t int_to_color(uint32_t entier);

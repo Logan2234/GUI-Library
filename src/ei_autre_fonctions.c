@@ -53,3 +53,12 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
         pere->children_tail = fils;
     }
 }
+
+ei_color_t int_to_color(uint32_t entier)
+{
+    uint8_t red, green, blue;
+    blue = entier / (256*256); 
+    green = (entier-blue) / 256; 
+    red = (entier-blue-green);
+    return (ei_color_t){red, blue, green, 0x00}; 
+}

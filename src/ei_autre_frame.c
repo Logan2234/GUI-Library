@@ -88,7 +88,8 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
 {
     widget->pick_id = widget_id;
-    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0x00};
+    ei_color_t pick_color = int_to_color(widget_id);
+    widget->pick_color = &pick_color;
     
     widget_id++;
 
