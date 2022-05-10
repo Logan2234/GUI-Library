@@ -73,10 +73,10 @@ void ei_app_run()
         }
     }
     // On doit faire ça ?
-    hw_surface_lock(racine_surface);
-    draw_widgets_and_family(widget_racine);
-    hw_surface_unlock(racine_surface);
-    hw_surface_update_rects(racine_surface, NULL);
+    // hw_surface_lock(racine_surface);
+    // draw_widgets_and_family(widget_racine);
+    // hw_surface_unlock(racine_surface);
+    // hw_surface_update_rects(racine_surface, NULL);
     free(event);
     free_liste_eventtypes(liste_events_widgets);
 }
