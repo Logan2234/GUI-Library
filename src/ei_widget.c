@@ -3,23 +3,10 @@
 #include "ei_widget.h"
 #include "ei_autre_struct.h"
 #include "ei_geometrymanager.h"
+#include "ei_autre_fonctions.h"
 
 extern struct liste_widgetclass *liste_widgetclass;
 extern struct liste_geometrymanager *liste_geometrymanager;
-
-void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
-{
-    if (pere->children_head == NULL)
-    {
-        pere->children_head = fils;
-        pere->children_tail = fils;
-    }
-    else
-    {
-        pere->children_tail->next_sibling = fils;
-        pere->children_tail = fils;
-    }
-}
 
 ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *parent, void *user_data, ei_widget_destructor_t destructor)
 {

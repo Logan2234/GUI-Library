@@ -4,6 +4,8 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 
+extern widget_id;
+
 struct ei_widget_t *frame_allocfunc(void)
 {
     ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
@@ -84,9 +86,10 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
 {
-    widget->pick_id = 0;
-
-    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0xff};
+    widget->pick_id = widget_id;
+    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0x00};
+    
+    widget_id++;
 
     widget->user_data = NULL;
     widget->destructor = NULL;

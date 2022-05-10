@@ -4,14 +4,17 @@
 #include "ei_event.h"
 #include "ei_autre_struct.h"
 #include "ei_autre_event.h"
+#include "ei_autre_fonctions.h"
 
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
 struct liste_eventtypes_t *liste_events_widgets;
+ei_bool_t arret = EI_FALSE;
+uint32_t widget_id = 0;
+
 static ei_surface_t racine_surface;
 static ei_surface_t pick_surface;
 static ei_widget_t *widget_racine;
-ei_bool_t arret = EI_FALSE;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -34,16 +37,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-}
-
-void draw_widgets_and_family(ei_widget_t *widget)
-{
-    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL) : widget->wclass->drawfunc(widget, racine_surface, pick_surface, &(widget->screen_location));
-    ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
-        draw_widgets_and_family(current_widget->next_sibling);
-    if (current_widget->children_head != NULL)
-        draw_widgets_and_family(current_widget->children_head);
 }
 
 void ei_app_run()
@@ -79,21 +72,6 @@ void ei_app_run()
     // hw_surface_update_rects(racine_surface, NULL);
     free(event);
     free_liste_eventtypes(liste_events_widgets);
-}
-
-
-
-void free_widgets_and_family(ei_widget_t *widget)
-{
-    ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
-        free_widgets_and_family(current_widget->next_sibling);
-
-    if (current_widget->children_head != NULL)
-        free_widgets_and_family(current_widget->children_head);
-
-    (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
-    free(widget);
 }
 
 void ei_app_free()

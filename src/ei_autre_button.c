@@ -1,19 +1,9 @@
 #include "ei_draw.h"
 #include "ei_autre_struct.h"
 #include "ei_autre_draw.h"
+#include "ei_autre_fonctions.h"
 
-void free_linked_point_pointeur(ei_linked_point_t *liste)
-{
-    ei_linked_point_t *courant = liste;
-    ei_linked_point_t *suivant = liste->next;
-    while (suivant != NULL)
-    {
-        free(courant);
-        courant = suivant;
-        suivant = suivant->next;
-    }
-    free(courant);
-}
+extern widget_id;
 
 struct ei_widget_t *button_allocfunc(void)
 {
@@ -67,11 +57,11 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
     // TODO
 }
 
-void button_setdefaultsfunc(struct ei_widget_t *widget) /* À reviser */
+void button_setdefaultsfunc(struct ei_widget_t *widget)
 {
-    widget->pick_id = 1;
+    widget->pick_id = 0;
 
-    widget->pick_color = &(ei_color_t){0xff, 0x00, 0x00, 0xff};
+    widget->pick_color = &(ei_color_t){0x00, 0x00, 0x00, 0x00};
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
