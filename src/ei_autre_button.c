@@ -38,8 +38,8 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_linked_point_t *partie_haute = ei_rounded_frame(rectangle, *(bouton->corner_radius), 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(rectangle, *(bouton->corner_radius), 2);
 
-    ei_draw_polygon(surface, partie_haute, color, clipper);
-    ei_draw_polygon(surface, partie_basse, color2, clipper);
+    ei_draw_polygon(surface, partie_haute, color2, clipper);
+    ei_draw_polygon(surface, partie_basse, color, clipper);
 
     /* Puis on dessine un plus petit rounded rectangle par dessus */
     rectangle->top_left.x += *((ei_toplevel_t *)widget)->border_width;
@@ -55,7 +55,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_color_t text_color = *((ei_button_t *)widget)->text_color;
     char **text = ((ei_button_t *)widget)->text;
     ei_point_t point = widget->screen_location.top_left;
-    // ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
+    ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
     ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
 
     free_linked_point_pointeur(partie_haute);
