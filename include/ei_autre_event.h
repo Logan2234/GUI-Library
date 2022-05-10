@@ -9,7 +9,7 @@
 /* Liste chainée liant widgets, events et callback */
 typedef struct liste_events_widgets
 {
-    ei_widget_t widget;
+    ei_widget_t *widget;
     ei_eventtype_t eventtype;
     ei_callback_t callback;
     void *user_param;

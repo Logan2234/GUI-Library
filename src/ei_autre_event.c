@@ -67,8 +67,8 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
         struct liste_events_widgets *courant = sentinel->liste;
         while (courant != NULL) {
             if (a_chercher == courant->eventtype) {
-                if (specifique == EI_FALSE || (specifique == EI_TRUE && courant->widget.pick_id == widget->pick_id)) {
-                    arret = courant->callback(&(courant->widget), event, courant->user_param);
+                if (specifique == EI_FALSE || (specifique == EI_TRUE && courant->widget->pick_id == widget->pick_id)) {
+                    arret = courant->callback(courant->widget, event, courant->user_param);
                     if (arret == EI_TRUE)
                         break;
                 }
