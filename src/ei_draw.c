@@ -116,15 +116,19 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
             for (uint32_t j = 0; j < dst_rect->size.width; j++)
             {
                 /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
-                if (pixel_ptr_dest > origine_dest + dst_rect->size.width * dst_rect->size.height)
+                if (*pixel_ptr_dest > *origine_dest + dst_rect->size.width * dst_rect->size.height)
                     break;
+                //if (*pixel_ptr_src > *origine_src + src_rect->size.width * src_rect->size.height)
+                //   break;
 
                 if (pixel_ptr_dest == last_pixel_of_current_line_dest)
                 {
                     last_value_of_j = j;
                     break;
                 }
-                *pixel_ptr_dest++ = *pixel_ptr_src++;
+                *pixel_ptr_dest++ = pixel_ptr_src++;
+                //*pixel_ptr_dest++;
+                //*pixel_ptr_src++;
             }
             if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
                 pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
@@ -134,8 +138,8 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
 
             last_pixel_of_current_line_dest += dst_rect->size.width;
 
-            if (pixel_ptr_dest > origine_dest + dst_rect->size.width * dst_rect->size.height)
-                break;
+            // if (*pixel_ptr_dest > *origine_dest + dst_rect->size.width * dst_rect->size.height)
+            //     break;
         }
     }
     else
@@ -145,4 +149,6 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
             *origine_dest++ = *origine_src++;
         }
     }
+    hw_surface_unlock(destination);
+    hw_surface_update_rects(destination, dst_rect);
 }

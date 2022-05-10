@@ -96,7 +96,8 @@ set(LIB_EI_SOURCES
 	  ${SRC}/ei_autre_toplevel.c
 	  ${SRC}/ei_autre_draw.c
 	  ${SRC}/ei_event.c 
-	  ${SRC}/ei_autre_event.c)
+	  ${SRC}/ei_autre_event.c
+		)
 
 add_library(ei STATIC			${LIB_EI_SOURCES})
 
