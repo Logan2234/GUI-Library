@@ -1,5 +1,6 @@
 #include "ei_autre_fonctions.h"
 #include "hw_interface.h"
+#include "ei_application.h"
 
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
@@ -57,8 +58,19 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 ei_color_t int_to_color(uint32_t entier)
 {
     uint8_t red, green, blue;
-    blue = entier / (256*256); 
+    red = entier / (256*256); 
     green = (entier-blue) / 256; 
-    red = (entier-blue-green);
-    return (ei_color_t){red, blue, green, 0x00}; 
+    blue = (entier-blue-green);
+    return (ei_color_t){red, green, blue, 0x00}; 
+}
+
+ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
+{
+    ei_widget_t *current_widget = widget;
+    if (current_widget->pick_id == id)
+        return current_widget;
+    if (current_widget->next_sibling != NULL)
+        return search_widget_by_id(current_widget->next_sibling, id);
+    if (current_widget->children_head != NULL)
+        return search_widget_by_id(current_widget->children_head, id);
 }

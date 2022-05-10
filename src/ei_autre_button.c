@@ -12,6 +12,7 @@ struct ei_widget_t *button_allocfunc(void)
 
 void button_releasefunc(struct ei_widget_t *widget)
 {
+    free(widget->pick_color);
     free((ei_button_t *)widget);
 }
 
@@ -31,6 +32,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_draw_polygon(surface, partie_haute, color2, clipper);
     ei_draw_polygon(surface, partie_basse, color, clipper);
 
+
     /* Puis on dessine un plus petit rounded rectangle par dessus */
     rectangle->top_left.x += *((ei_toplevel_t *)widget)->border_width;
     rectangle->top_left.y += *((ei_toplevel_t *)widget)->border_width;
@@ -46,10 +48,12 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_point_t point = widget->screen_location.top_left;
     ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
     ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
-
+    
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
+    
+    ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)
@@ -60,8 +64,9 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
 void button_setdefaultsfunc(struct ei_widget_t *widget)
 {
     widget->pick_id = widget_id;
-    ei_color_t pick_color = int_to_color(widget_id);
-    widget->pick_color = &pick_color;
+    ei_color_t *pick_color = malloc(sizeof(ei_color_t));
+    *pick_color = int_to_color(widget_id);
+    widget->pick_color = pick_color;
     
     widget_id++;
 

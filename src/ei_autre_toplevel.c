@@ -15,6 +15,7 @@ struct ei_widget_t *toplevel_allocfunc(void)
 
 void toplevel_releasefunc(struct ei_widget_t *widget)
 {
+    free(widget->pick_color);
     free((ei_toplevel_t *)widget);
 }
 
@@ -28,8 +29,9 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 {
     widget->pick_id = widget_id;
-    ei_color_t pick_color = int_to_color(widget_id);
-    widget->pick_color = &pick_color;
+    ei_color_t *pick_color = malloc(sizeof(ei_color_t));
+    *pick_color = int_to_color(widget_id);
+    widget->pick_color = pick_color;
     
     widget_id++;
 
