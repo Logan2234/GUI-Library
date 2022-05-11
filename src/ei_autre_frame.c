@@ -93,7 +93,7 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
-    
+
     widget_id++;
 
     widget->user_data = NULL;

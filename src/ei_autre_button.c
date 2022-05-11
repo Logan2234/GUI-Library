@@ -18,6 +18,20 @@ void button_releasefunc(struct ei_widget_t *widget)
     free((ei_button_t *)widget);
 }
 
+uint8_t add_50_or_not(uint8_t entier){
+    if (entier <= 205){
+        return entier + 50;
+    }
+    return entier;
+}
+
+uint8_t remove_50_or_not(uint8_t entier){
+    if (entier >= 50){
+        return entier - 50;
+    }
+    return entier;
+}
+
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
@@ -29,13 +43,13 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
     if (*bouton->relief == ei_relief_sunken)
     {
-        color = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
-        color2 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
+        color = (ei_color_t){add_50_or_not(color.red), add_50_or_not(color.green), add_50_or_not(color.blue), 0xff};
+        color2 = (ei_color_t){remove_50_or_not(color.red), remove_50_or_not(color.green), remove_50_or_not(color.blue), 0xff};
     }
     else if (*bouton->relief == ei_relief_raised)
     {
-        color = (ei_color_t){0x64, 0x64, 0x64, 0xff};
-        color2 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
+        color = (ei_color_t){remove_50_or_not(color.red), remove_50_or_not(color.green), remove_50_or_not(color.blue), 0xff};
+        color2 = (ei_color_t){add_50_or_not(color.red), add_50_or_not(color.green), add_50_or_not(color.blue), 0xff};
     }
 
     /* On dessine d'abord les parties hautes et basses */
@@ -71,49 +85,50 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     }
     else
     {
-        switch(*anchor){
-            case ei_anc_none :
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break; 
-            case ei_anc_northwest :
-                break; 
-            case ei_anc_north :
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                break; 
-            case ei_anc_northeast :
-                point.x += (largeur_boutton - largeur_texte);
-                break; 
-            case ei_anc_west :
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break; 
-            case ei_anc_center :
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break; 
-            case ei_anc_east :
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break; 
-            case ei_anc_southwest :
-                point.y += (hauteur_boutton - hauteur_texte);
-                break; 
-            case ei_anc_south :
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte);
-                break; 
-            case ei_anc_southeast :
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte);
-                break; 
+        switch (*anchor)
+        {
+        case ei_anc_none:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_northwest:
+            break;
+        case ei_anc_north:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            break;
+        case ei_anc_northeast:
+            point.x += (largeur_boutton - largeur_texte);
+            break;
+        case ei_anc_west:
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_center:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_east:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_southwest:
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_south:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_southeast:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
         }
     }
     ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
-    
+
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
-    
+
     ei_fill(pick_surface, widget->pick_color, clipper);
 }
 
@@ -128,7 +143,7 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
-    
+
     widget_id++;
 
     widget->user_data = NULL;

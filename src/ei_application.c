@@ -64,7 +64,8 @@ void ei_app_run()
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = search_widget_by_click(event);
-            if (!strcmp(pressed_widget->wclass->name, "button")){
+            if (!strcmp(pressed_widget->wclass->name, "button"))
+            {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
                 hw_surface_lock(racine_surface);
                 draw_widgets_and_family(widget_racine);
@@ -78,18 +79,17 @@ void ei_app_run()
         {
             /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
             released_widget = search_widget_by_click(event);
-            if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button")) 
+            if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
-                (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0;
+                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : NULL;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
                 hw_surface_lock(racine_surface);
                 draw_widgets_and_family(widget_racine);
                 hw_surface_unlock(racine_surface);
                 hw_surface_update_rects(racine_surface, NULL);
-            } 
+            }
             pressed_widget = NULL;
-
         }
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)

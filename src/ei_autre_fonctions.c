@@ -60,10 +60,10 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 ei_color_t int_to_color(uint32_t entier)
 {
     uint8_t red, green, blue;
-    red = entier / (256*256); 
-    green = (entier-blue) / 256; 
-    blue = (entier-blue-green);
-    return (ei_color_t){red, green, blue, 0x00}; 
+    red = entier / (256 * 256);
+    green = (entier - blue) / 256;
+    blue = (entier - blue - green);
+    return (ei_color_t){red, green, blue, 0x00};
 }
 
 ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
@@ -87,12 +87,12 @@ ei_widget_t *search_widget_by_click(ei_event_t *event)
     return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
 }
 
-void create_close_button_for_each_toplevel(ei_widget_t * widget)
+void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
     if (!strcmp(widget->wclass->name, "toplevel"))
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
     }
     if (widget->next_sibling != NULL)
