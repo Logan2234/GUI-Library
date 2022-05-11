@@ -66,13 +66,13 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         free(zone_rectangle);
 
         /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
-        ei_rect_t *new_clipper = clipper;
+        ei_rect_t new_clipper = *clipper;
         int border_size = *((ei_frame_t *)widget)->border_width;
-        new_clipper->top_left.x += border_size;
-        new_clipper->top_left.y += border_size;
-        new_clipper->size.height -= 2 * border_size;
-        new_clipper->size.width -= 2 * border_size;
-        ei_fill(surface, ((ei_frame_t *)widget)->color, new_clipper);
+        new_clipper.top_left.x += border_size;
+        new_clipper.top_left.y += border_size;
+        new_clipper.size.height -= 2 * border_size;
+        new_clipper.size.width -= 2 * border_size;
+        ei_fill(surface, ((ei_frame_t *)widget)->color, &new_clipper);
     }
     else
         ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
