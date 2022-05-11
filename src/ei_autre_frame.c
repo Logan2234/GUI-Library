@@ -21,6 +21,7 @@ void frame_releasefunc(struct ei_widget_t *widget)
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
+
     int h = widget->requested_size.height / 2;
     if (((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
     {
