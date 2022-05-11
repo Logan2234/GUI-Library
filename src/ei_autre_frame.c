@@ -23,7 +23,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 {
 
     int h = widget->requested_size.height / 2;
-    if (((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
+    if (*((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
