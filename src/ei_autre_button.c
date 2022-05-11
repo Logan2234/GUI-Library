@@ -22,9 +22,20 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_button_t *bouton = (ei_button_t *)widget;
     ei_rect_t rectangle = widget->screen_location;
 
-    ei_color_t color = {0x64, 0x64, 0x64, 0xff};
-    ei_color_t color2 = {0xB4, 0xB4, 0xB4, 0xff};
+    ei_color_t color = {0x8B, 0x8B, 0x8B, 0xff};
+    ei_color_t color2 = {0x8B, 0x8B, 0x8B, 0xff};
     ei_color_t color3 = {0x8B, 0x8B, 0x8B, 0xff};
+
+    if (*((ei_button_t *)widget)->relief == ei_relief_sunken)
+    {
+        color = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
+        color2 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
+    }
+    else if (*((ei_button_t *)widget)->relief == ei_relief_raised)
+    {
+        color = (ei_color_t){0x64, 0x64, 0x64, 0xff};
+        color2 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
+    }
 
     /* On dessine d'abord les parties hautes et basses */
     ei_linked_point_t *partie_haute = ei_rounded_frame(&rectangle, *(bouton->corner_radius), 1);

@@ -46,48 +46,48 @@ void ei_app_run()
     hw_surface_unlock(racine_surface);
     // hw_surface_unlock(pick_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    
-    struct ei_event_t* event = calloc(1, sizeof(ei_event_t));
+
+    struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
+    ei_widget_t *pointed_widget;
+    ei_widget_t *pressed_widget = NULL;
+    ei_widget_t *released_widget;
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
-        if (event->type < 5){
+        if (event->type < 5)
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
-        } 
+
+        /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
-            ei_point_t point = event->param.mouse.where;
-
-            uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
-            picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
-
-            ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
-            if (!strcmp(touched_widget->wclass->name, "button"))
-            {
-                *((ei_button_t *)touched_widget)->relief = ei_relief_sunken;
-                (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
-                hw_surface_lock(racine_surface);
-                draw_widgets_and_family(widget_racine);
-                hw_surface_unlock(racine_surface);
-                hw_surface_update_rects(racine_surface, NULL);
-                // printf("%d, %d, %d, %d, x %d, y %d\n", touched_widget->requested_size.width, touched_widget->requested_size.height, touched_widget->screen_location.size.width, touched_widget->screen_location.size.height, touched_widget->screen_location.top_left.x, touched_widget->screen_location.top_left.y);
-            }
+            pressed_widget = search_widget_by_click(event);
+            if (!strcmp(pressed_widget->wclass->name, "button"))
+                *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
+        /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
-            ei_point_t point = event->param.mouse.where;
-
-            uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
-            picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
-
-            ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
-            if (!strcmp(touched_widget->wclass->name, "button"))
+            /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
+            released_widget = search_widget_by_click(event);
+            if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button")) 
             {
-                *((ei_button_t *)touched_widget)->relief = ei_relief_raised;
-                (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
-            }
+                /* Si c'est le même on appelle le callback et on redessine le relief*/
+                (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : NULL;
+                *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
+            } 
+            pressed_widget = NULL;
         }
+        /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
+        else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
+        {
+            pointed_widget = search_widget_by_click(event);
+            *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
+        }
+        hw_surface_lock(racine_surface);
+        draw_widgets_and_family(widget_racine);
+        hw_surface_unlock(racine_surface);
+        hw_surface_update_rects(racine_surface, NULL);
     }
     // On doit faire ça ?
     free(event);
