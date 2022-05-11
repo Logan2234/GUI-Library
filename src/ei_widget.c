@@ -28,13 +28,6 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *par
 
             /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
             (parent != NULL) ? ajout_relation_parent(parent, widget) : NULL;
-            
-            if (!strcmp(widget->wclass->name, "toplevel"))
-            {
-                ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-                ei_button_configure(button, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-            }
-
             return widget;
         }
         else
@@ -107,7 +100,7 @@ void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_co
                            char **title, ei_bool_t *closable, ei_axis_set_t *resizable, ei_size_t **min_size)
 {
     const int constante = 4;
-    ei_axis_set_t default_axis = ei_axis_both; 
+    ei_axis_set_t default_axis = ei_axis_both;
     ei_bool_t vrai = EI_TRUE;
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240}
