@@ -5,6 +5,7 @@
 #include "ei_autre_struct.h"
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
+#include "ei_autre_global_var.h"
 
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
@@ -42,14 +43,9 @@ void create_close_button_for_each_toplevel(ei_widget_t * widget)
 {
     if (!strcmp(widget->wclass->name, "toplevel"))
     {
-    ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-    ei_size_t button_size = {300, 200};
-    int button_x = 150;
-    int button_y = 200;
-    char **button_title = malloc(sizeof(char *));
-    *button_title = "Close";
-    ei_button_configure(button, &button_size, NULL, NULL, NULL, NULL, button_title, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
     }
     if (widget->next_sibling != NULL)
         return create_close_button_for_each_toplevel(widget->next_sibling);

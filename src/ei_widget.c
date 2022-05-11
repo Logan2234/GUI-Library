@@ -70,6 +70,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
 {
     ei_button_t *bouton = (ei_button_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
+
     bouton->color = (color != NULL) ? color : (bouton->color == NULL) ? &ei_default_background_color
                                                                       : bouton->color;
     bouton->border_width = (border_width != NULL) ? border_width : (bouton->border_width == NULL) ? (int *)&k_default_button_border_width
