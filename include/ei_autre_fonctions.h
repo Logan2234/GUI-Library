@@ -1,4 +1,5 @@
 #include "ei_widget.h"
+#include "ei_event.h"
 
 /* 
  * Permet de tracer tout les widgets. La fonction est tout le temps
@@ -31,4 +32,11 @@ ei_color_t int_to_color(uint32_t entier);
 /*
  * Cherche parmi l'arbre des widgets celui correspondant à l'id fournit
  */
-ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
+static ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
+
+/* 
+ * Utilise la fonction précédente pour chercher avec quel widget
+ * l'utilisateur a intéragit. On prend l'event de clic, et on renvoie
+ * le widget en question.
+ */
+ei_widget_t *search_widget_by_click(ei_event_t *event);
