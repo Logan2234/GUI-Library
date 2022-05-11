@@ -28,12 +28,7 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *par
 
             /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
             (parent != NULL) ? ajout_relation_parent(parent, widget) : NULL;
-
-            // if (!strcmp(widget->wclass->name, "toplevel"))
-            // {
-            //     create_close_button(widget);
-            // }
-
+            
             return widget;
         }
         else
@@ -74,6 +69,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                          ei_anchor_t *img_anchor, ei_callback_t *callback, void **user_param)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
+    ei_anchor_t default_anchor = ei_anc_center;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     bouton->color = (color != NULL) ? color : (bouton->color == NULL) ? &ei_default_background_color
                                                                       : bouton->color;
@@ -88,11 +84,11 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                                                                                       : bouton->text_font;
     bouton->text_color = (text_color != NULL) ? text_color : (bouton->text_color == NULL) ? (ei_color_t *)&ei_font_default_color
                                                                                           : bouton->text_color;
-    bouton->text_anchor = (text_anchor != NULL) ? text_anchor : (bouton->text_anchor == NULL) ? (ei_anchor_t *)ei_anc_center
+    bouton->text_anchor = (text_anchor != NULL) ? text_anchor : (bouton->text_anchor == NULL) ? &default_anchor
                                                                                               : bouton->text_anchor;
     bouton->img = img;
     bouton->img_rect = img_rect;
-    bouton->img_anchor = (img_anchor != NULL) ? img_anchor : (bouton->img_anchor == NULL) ? (ei_anchor_t *)ei_anc_center
+    bouton->img_anchor = (img_anchor != NULL) ? img_anchor : (bouton->img_anchor == NULL) ? &default_anchor
                                                                                           : bouton->img_anchor;
     bouton->callback = callback;
     bouton->user_param = user_param;
