@@ -29,6 +29,12 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *par
             /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
             (parent != NULL) ? ajout_relation_parent(parent, widget) : NULL;
             
+            if (!strcmp(widget->wclass->name, "toplevel"))
+            {
+                ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
+                ei_button_configure(button, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+            }
+
             return widget;
         }
         else
