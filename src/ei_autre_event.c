@@ -1,5 +1,14 @@
 #include "ei_autre_event.h"
+
 extern ei_bool_t arret;
+
+ei_bool_t button_click(ei_widget_t* widget, ei_event_t* event, void* user_param)
+{
+    // TODO Fonction qui permettra de donner l'aspect enfoncé du bouton lors de l'appui (et peut etre l'aspect relaché je sais pas encore s'il faut faire une seconde fonction ou pas)
+    // Pour pouvoir faire ca il faut que le tag "button" soit pris en compte dans ei_bind$
+    printf("Coucou");
+	return EI_TRUE;
+}
 
 /* FONCTIONS INCOMPLÈTES ET DONT JE DOUTE DE SON UTILITÉ
 void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param)

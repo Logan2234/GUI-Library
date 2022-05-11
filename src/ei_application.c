@@ -36,6 +36,8 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    ei_bind(ei_ev_mouse_buttondown, NULL, "all", button_click, NULL);
 }
 
 void ei_app_run()
@@ -59,9 +61,38 @@ void ei_app_run()
         if (event->type < 5){
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
         } 
-        else {
-            // TODO
+        else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
+        {
+            ei_point_t point = event->param.mouse.where;
+
+            uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
+            picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
+
+            ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
+            if (!strcmp(touched_widget->wclass->name, "button"))
+            {
+                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
+                *((ei_button_t *)touched_widget)->relief = ei_relief_sunken;
+                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
+                (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
+            }
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
+        }
+        else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
+        {
+            ei_point_t point = event->param.mouse.where;
+
+            uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
+            picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
+
+            ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
+            if (!strcmp(touched_widget->wclass->name, "button"))
+            {
+                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
+                *((ei_button_t *)touched_widget)->relief = ei_relief_sunken;
+                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
+                (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
+            }
         }
     }
     // On doit faire ça ?
