@@ -283,8 +283,10 @@ int test_6()
     ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
     ei_size_t toplevel_size = {300, 300};
     char *title = "Test 6";
+
     ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, NULL, NULL, NULL, NULL);
     ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
+
 	ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */

@@ -57,7 +57,6 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_color_t text_color = *((ei_button_t *)widget)->text_color;
     char **text = ((ei_button_t *)widget)->text;
     ei_font_t font = (*((ei_button_t *)widget)->text_font != NULL) ? (ei_default_font) : *((ei_button_t *)widget)->text_font;
-
     int largeur_texte = hw_surface_get_size(hw_text_create_surface(*text, font, color)).width;
     int hauteur_texte = hw_surface_get_size(hw_text_create_surface(*text, font, color)).height;
     int largeur_boutton = widget->screen_location.size.width;

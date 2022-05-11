@@ -38,8 +38,28 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
+void create_close_button_for_each_toplevel(ei_widget_t * widget)
+{
+    if (!strcmp(widget->wclass->name, "toplevel"))
+    {
+    ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
+    ei_size_t button_size = {300, 200};
+    int button_x = 150;
+    int button_y = 200;
+    char **button_title = malloc(sizeof(char *));
+    *button_title = "Close";
+    ei_button_configure(button, &button_size, NULL, NULL, NULL, NULL, button_title, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+    if (widget->next_sibling != NULL)
+        return create_close_button_for_each_toplevel(widget->next_sibling);
+    if (widget->children_head != NULL)
+        return create_close_button_for_each_toplevel(widget->children_head);
+}
+
 void ei_app_run()
 {
+    create_close_button_for_each_toplevel(widget_racine);
     hw_surface_lock(racine_surface);
     // hw_surface_lock(pick_surface);
     draw_widgets_and_family(widget_racine);

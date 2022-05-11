@@ -5,6 +5,7 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_fonctions.h"
 #include "ei_application.h"
+#include "ei_autre_global_var.h"
 
 extern struct liste_widgetclass *liste_widgetclass;
 extern struct liste_geometrymanager *liste_geometrymanager;
@@ -40,8 +41,6 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
                         ei_relief_t *relief, char **text, ei_font_t *text_font, ei_color_t *text_color,
                         ei_anchor_t *text_anchor, ei_surface_t *img, ei_rect_t **img_rect, ei_anchor_t *img_anchor)
 {
-    ei_anchor_t default_anchor_frame = ei_anc_center;
-    ei_relief_t default_relief_frame = ei_relief_none;
     ei_frame_t *frame = (ei_frame_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     frame->color = (color != NULL) ? color : (frame->color == NULL) ? &ei_default_background_color
@@ -70,8 +69,6 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                          ei_anchor_t *img_anchor, ei_callback_t *callback, void **user_param)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
-    ei_anchor_t default_anchor_button = ei_anc_center;
-    ei_relief_t default_relief_button = ei_relief_raised;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     bouton->color = (color != NULL) ? color : (bouton->color == NULL) ? &ei_default_background_color
                                                                       : bouton->color;
@@ -99,15 +96,12 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
 void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_color_t *color, int *border_width,
                            char **title, ei_bool_t *closable, ei_axis_set_t *resizable, ei_size_t **min_size)
 {
-    const int constante = 4;
-    ei_axis_set_t default_axis = ei_axis_both;
-    ei_bool_t vrai = EI_TRUE;
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240}
                                                                                                               : widget->requested_size;
     toplevel->color = (color != NULL) ? color : (&toplevel->color == NULL) ? (ei_color_t *)&ei_default_background_color
                                                                            : toplevel->color;
-    toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante
+    toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante_4
                                                                                                       : toplevel->border_width;
     toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? (char **)"Toplevel"
                                                                           : toplevel->title;
