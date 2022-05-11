@@ -3,6 +3,7 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_application.h"
+
 extern int widget_id;
 
 struct ei_widget_t *button_allocfunc(void)

@@ -1,6 +1,8 @@
 #include "ei_autre_fonctions.h"
 #include "hw_interface.h"
 #include "ei_application.h"
+#include "ei_autre_global_var.h"
+#include "ei_geometrymanager.h"
 
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
@@ -83,4 +85,18 @@ ei_widget_t *search_widget_by_click(ei_event_t *event)
     picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
 
     return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
+}
+
+void create_close_button_for_each_toplevel(ei_widget_t * widget)
+{
+    if (!strcmp(widget->wclass->name, "toplevel"))
+    {
+        ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+    }
+    if (widget->next_sibling != NULL)
+        return create_close_button_for_each_toplevel(widget->next_sibling);
+    if (widget->children_head != NULL)
+        return create_close_button_for_each_toplevel(widget->children_head);
 }

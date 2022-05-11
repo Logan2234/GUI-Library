@@ -47,7 +47,6 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
     // JE VAIS METTRE ICI LA CRÉATION DU BUTTON MAIS JE NE SAIS PAS S'IL DEVRAIT ALLER LÀ
 
-
     free_linked_point_pointeur(premier_point);
 
     /*
@@ -99,4 +98,3 @@ ei_widgetclass_t *return_class_toplevel(void)
 
     return widgetclass_toplevel;
 }
-

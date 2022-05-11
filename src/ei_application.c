@@ -7,14 +7,15 @@
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
 
+/* Paramètres globaux de l'appli */
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
 struct liste_eventtypes_t *liste_events_widgets;
+ei_widget_t *widget_racine;
 ei_surface_t racine_surface;
 ei_surface_t pick_surface;
-ei_widget_t *widget_racine;
+int widget_id = 0;
 ei_bool_t arret = EI_FALSE;
-uint32_t widget_id = 0;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -37,20 +38,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-}
-
-void create_close_button_for_each_toplevel(ei_widget_t * widget)
-{
-    if (!strcmp(widget->wclass->name, "toplevel"))
-    {
-        ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-        ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
-    }
-    if (widget->next_sibling != NULL)
-        return create_close_button_for_each_toplevel(widget->next_sibling);
-    if (widget->children_head != NULL)
-        return create_close_button_for_each_toplevel(widget->children_head);
 }
 
 void ei_app_run()
@@ -94,7 +81,7 @@ void ei_app_run()
             if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button")) 
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
-                (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : NULL;
+                (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
                 hw_surface_lock(racine_surface);
                 draw_widgets_and_family(widget_racine);
