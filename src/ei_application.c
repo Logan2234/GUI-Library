@@ -64,10 +64,13 @@ void ei_app_run()
             ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
             if (!strcmp(touched_widget->wclass->name, "button"))
             {
-                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
                 *((ei_button_t *)touched_widget)->relief = ei_relief_sunken;
-                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
                 (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
+                hw_surface_lock(racine_surface);
+                draw_widgets_and_family(widget_racine);
+                hw_surface_unlock(racine_surface);
+                hw_surface_update_rects(racine_surface, NULL);
+                // printf("%d, %d, %d, %d, x %d, y %d\n", touched_widget->requested_size.width, touched_widget->requested_size.height, touched_widget->screen_location.size.width, touched_widget->screen_location.size.height, touched_widget->screen_location.top_left.x, touched_widget->screen_location.top_left.y);
             }
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
@@ -81,18 +84,12 @@ void ei_app_run()
             ei_widget_t *touched_widget = search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
             if (!strcmp(touched_widget->wclass->name, "button"))
             {
-                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
                 *((ei_button_t *)touched_widget)->relief = ei_relief_raised;
-                printf("%d\n",*((ei_button_t *)touched_widget)->relief );
                 (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
             }
         }
     }
     // On doit faire ça ?
-    // hw_surface_lock(racine_surface);
-    // draw_widgets_and_family(widget_racine);
-    // hw_surface_unlock(racine_surface);
-    // hw_surface_update_rects(racine_surface, NULL);
     free(event);
     free_liste_eventtypes(liste_events_widgets);
 }
