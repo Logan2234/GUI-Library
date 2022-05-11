@@ -64,6 +64,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
                             NULL, NULL, NULL, NULL, NULL);
     ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL );
 
+    free_linked_point_pointeur(premier_point);
 
 
     /*
