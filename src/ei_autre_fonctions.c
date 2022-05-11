@@ -50,6 +50,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
     }
     else
     {
+        printf("%s", fils->wclass->name);
         pere->children_tail->next_sibling = fils;
         pere->children_tail = fils;
     }
