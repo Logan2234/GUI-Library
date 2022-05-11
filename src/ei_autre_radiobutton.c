@@ -15,7 +15,8 @@ void radiobutton_releasefunc(struct ei_widget_t *widget)
 void radiobutton_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
 
-    // TODO
+    struct liste_textes *textes = ((ei_radiobutton_t *) widget)->textes;
+
 }
 
 void radiobutton_geomnotifyfunc(struct ei_widget_t *widget)

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "ei_draw.h"
-#include "ei_application.h"
+#include "ei_autre_fonctions.h"
 #include "ei_autre_draw.h"
 #include "ei_autre_struct.h"
 
@@ -106,7 +106,7 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle, uint32_t rayon, uint8_
         premier_point.x = suivant->point.x - h + (int)rayon;
         premier_point.y = suivant->point.y + h - (int)rayon;
         suivant->next = ei_draw_arc(premier_point, rayon, (float)-2.3562, (float)-3.1415);
-        ;
+
         return liste_point;
     }
     if (orientation == 2) /* Cas où on dessine que la partie basse */
@@ -147,4 +147,73 @@ ei_linked_point_t *ei_rounded_frame(ei_rect_t *rectangle, uint32_t rayon, uint8_
         return liste_point;
     }
     return NULL;
+}
+
+void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_bool_t raised, ei_surface_t surface, ei_rect_t *clipper)
+{
+    ei_linked_point_t *partie_haute = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *sentinel_haut = partie_haute;
+    ei_linked_point_t *partie_basse = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *sentinel_basse = partie_basse;
+    ei_linked_point_t *partie_milieu = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *sentinel_milieu = partie_milieu;
+    sentinel_haut->point.x = (rectangle->size.width / 2) + rectangle->top_left.x;
+    sentinel_haut->point.y = rectangle->top_left.y;
+    sentinel_milieu->point.x = sentinel_haut->point.x;
+    sentinel_milieu->point.y = sentinel_haut->point.y + largeur;
+
+    ei_linked_point_t *nouveau_haute = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *nouveau_milieu = calloc(1, sizeof(ei_linked_point_t));
+    nouveau_haute->point.x = rectangle->size.width  + rectangle->top_left.x;
+    nouveau_haute->point.y = (rectangle->size.height / 2) + rectangle->top_left.y;
+    nouveau_milieu = nouveau_haute;
+    nouveau_milieu->point.x -= largeur;
+    sentinel_basse = nouveau_haute;
+    sentinel_haut->next = nouveau_haute;
+    sentinel_milieu->next = nouveau_milieu;
+    sentinel_haut = sentinel_haut->next;
+    sentinel_milieu = sentinel_milieu->next;
+
+    ei_linked_point_t *nouveau_milieu_1 = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *nouveau_basse = calloc(1, sizeof(ei_linked_point_t));
+    nouveau_basse->point.x = (rectangle->size.width / 2)  + rectangle->top_left.x;
+    nouveau_basse->point.y = rectangle->size.height + rectangle->top_left.y;
+    nouveau_milieu_1 = nouveau_basse;
+    nouveau_milieu_1->point.y -= largeur;
+    sentinel_milieu->next = nouveau_milieu_1;
+    sentinel_milieu = sentinel_milieu->next;
+    sentinel_basse->next = nouveau_basse;
+    sentinel_basse = sentinel_basse->next;
+
+    ei_linked_point_t *nouveau_milieu_2 = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *nouveau_basse_1 = calloc(1, sizeof(ei_linked_point_t));
+    ei_linked_point_t *nouveau_haute_1 = calloc(1, sizeof(ei_linked_point_t));
+    nouveau_haute_1->point.x = rectangle->top_left.x;
+    nouveau_haute_1->point.y = (rectangle->size.height / 2) + rectangle->top_left.y;
+    nouveau_basse_1 = nouveau_haute_1;
+    nouveau_milieu_2 = nouveau_haute_1;
+    nouveau_milieu_2->point.x += largeur;
+    sentinel_haut->next = nouveau_haute_1;
+    sentinel_milieu->next = nouveau_milieu_2;
+    sentinel_basse->next = nouveau_basse_1;
+
+    ei_color_t color1 = color;
+    ei_color_t color2 = color;
+
+    if (raised == EI_TRUE) {
+        color1 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
+        color2 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
+    } else {
+        color1 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
+        color2 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
+        color = (ei_color_t){0x9E, 0x0E, 0x40, 0xff};
+    }
+
+    ei_draw_polygon(surface, partie_haute, color1, clipper);
+    ei_draw_polygon(surface, partie_basse, color2, clipper);
+    ei_draw_polygon(surface, partie_milieu, color, clipper);
+
+    free_linked_point_pointeur(partie_haute);
+    free_linked_point_pointeur(partie_milieu);
+    free_linked_point_pointeur(partie_basse);
 }

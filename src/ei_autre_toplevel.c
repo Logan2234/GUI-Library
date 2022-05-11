@@ -99,3 +99,4 @@ ei_widgetclass_t *return_class_toplevel(void)
 
     return widgetclass_toplevel;
 }
+

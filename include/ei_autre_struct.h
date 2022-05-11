@@ -51,7 +51,7 @@ typedef struct ei_radiobutton_t
     const ei_color_t *color;
     int *border_width;
     ei_relief_t *relief;
-    char **text;  // Il faudrait faire une liste de textes ?
+    struct liste_textes *textes;
     ei_font_t *text_font;
     ei_color_t *text_color;
     ei_anchor_t *text_anchor;
@@ -93,3 +93,9 @@ struct liste_geometrymanager
 };
 
 ei_geometrymanager_t *return_geometry_manager_placer();
+
+struct liste_textes
+{
+    char **text;
+    struct liste_textes *next;
+};
