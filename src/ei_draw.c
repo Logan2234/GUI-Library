@@ -90,9 +90,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
 
         dest.top_left.x = where->x;
         dest.top_left.y = where->y;
-        // // printf("%d\n", dest.size.width);
-        // // printf("%d\n", source.size.width);
-        // // printf("%d\n", hw_surface_get_buffer(&surface_source));
+        
         ei_copy_surface(surface, &dest, surface_source, &source, color.alpha);
     }
 }
