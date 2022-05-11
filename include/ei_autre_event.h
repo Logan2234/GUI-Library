@@ -19,11 +19,6 @@ typedef struct liste_eventtypes_t
     struct liste_eventtypes_t* next;
 } liste_eventtypes_t;
 
-/*
- * Fonction gérant l'enfoncement du bouton lors de l'appui
- */
-ei_bool_t button_click(ei_widget_t* widget, ei_event_t* event, void* user_param);
-
 void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param);
 
 void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget);

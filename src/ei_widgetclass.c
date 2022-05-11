@@ -31,15 +31,18 @@ ei_widgetclass_t *ei_widgetclass_from_name(ei_widgetclass_name_t name)
 
 void ei_frame_register_class(void)
 {
-    // TODO
+    ei_widgetclass_t *frame = return_class_frame();
+    ei_widgetclass_register(frame);
 }
 
 void ei_button_register_class(void)
 {
-    // TODO
+    ei_widgetclass_t *button = return_class_button();
+    ei_widgetclass_register(button);
 }
 
 void ei_toplevel_register_class(void)
 {
-    // TODO
+    ei_widgetclass_t *toplevel = return_class_toplevel();
+    ei_widgetclass_register(toplevel);
 }

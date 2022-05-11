@@ -24,10 +24,10 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     liste_events_widgets = calloc(1, sizeof(liste_eventtypes_t));
 
     /* Enregistrement des différentes classes de widget */
-    ei_widgetclass_register(return_class_frame());
-    ei_widgetclass_register(return_class_button());
-    ei_widgetclass_register(return_class_toplevel());
-    
+    ei_frame_register_class();
+    ei_button_register_class();
+    ei_toplevel_register_class();
+
     /* Enregistrement des différents gestionnaires de géométrie */
     ei_geometrymanager_register(return_geometry_manager_placer());
 
@@ -36,23 +36,16 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
-    ei_bind(ei_ev_mouse_buttondown, NULL, "all", button_click, NULL);
 }
 
 void ei_app_run()
 {
     hw_surface_lock(racine_surface);
-    // hw_surface_get_buffer(racine_surface); // TODO A utiliser qq part
+    // hw_surface_lock(pick_surface);
     draw_widgets_and_family(widget_racine);
     hw_surface_unlock(racine_surface);
+    // hw_surface_unlock(pick_surface);
     hw_surface_update_rects(racine_surface, NULL);
-    
-    /*struct ei_event_t* event = malloc(sizeof(ei_event_t));
-     while(event->type != ei_ev_mouse_buttondown) {
-        hw_event_wait_next(event);
-    } TRUC DE NILS
-    free(event);*/
     
     struct ei_event_t* event = calloc(1, sizeof(ei_event_t));
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
@@ -89,7 +82,7 @@ void ei_app_run()
             if (!strcmp(touched_widget->wclass->name, "button"))
             {
                 printf("%d\n",*((ei_button_t *)touched_widget)->relief );
-                *((ei_button_t *)touched_widget)->relief = ei_relief_sunken;
+                *((ei_button_t *)touched_widget)->relief = ei_relief_raised;
                 printf("%d\n",*((ei_button_t *)touched_widget)->relief );
                 (*((ei_button_t *)touched_widget)->callback)(touched_widget, event, NULL);
             }
