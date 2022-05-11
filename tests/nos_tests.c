@@ -272,20 +272,19 @@ int test_6()
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     /* Create, configure and place the frame on screen. */
-    // frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-    // ei_frame_configure(frame, &frame_size, &frame_color,
-    //                    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
-    //                    NULL, NULL, NULL);
-    // ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
+    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+    ei_frame_configure(frame, &frame_size, &frame_color,
+                       &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL);
+    ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    // toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
-    // int border_width = 0;
-    // ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
-    // ei_size_t toplevel_size = {300, 300};
-    // char *title = "Test 6";
-    // ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, NULL, NULL, NULL, NULL);
-    // ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
-    create_close_button(NULL);
+    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
+    int border_width = 0;
+    ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
+    ei_size_t toplevel_size = {300, 300};
+    char *title = "Test 6";
+    ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, NULL, NULL, NULL, NULL);
+    ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
 	ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */

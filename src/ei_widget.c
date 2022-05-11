@@ -88,7 +88,8 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                                                                                       : bouton->text_font;
     bouton->text_color = (text_color != NULL) ? text_color : (bouton->text_color == NULL) ? (ei_color_t *)&ei_font_default_color
                                                                                           : bouton->text_color;
-    bouton->text_anchor = text_anchor;
+    bouton->text_anchor = (text_anchor != NULL) ? text_anchor : (bouton->text_anchor == NULL) ? (ei_anchor_t *)ei_anc_center
+                                                                                              : bouton->text_anchor;
     bouton->img = img;
     bouton->img_rect = img_rect;
     bouton->img_anchor = (img_anchor != NULL) ? img_anchor : (bouton->img_anchor == NULL) ? (ei_anchor_t *)ei_anc_center

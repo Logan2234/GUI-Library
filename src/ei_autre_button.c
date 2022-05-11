@@ -108,8 +108,6 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
                 break; 
         }
     }
-
-
     ei_draw_text(surface, &point, *text, ei_default_font, text_color, NULL);
     
     free_linked_point_pointeur(partie_haute);
