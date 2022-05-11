@@ -61,8 +61,13 @@ void ei_app_run()
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = search_widget_by_click(event);
-            if (!strcmp(pressed_widget->wclass->name, "button"))
+            if (!strcmp(pressed_widget->wclass->name, "button")){
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
+                hw_surface_lock(racine_surface);
+                draw_widgets_and_family(widget_racine);
+                hw_surface_unlock(racine_surface);
+                hw_surface_update_rects(racine_surface, NULL);
+            }
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
         /* Cas où on relache le clic gauche */
@@ -75,19 +80,24 @@ void ei_app_run()
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : NULL;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
+                hw_surface_lock(racine_surface);
+                draw_widgets_and_family(widget_racine);
+                hw_surface_unlock(racine_surface);
+                hw_surface_update_rects(racine_surface, NULL);
             } 
             pressed_widget = NULL;
+
         }
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
         {
             pointed_widget = search_widget_by_click(event);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
+            hw_surface_lock(racine_surface);
+            draw_widgets_and_family(widget_racine);
+            hw_surface_unlock(racine_surface);
+            hw_surface_update_rects(racine_surface, NULL);
         }
-        hw_surface_lock(racine_surface);
-        draw_widgets_and_family(widget_racine);
-        hw_surface_unlock(racine_surface);
-        hw_surface_update_rects(racine_surface, NULL);
     }
     // On doit faire ça ?
     free(event);

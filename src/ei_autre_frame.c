@@ -78,7 +78,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, ((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
+    (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
 
     /* Dessin de l'image si nécessaire */
     ei_surface_t *image = (((ei_frame_t *)widget)->img != NULL) ? hw_image_load(((ei_frame_t *)widget)->img, surface) : NULL;

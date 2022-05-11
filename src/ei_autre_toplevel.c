@@ -47,23 +47,8 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
     // JE VAIS METTRE ICI LA CRÉATION DU BUTTON MAIS JE NE SAIS PAS S'IL DEVRAIT ALLER LÀ
 
-    // ei_widget_t *button;
-    // int taille_bouton = widget->screen_location.size.height / 2;
-    // ei_size_t button_size = {taille_bouton, taille_bouton};
-    // int button_x = taille_bouton / 2;
-    // int button_y = taille_bouton / 2;
-    // char *button_title = "Close";
-    // ei_color_t button_color = {0xFA, 0x20, 0x20, 0xff};
-    // ei_relief_t button_relief = ei_relief_raised;
-    // int button_border_width = 2;
-    // int button_corner_radius = taille_bouton / 2;
-    // button = ei_widget_create("button", widget, NULL, NULL);
-    // ei_button_configure(button, &button_size, &button_color,
-    //                     &button_border_width, &button_corner_radius, &button_relief, &button_title, NULL, NULL, NULL,
-    //                     NULL, NULL, NULL, NULL, NULL);
-    // ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    // free_linked_point_pointeur(premier_point);
+    free_linked_point_pointeur(premier_point);
 
     /*
     // Il faut encore faire le callback du bouton et l'écriture

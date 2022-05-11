@@ -7,6 +7,7 @@
 #include "ei_widget.h"
 #include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
+#include "ei_autre_fonctions.h"
 
 /* Variables globales à ces tests */
 
@@ -14,6 +15,16 @@ extern struct liste_widgetclass *liste_widgetclass;
 extern struct liste_geometrymanager *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
+
+ei_bool_t process_key(ei_widget_t* widget, ei_event_t* event, void* user_param)
+{
+	if (event->param.key.key_code == SDLK_ESCAPE) {
+		ei_app_quit_request();
+		return EI_TRUE;
+	}
+        
+        return EI_FALSE;
+}
 
 /*
     Fonction qui va nous servir pour les tests
@@ -247,6 +258,8 @@ int test_6()
     ei_size_t frame_size2 = {100, 100};
     int frame_x = 250;
     int frame_y = 250;
+    int toplevel_x = 200;
+    int toplevel_y = 200;
     float frame_x_rel = 0.5;
     float frame_y_rel = 0.5;
     ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
@@ -259,22 +272,26 @@ int test_6()
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     /* Create, configure and place the frame on screen. */
-    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-    ei_frame_configure(frame, &frame_size, &frame_color,
-                       &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
-                       NULL, NULL, NULL);
-    ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
+    // frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+    // ei_frame_configure(frame, &frame_size, &frame_color,
+    //                    &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
+    //                    NULL, NULL, NULL);
+    // ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
-    int border_width = 0;
-    ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
-    ei_size_t toplevel_size = {300, 300};
-    char *title = "Test 6";
-    ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, NULL, NULL, NULL, NULL);
-    ei_place(toplevel, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL);
+    // toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
+    // int border_width = 0;
+    // ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
+    // ei_size_t toplevel_size = {300, 300};
+    // char *title = "Test 6";
+    // ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, NULL, NULL, NULL, NULL);
+    // ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
+    create_close_button(NULL);
+	ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */
     ei_app_run();
+
+	ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* We just exited from the main loop. Terminate the application (cleanup). */
     ei_app_free();

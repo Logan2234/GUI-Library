@@ -7,7 +7,8 @@ extern int widget_id;
 
 struct ei_widget_t *button_allocfunc(void)
 {
-    return (ei_widget_t *)calloc(1, sizeof(ei_button_t));
+    ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
+    return (ei_widget_t *)widget_button;
 }
 
 void button_releasefunc(struct ei_widget_t *widget)
@@ -18,13 +19,12 @@ void button_releasefunc(struct ei_widget_t *widget)
 
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
-
     ei_button_t *bouton = (ei_button_t *)widget;
     ei_rect_t rectangle = widget->screen_location;
 
-    ei_color_t color = {0x8B, 0x8B, 0x8B, 0xff};
-    ei_color_t color2 = {0x8B, 0x8B, 0x8B, 0xff};
-    ei_color_t color3 = {0x8B, 0x8B, 0x8B, 0xff};
+    ei_color_t color = *((ei_button_t *)widget)->color;
+    ei_color_t color2 = *((ei_button_t *)widget)->color;
+    ei_color_t color3 = *((ei_button_t *)widget)->color;
 
     if (*((ei_button_t *)widget)->relief == ei_relief_sunken)
     {
@@ -38,8 +38,8 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     }
 
     /* On dessine d'abord les parties hautes et basses */
-    ei_linked_point_t *partie_haute = ei_rounded_frame(&rectangle, *(bouton->corner_radius), 1);
-    ei_linked_point_t *partie_basse = ei_rounded_frame(&rectangle, *(bouton->corner_radius), 2);
+    ei_linked_point_t *partie_haute = ei_rounded_frame(&rectangle, 20, 1);
+    ei_linked_point_t *partie_basse = ei_rounded_frame(&rectangle, 20, 2);
 
     ei_draw_polygon(surface, partie_haute, color2, clipper);
     ei_draw_polygon(surface, partie_basse, color, clipper);
@@ -49,7 +49,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     rectangle.top_left.y += *((ei_toplevel_t *)widget)->border_width;
     rectangle.size.width -= 2 * *((ei_toplevel_t *)widget)->border_width;
     rectangle.size.height -= 2 * *((ei_toplevel_t *)widget)->border_width;
-    ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*(bouton->corner_radius)) / 3), 0);
+    ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(20) / 3), 0);
 
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
