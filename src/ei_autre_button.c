@@ -133,7 +133,7 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     widget_id++;
 
     widget->user_data = NULL;
-    widget->destructor = NULL; /* Il faut créer la fonction */
+    widget->destructor = NULL;
     widget->parent = NULL;
     widget->children_head = NULL;
     widget->children_tail = NULL;
@@ -141,8 +141,8 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     widget->geom_params = NULL;
 
     widget->requested_size = (ei_size_t){100, 40};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){0, 0}};
-    widget->content_rect = NULL;
+    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
+    widget->content_rect = &widget->screen_location;
 }
 
 ei_widgetclass_t *return_class_button(void)

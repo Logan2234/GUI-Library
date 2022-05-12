@@ -103,9 +103,9 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     widget->children_tail = NULL;
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
-    widget->requested_size = (ei_size_t){0, 0};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){0, 0}};
-    widget->content_rect = NULL;
+    widget->requested_size = (ei_size_t){100, 100};
+    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
+    widget->content_rect = &widget->screen_location;
 }
 
 void frame_geomnotifyfunc(struct ei_widget_t *widget)

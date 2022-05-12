@@ -76,7 +76,7 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 
     widget->requested_size = (ei_size_t){320, 240};
     widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
-    widget->content_rect = NULL;
+    widget->content_rect = &widget->screen_location;
 }
 
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)

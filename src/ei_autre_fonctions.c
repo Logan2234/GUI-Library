@@ -3,6 +3,7 @@
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
 #include "ei_geometrymanager.h"
+#include "ei_autre_struct.h"
 
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
@@ -95,7 +96,7 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
 
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
-    if (!strcmp(widget->wclass->name, "toplevel"))
+    if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
         ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
