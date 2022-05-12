@@ -1,5 +1,6 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
+#include "ei_application.h"
 
 extern struct liste_geometrymanager *liste_geometrymanager;
 
@@ -22,7 +23,8 @@ void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
 
 void ei_geometrymanager_unmap(ei_widget_t *widget)
 {
-    // TODO
+    widget->geom_params = NULL;
+    ei_app_invalidate_rect(&widget->screen_location);
 }
 
 ei_geometrymanager_t *ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
@@ -58,17 +60,18 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     int width2, height2;
     float rel_x2, rel_y2;
     float rel_height2, rel_width2;
-    x2 = ((x == NULL) ? widget->screen_location.top_left.x : *x);
-    y2 = ((y == NULL) ? widget->screen_location.top_left.y : *y);
+    
+    x2 = ((x == NULL) ? widget->content_rect->top_left.x : *x);
+    y2 = ((y == NULL) ? widget->content_rect->top_left.y : *y);
     rel_x2 = ((rel_x == NULL) ? 0 : *rel_x);
     rel_y2 = ((rel_y == NULL) ? 0 : *rel_y);
 
     if (widget->parent != NULL)
     {
-        top_left->x = ((rel_x != NULL) ? widget->parent->screen_location.top_left.x : 0);
-        top_left->y = ((rel_y != NULL) ? widget->parent->screen_location.top_left.y : 0);
-        width_parent = widget->parent->screen_location.size.width;
-        height_parent = widget->parent->screen_location.size.height;
+        top_left->x = ((rel_x != NULL) ? widget->parent->content_rect->top_left.x : 0);
+        top_left->y = ((rel_y != NULL) ? widget->parent->content_rect->top_left.y : 0);
+        width_parent = widget->parent->content_rect->size.width;
+        height_parent = widget->parent->content_rect->size.height;
     }
 
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
@@ -81,8 +84,8 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     width2 += rel_width2 * width_parent;
 
     /* Maintenant on remplace dans les données de widgets */
-    widget->screen_location.size.width = width2;
-    widget->screen_location.size.height = height2;
+    widget->content_rect->size.width = width2;
+    widget->content_rect->size.height = height2;
 
     if (anchor == NULL)
     {
@@ -135,6 +138,6 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
             break;
         }
     }
-    widget->screen_location.top_left = *top_left;
+    widget->content_rect->top_left = *top_left;
     free(top_left);
 }
