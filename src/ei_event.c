@@ -84,7 +84,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
                 free(ancien);
                 return;
             }
-            while (suivant->next != NULL)
+            while (suivant != NULL && suivant->next != NULL)
             {
                 if (((suivant->next->widget == NULL && widget == NULL) || suivant->next->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
                     suivant->user_param == user_param && suivant->eventtype == eventtype)
