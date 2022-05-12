@@ -98,3 +98,17 @@ void update_surface(ei_linked_rect_t *rectangles_list)
     hw_surface_unlock(ei_app_root_surface());
     hw_surface_update_rects(ei_app_root_surface(), NULL);
 }
+
+void lighten_color(ei_color_t *couleur)
+{
+    couleur->red = (couleur->red <= 225) ? couleur->red + 30 : 255;
+    couleur->green = (couleur->green <= 225) ? couleur->green + 30 : 255;
+    couleur->blue = (couleur->blue <= 225) ? couleur->blue + 30 : 255;
+}
+
+void darken_color(ei_color_t *couleur)
+{
+    couleur->red = (couleur->red >= 30) ? couleur->red - 30 : 0;
+    couleur->green = (couleur->green >= 30) ? couleur->green - 30 : 0;
+    couleur->blue = (couleur->blue >= 30) ? couleur->blue - 30 : 0;
+}
