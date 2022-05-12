@@ -140,8 +140,8 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
 
-    widget->requested_size = (ei_size_t){100, 50};
-    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){100, 50}};
+    widget->requested_size = (ei_size_t){100, 40};
+    widget->screen_location = (ei_rect_t){0, 0, (ei_size_t){0, 0}};
     widget->content_rect = NULL;
 }
 
