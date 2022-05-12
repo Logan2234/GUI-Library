@@ -5,9 +5,6 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_struct.h"
 
-/* Fonction qui crée un arc à partir d'un centre, un rayon et des angles de début et fin
- *
- * Return : liste chainée de points formant un arc */
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
 {
     ei_linked_point_t *liste_point = malloc(sizeof(ei_linked_point_t));

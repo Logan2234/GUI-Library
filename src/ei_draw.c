@@ -76,9 +76,8 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
     }
 }
 
-void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
-                  const char *text, ei_font_t font,
-                  ei_color_t color, const ei_rect_t *clipper)
+void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *text,
+                  ei_font_t font, ei_color_t color, const ei_rect_t *clipper)
 {
     if (text != NULL)
     {
@@ -89,7 +88,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where,
 
         dest.top_left.x = where->x;
         dest.top_left.y = where->y;
-        
+
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
     }
 }
@@ -132,10 +131,10 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     last_value_of_j = j;
                     break;
                 }
-                if (alpha == EI_TRUE){
+                if (alpha == EI_TRUE)
+                {
                     uint8_t *dest = (uint8_t *)pixel_ptr_dest;
                     uint8_t *src = (uint8_t *)pixel_ptr_src;
-
 
                     *(dest + ig) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig) / 255;
                     *(dest + ir) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir) / 255;
@@ -144,9 +143,8 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     *pixel_ptr_dest++;
                     *pixel_ptr_src++;
                 }
-                else {
+                else
                     *pixel_ptr_dest++ = *pixel_ptr_src++;
-                }
             }
             if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
                 pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
@@ -160,9 +158,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     else
     {
         for (uint32_t i = 0; i < dst_rect->size.width * dst_rect->size.height; i++)
-        {
             *origine_dest++ = *origine_src++;
-        }
     }
     hw_surface_unlock(destination);
     ei_linked_rect_t *liste_rects = calloc(1, sizeof(ei_linked_rect_t));

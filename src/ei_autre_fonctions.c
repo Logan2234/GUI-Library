@@ -57,7 +57,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 }
 
 ei_color_t int_to_color(uint32_t entier)
-{   
+{
     // int ir;
     // int ig;
     // int ib;
@@ -116,14 +116,14 @@ void update_surface(ei_linked_rect_t *rectangles_list)
 
 void lighten_color(ei_color_t *couleur)
 {
-    couleur->red = (couleur->red <= 225) ? couleur->red + 30 : 255;
-    couleur->green = (couleur->green <= 225) ? couleur->green + 30 : 255;
-    couleur->blue = (couleur->blue <= 225) ? couleur->blue + 30 : 255;
+    couleur->red = (couleur->red <= 205) ? couleur->red + 50 : 255;
+    couleur->green = (couleur->green <= 205) ? couleur->green + 50 : 255;
+    couleur->blue = (couleur->blue <= 205) ? couleur->blue + 50 : 255;
 }
 
 void darken_color(ei_color_t *couleur)
 {
-    couleur->red = (couleur->red >= 30) ? couleur->red - 30 : 0;
-    couleur->green = (couleur->green >= 30) ? couleur->green - 30 : 0;
-    couleur->blue = (couleur->blue >= 30) ? couleur->blue - 30 : 0;
+    couleur->red = (couleur->red >= 50) ? couleur->red - 50 : 0;
+    couleur->green = (couleur->green >= 50) ? couleur->green - 50 : 0;
+    couleur->blue = (couleur->blue >= 50) ? couleur->blue - 50 : 0;
 }
