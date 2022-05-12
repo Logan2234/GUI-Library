@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "ei_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_draw.h"
 #include "ei_autre_struct.h"

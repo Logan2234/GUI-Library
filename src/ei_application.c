@@ -1,11 +1,7 @@
 #include "ei_application.h"
-#include "ei_geometrymanager.h"
-#include "ei_widgetclass.h"
 #include "ei_event.h"
-#include "ei_autre_struct.h"
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
-#include "ei_autre_global_var.h"
 
 /* Paramètres globaux de l'appli */
 struct liste_widgetclass *liste_widgetclass;
@@ -76,7 +72,7 @@ void ei_app_run()
             if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
-                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : NULL;
+                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : 0;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
             }
             pressed_widget = NULL;

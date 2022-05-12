@@ -1,5 +1,4 @@
 #include "ei_widget.h"
-#include "ei_event.h"
 
 /*
  * Permet de tracer tout les widgets. La fonction est tout le temps

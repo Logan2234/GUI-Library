@@ -1,8 +1,6 @@
 #include "ei_autre_fonctions.h"
-#include "hw_interface.h"
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
-#include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
 
 extern ei_surface_t racine_surface;

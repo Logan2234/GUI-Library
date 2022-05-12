@@ -1,6 +1,4 @@
-#include "ei_draw.h"
 #include "ei_autre_struct.h"
-#include "ei_autre_draw.h"
 
 struct ei_widget_t *radiobutton_allocfunc(void)
 {

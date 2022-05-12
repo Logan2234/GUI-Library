@@ -1,8 +1,6 @@
-#include "ei_draw.h"
 #include "ei_autre_struct.h"
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
-#include "ei_application.h"
 #include "ei_autre_global_var.h"
 
 extern int widget_id;

@@ -1,4 +1,3 @@
-#include "ei_event.h"
 #include "ei_autre_event.h"
 
 extern struct liste_eventtypes_t *liste_events_widgets;

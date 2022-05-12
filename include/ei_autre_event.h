@@ -1,23 +1,5 @@
 #include "ei_event.h"
-#include "ei_application.h"
-
-/* Liste chainée liant widgets, events et callback */
-typedef struct liste_events_widgets
-{
-    ei_widget_t *widget;
-    ei_eventtype_t eventtype;
-    ei_callback_t callback;
-    void *user_param;
-    struct liste_events_widgets* next;
-} liste_events;
-
-/* Liste chainée de eventype menant vers de liste_events_widgets */
-typedef struct liste_eventtypes_t
-{
-    ei_eventtype_t eventtype;
-    struct liste_events_widgets* liste;
-    struct liste_eventtypes_t* next;
-} liste_eventtypes_t;
+#include "ei_autre_struct.h"
 
 void ajout_liste_event_widget(struct liste_events_widgets *liste, ei_widget_t widget, ei_eventtype_t eventtype, ei_callback_t callback, void *user_param);
 
