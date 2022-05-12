@@ -45,7 +45,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
-    update_surface(NULL);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
@@ -54,6 +53,7 @@ void ei_app_run()
     
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
+        update_surface(rect_to_update);
         hw_event_wait_next(event);
         if (event->type < 5)
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
@@ -65,7 +65,6 @@ void ei_app_run()
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
-                update_surface(NULL);
             }
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
@@ -79,7 +78,6 @@ void ei_app_run()
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : NULL;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
-                update_surface(NULL);
             }
             pressed_widget = NULL;
         }
@@ -88,7 +86,6 @@ void ei_app_run()
         {
             pointed_widget = ei_widget_pick(&event->param.mouse.where);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
-            update_surface(NULL);
         }
     }
     free(event);
