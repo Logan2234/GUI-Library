@@ -22,14 +22,14 @@ uint8_t add_50_or_not(uint8_t entier){
     if (entier <= 205){
         return entier + 50;
     }
-    return entier;
+    return 255;
 }
 
 uint8_t remove_50_or_not(uint8_t entier){
     if (entier >= 50){
         return entier - 50;
     }
-    return entier;
+    return 0;
 }
 
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
@@ -40,6 +40,9 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_color_t color = *bouton->color;
     ei_color_t color2 = *bouton->color;
     ei_color_t color3 = *bouton->color;
+    printf("%i\n", color.red);
+    printf("%i\n", color.blue);
+    printf("%i\n", color.green);
 
     if (*bouton->relief == ei_relief_sunken)
     {
@@ -48,8 +51,9 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     }
     else if (*bouton->relief == ei_relief_raised)
     {
-        color = (ei_color_t){remove_50_or_not(color.red), remove_50_or_not(color.green), remove_50_or_not(color.blue), 0xff};
         color2 = (ei_color_t){add_50_or_not(color.red), add_50_or_not(color.green), add_50_or_not(color.blue), 0xff};
+        color = (ei_color_t){remove_50_or_not(color.red), remove_50_or_not(color.green), remove_50_or_not(color.blue), 0xff};
+
     }
 
     /* On dessine d'abord les parties hautes et basses */
