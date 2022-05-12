@@ -37,7 +37,8 @@ ei_geometrymanager_t *ei_geometrymanager_from_name(ei_geometrymanager_name_t nam
 
 void ei_register_placer_manager(void)
 {
-    // TODO
+    ei_geometrymanager_t *placer = return_geometry_manager_placer();
+    ei_geometrymanager_register(placer);
 }
 
 /*
@@ -50,17 +51,13 @@ void ei_register_placer_manager(void)
    les descriptions des arguments ci-dessous). Si aucune taille n'est fournie (absolue ou
    relatif), alors la taille demandée du widget est utilisée, c'est-à-dire la taille minimale
    requis pour afficher son contenu. */
-void ei_place(ei_widget_t *widget,
-              ei_anchor_t *anchor,
-              int *x,
-              int *y,
-              int *width,
-              int *height,
-              float *rel_x,
-              float *rel_y,
-              float *rel_width,
-              float *rel_height)
+void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *width, 
+              int *height, float *rel_x, float *rel_y, float *rel_width, float *rel_height)
 {
+    
+    /* Gestion du paramètre geom_params du widget */
+    widget->geom_params = ei_geometrymanager_from_name("placer");
+    
     /* Initialisation des variables pour contrer les NULL */
     ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
 

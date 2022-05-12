@@ -58,7 +58,7 @@ void ei_app_run()
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
-            pressed_widget = search_widget_by_click(event);
+            pressed_widget = ei_widget_pick(&event->param.mouse.where);
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
@@ -70,7 +70,7 @@ void ei_app_run()
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
             /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
-            released_widget = search_widget_by_click(event);
+            released_widget = ei_widget_pick(&event->param.mouse.where);
             if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
@@ -83,14 +83,12 @@ void ei_app_run()
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
         {
-            pointed_widget = search_widget_by_click(event);
+            pointed_widget = ei_widget_pick(&event->param.mouse.where);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
             update_surface(NULL);
         }
     }
-    // On doit faire ça ?
     free(event);
-    free_liste_eventtypes(liste_events_widgets);
 }
 
 void ei_app_free()
@@ -116,6 +114,9 @@ void ei_app_free()
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
+    
+    /* On libère la liste chaînée des event types */
+    // free_liste_eventtypes(liste_events_widgets);
 
     /* On libère les ressources créées par hw_init */
     hw_quit();
@@ -138,5 +139,5 @@ void ei_app_invalidate_rect(ei_rect_t *rect)
 
 void ei_app_quit_request(void)
 {
-    // TODO
+    printf("Coucou");
 }

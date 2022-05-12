@@ -21,18 +21,14 @@ void button_releasefunc(struct ei_widget_t *widget)
 uint8_t lighten_color(uint8_t entier)
 {
     if (entier <= 205)
-    {
         return entier + 50;
-    }
     return 255;
 }
 
 uint8_t darken_color(uint8_t entier)
 {
     if (entier >= 50)
-    {
         return entier - 50;
-    }
     return 0;
 }
 

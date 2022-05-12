@@ -77,16 +77,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
         return search_widget_by_id(current_widget->children_head, id);
 }
 
-ei_widget_t *search_widget_by_click(ei_event_t *event)
-{
-    ei_point_t point = event->param.mouse.where;
-
-    uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
-    picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
-
-    return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
-}
-
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
     if (!strcmp(widget->wclass->name, "toplevel"))

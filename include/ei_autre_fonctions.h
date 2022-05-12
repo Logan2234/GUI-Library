@@ -32,14 +32,7 @@ ei_color_t int_to_color(uint32_t entier);
 /*
  * Cherche parmi l'arbre des widgets celui correspondant à l'id fournit
  */
-static ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
-
-/*
- * Utilise la fonction précédente pour chercher avec quel widget
- * l'utilisateur a intéragit. On prend l'event de clic, et on renvoie
- * le widget en question.
- */
-ei_widget_t *search_widget_by_click(ei_event_t *event);
+ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
 
 /*
  * Fonction qui est lancée une et une seule fois en début de ei_app_run.
