@@ -41,16 +41,6 @@ void ei_register_placer_manager(void)
     ei_geometrymanager_register(placer);
 }
 
-/*
- Configure la géométrie d'un widget à l'aide du gestionnaire de géométrie "placer".
- * Si le widget était déjà géré par un autre gestionnaire de géométrie, alors il est d'abord
-   supprimé du gestionnaire de géométrie précédent. // TODO
- * Si le widget était déjà géré par le "placer", alors cela appelle simplement les mises à jour
-   les paramètres placer : les arguments non NULL remplacent les valeurs précédentes.
- * Lorsque les arguments sont passés comme NULL, le placer utilise les valeurs par défaut (détaillées dans
-   les descriptions des arguments ci-dessous). Si aucune taille n'est fournie (absolue ou
-   relatif), alors la taille demandée du widget est utilisée, c'est-à-dire la taille minimale
-   requis pour afficher son contenu. */
 void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *width, 
               int *height, float *rel_x, float *rel_y, float *rel_width, float *rel_height)
 {
@@ -67,8 +57,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     int x2, y2;
     int width2, height2;
     float rel_x2, rel_y2;
-    int rel_height2, rel_width2;
-
+    float rel_height2, rel_width2;
     x2 = ((x == NULL) ? widget->screen_location.top_left.x : *x);
     y2 = ((y == NULL) ? widget->screen_location.top_left.y : *y);
     rel_x2 = ((rel_x == NULL) ? 0 : *rel_x);
@@ -85,15 +74,16 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     rel_width2 = ((rel_width == NULL) ? 0 : *rel_width);
     rel_height2 = ((rel_height == NULL) ? 0 : *rel_height);
 
-    height2 = ((height == NULL) ? widget->requested_size.height : *height);
+    height2 = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : 0 : *height);
     height2 += rel_height2 * height_parent;
 
-    width2 = ((width == NULL) ? widget->requested_size.width : *width);
+    width2 = ((width == NULL) ? (rel_width == NULL) ? widget->requested_size.width : 0 : *width);
     width2 += rel_width2 * width_parent;
 
     /* Maintenant on remplace dans les données de widgets */
     widget->screen_location.size.width = width2;
     widget->screen_location.size.height = height2;
+
     if (anchor == NULL)
     {
         top_left->x += x2 + rel_x2 * width_parent;

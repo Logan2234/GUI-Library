@@ -58,7 +58,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 }
 
 ei_color_t int_to_color(uint32_t entier)
-{
+{   
     // int ir;
     // int ig;
     // int ib;
@@ -77,8 +77,8 @@ ei_color_t int_to_color(uint32_t entier)
     //     }
     // }
     red = entier / (256 * 256);
-    green = (entier - red * 256*256) / 256;
-    blue = (entier - red*256*256 - green*256);
+    green = (entier - red * 256 * 256) / 256;
+    blue = (entier - red * 256 * 256 - green * 256);
     return (ei_color_t){red, green, blue, 0x00};
 }
 
