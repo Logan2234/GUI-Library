@@ -100,7 +100,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
                     suivant = suivant->next;
                 }
             }
-            if (((suivant->widget == NULL && widget == NULL) || suivant->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
+            if (((suivant != NULL && suivant->widget == NULL && widget == NULL) || (suivant != NULL && suivant->widget != NULL && widget != NULL && suivant->widget->pick_id == widget->pick_id)) && suivant->callback == callback &&
                 suivant->user_param == user_param && suivant->eventtype == eventtype)
             {
                 suivant = ancien->next;
