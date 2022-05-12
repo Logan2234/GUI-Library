@@ -11,6 +11,7 @@
 struct liste_widgetclass *liste_widgetclass;
 struct liste_geometrymanager *liste_geometrymanager;
 struct liste_eventtypes_t *liste_events_widgets;
+ei_linked_rect_t *rect_to_update;
 ei_widget_t *widget_racine;
 ei_surface_t racine_surface;
 ei_surface_t pick_surface;
@@ -23,7 +24,8 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 
     liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
     liste_geometrymanager = calloc(1, sizeof(struct liste_geometrymanager));
-    liste_events_widgets = calloc(1, sizeof(liste_eventtypes_t));
+    liste_events_widgets = calloc(1, sizeof(struct liste_eventtypes_t));
+    rect_to_update = calloc(1, sizeof(ei_linked_rect_t));
 
     /* Enregistrement des différentes classes de widget */
     ei_frame_register_class();
@@ -49,6 +51,7 @@ void ei_app_run()
     ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
+    
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
@@ -116,7 +119,14 @@ void ei_app_free()
     }
     
     /* On libère la liste chaînée des event types */
-    // free_liste_eventtypes(liste_events_widgets);
+    free_liste_eventtypes(liste_events_widgets);
+
+    while (rect_to_update != NULL)
+    {
+        ei_linked_rect_t *next = rect_to_update->next;
+        free(rect_to_update);
+        rect_to_update = next;
+    }
 
     /* On libère les ressources créées par hw_init */
     hw_quit();
@@ -134,10 +144,14 @@ ei_surface_t ei_app_root_surface(void)
 
 void ei_app_invalidate_rect(ei_rect_t *rect)
 {
-    // TODO
+    ei_linked_rect_t *sent = rect_to_update;
+    while (sent->next != NULL)
+        sent = sent->next;
+    sent->next = calloc(1, sizeof(ei_linked_rect_t));
+    sent->next->rect = *rect;
 }
 
 void ei_app_quit_request(void)
 {
-    printf("Coucou");
+    arret = EI_TRUE;
 }
