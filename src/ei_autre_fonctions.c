@@ -93,16 +93,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
         return search_widget_by_id(current_widget->children_head, id);
 }
 
-ei_widget_t *search_widget_by_click(ei_event_t *event)
-{
-    ei_point_t point = event->param.mouse.where;
-
-    uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
-    picking_color_entier += point.x + point.y * hw_surface_get_size(pick_surface).width;
-
-    return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
-}
-
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
     if (!strcmp(widget->wclass->name, "toplevel"))
@@ -123,4 +113,18 @@ void update_surface(ei_linked_rect_t *rectangles_list)
     draw_widgets_and_family(ei_app_root_widget());
     hw_surface_unlock(ei_app_root_surface());
     hw_surface_update_rects(ei_app_root_surface(), NULL);
+}
+
+void lighten_color(ei_color_t *couleur)
+{
+    couleur->red = (couleur->red <= 225) ? couleur->red + 30 : 255;
+    couleur->green = (couleur->green <= 225) ? couleur->green + 30 : 255;
+    couleur->blue = (couleur->blue <= 225) ? couleur->blue + 30 : 255;
+}
+
+void darken_color(ei_color_t *couleur)
+{
+    couleur->red = (couleur->red >= 30) ? couleur->red - 30 : 0;
+    couleur->green = (couleur->green >= 30) ? couleur->green - 30 : 0;
+    couleur->blue = (couleur->blue >= 30) ? couleur->blue - 30 : 0;
 }

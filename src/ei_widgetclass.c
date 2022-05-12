@@ -27,6 +27,7 @@ ei_widgetclass_t *ei_widgetclass_from_name(ei_widgetclass_name_t name)
 
     if (!strcmp(sent->first_widgetclass->name, name))
         return sent->first_widgetclass;
+    return NULL;
 }
 
 void ei_frame_register_class(void)

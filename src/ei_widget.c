@@ -9,32 +9,40 @@
 
 extern struct liste_widgetclass *liste_widgetclass;
 extern struct liste_geometrymanager *liste_geometrymanager;
+extern ei_surface_t pick_surface;
+
+void ei_widget_destroy(ei_widget_t *widget)
+{
+    // TODO
+}
+
+ei_widget_t *ei_widget_pick(ei_point_t *where)
+{
+    uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
+    picking_color_entier += where->x + where->y * hw_surface_get_size(pick_surface).width;
+
+    return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
+}
 
 ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *parent, void *user_data, ei_widget_destructor_t destructor)
 {
-    struct liste_widgetclass *sent = liste_widgetclass;
-    while (sent != NULL && sent->first_widgetclass != NULL)
-    {
-        if (!strcmp(sent->first_widgetclass->name, class_name))
-        {
-            ei_widget_t *widget = sent->first_widgetclass->allocfunc();
+    ei_widgetclass_t *widgetclass = ei_widgetclass_from_name(class_name);
 
-            /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
-            widget->wclass = sent->first_widgetclass;
-            widget->wclass->setdefaultsfunc(widget); /* Notre nouveau widget prend les paramètres par défaut */
-            widget->parent = parent;
-            widget->user_data = user_data;
-            widget->destructor = destructor;
-            widget->geom_params = (ei_geometry_param_t *)(liste_geometrymanager->geometrymanager_cell);
+    if (widgetclass == NULL)
+        return NULL;
 
-            /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
-            (parent != NULL) ? ajout_relation_parent(parent, widget) : NULL;
-            return widget;
-        }
-        else
-            sent = sent->next;
-    }
-    return NULL;
+    ei_widget_t *widget = widgetclass->allocfunc();
+
+    /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
+    widget->wclass = widgetclass;
+    widget->wclass->setdefaultsfunc(widget); /* Notre nouveau widget prend les paramètres par défaut */
+    widget->parent = parent;
+    widget->user_data = user_data;
+    widget->destructor = destructor;
+
+    /* Il ne faut pas oublier de dire au parent qu'il a un nouveau fils si jamais c'est pas la racine */
+    (parent != NULL) ? ajout_relation_parent(parent, widget) : NULL;
+    return widget;
 }
 
 void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei_color_t *color, int *border_width,

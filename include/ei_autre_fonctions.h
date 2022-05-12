@@ -32,14 +32,7 @@ ei_color_t int_to_color(uint32_t entier);
 /*
  * Cherche parmi l'arbre des widgets celui correspondant à l'id fournit
  */
-static ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
-
-/*
- * Utilise la fonction précédente pour chercher avec quel widget
- * l'utilisateur a intéragit. On prend l'event de clic, et on renvoie
- * le widget en question.
- */
-ei_widget_t *search_widget_by_click(ei_event_t *event);
+ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
 
 /*
  * Fonction qui est lancée une et une seule fois en début de ei_app_run.
@@ -49,3 +42,13 @@ void create_close_button_for_each_toplevel(ei_widget_t *widget);
 
 /* Fonction simplifiant la mise à jour des surfaces pour le dessins */
 void update_surface(ei_linked_rect_t *rectangles_list);
+
+/* 
+ * Permet d'éclaircir une couleur
+ */
+void lighten_color(ei_color_t *couleur);
+
+/* 
+ * Permet d'assombrir une couleur
+ */
+void darken_color(ei_color_t *couleur);

@@ -164,7 +164,7 @@ void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_boo
 
     ei_linked_point_t *nouveau_haute = calloc(1, sizeof(ei_linked_point_t));
     ei_linked_point_t *nouveau_milieu = calloc(1, sizeof(ei_linked_point_t));
-    nouveau_haute->point.x = rectangle->size.width  + rectangle->top_left.x;
+    nouveau_haute->point.x = rectangle->size.width + rectangle->top_left.x;
     nouveau_haute->point.y = (rectangle->size.height / 2) + rectangle->top_left.y;
     nouveau_milieu = nouveau_haute;
     nouveau_milieu->point.x -= largeur;
@@ -176,7 +176,7 @@ void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_boo
 
     ei_linked_point_t *nouveau_milieu_1 = calloc(1, sizeof(ei_linked_point_t));
     ei_linked_point_t *nouveau_basse = calloc(1, sizeof(ei_linked_point_t));
-    nouveau_basse->point.x = (rectangle->size.width / 2)  + rectangle->top_left.x;
+    nouveau_basse->point.x = (rectangle->size.width / 2) + rectangle->top_left.x;
     nouveau_basse->point.y = rectangle->size.height + rectangle->top_left.y;
     nouveau_milieu_1 = nouveau_basse;
     nouveau_milieu_1->point.y -= largeur;
@@ -200,10 +200,13 @@ void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_boo
     ei_color_t color1 = color;
     ei_color_t color2 = color;
 
-    if (raised == EI_TRUE) {
+    if (raised == EI_TRUE)
+    {
         color1 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
         color2 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
-    } else {
+    }
+    else
+    {
         color1 = (ei_color_t){0x64, 0x64, 0x64, 0xff};
         color2 = (ei_color_t){0xB4, 0xB4, 0xB4, 0xff};
         color = (ei_color_t){0x9E, 0x0E, 0x40, 0xff};
@@ -218,10 +221,7 @@ void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_boo
     free_linked_point_pointeur(partie_basse);
 }
 
-void			ei_draw_img		(ei_surface_t		surface,
-						 const ei_point_t*	where,
-						 const char**		filename,
-						 const ei_rect_t*	clipper)
+void ei_draw_img(ei_surface_t surface, const ei_point_t *where, const char **filename, const ei_rect_t *clipper)
 {
     if (filename != NULL)
     {
@@ -232,7 +232,7 @@ void			ei_draw_img		(ei_surface_t		surface,
 
         dest.top_left.x = where->x;
         dest.top_left.y = where->y;
-        
+
         ei_copy_surface(surface, &dest, surface_source, &source, EI_FALSE);
-    }    
+    }
 }

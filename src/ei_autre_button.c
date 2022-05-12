@@ -18,24 +18,6 @@ void button_releasefunc(struct ei_widget_t *widget)
     free((ei_button_t *)widget);
 }
 
-uint8_t lighten_color(uint8_t entier)
-{
-    if (entier <= 205)
-    {
-        return entier + 50;
-    }
-    return 255;
-}
-
-uint8_t darken_color(uint8_t entier)
-{
-    if (entier >= 50)
-    {
-        return entier - 50;
-    }
-    return 0;
-}
-
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
@@ -47,13 +29,13 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
     if (*bouton->relief == ei_relief_sunken)
     {
-        color = (ei_color_t){lighten_color(color.red), lighten_color(color.green), lighten_color(color.blue), 0xff};
-        color2 = (ei_color_t){darken_color(color2.red), darken_color(color2.green), darken_color(color2.blue), 0xff};
+        lighten_color(&color);
+        darken_color(&color2);
     }
     else if (*bouton->relief == ei_relief_raised)
     {
-        color = (ei_color_t){darken_color(color.red), darken_color(color.green), darken_color(color.blue), 0xff};
-        color2 = (ei_color_t){lighten_color(color2.red), lighten_color(color2.green), lighten_color(color2.blue), 0xff};
+        darken_color(&color);
+        lighten_color(&color2);
     }
 
     /* On dessine d'abord les parties hautes et basses */
