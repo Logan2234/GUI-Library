@@ -44,19 +44,16 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_color_t color = *bouton->color;
     ei_color_t color2 = *bouton->color;
     ei_color_t color3 = *bouton->color;
-    printf("%i\n", color.red);
-    printf("%i\n", color.blue);
-    printf("%i\n", color.green);
 
     if (*bouton->relief == ei_relief_sunken)
     {
         color = (ei_color_t){lighten_color(color.red), lighten_color(color.green), lighten_color(color.blue), 0xff};
-        color2 = (ei_color_t){darken_color(color.red), darken_color(color.green), darken_color(color.blue), 0xff};
+        color2 = (ei_color_t){darken_color(color2.red), darken_color(color2.green), darken_color(color2.blue), 0xff};
     }
     else if (*bouton->relief == ei_relief_raised)
     {
         color = (ei_color_t){darken_color(color.red), darken_color(color.green), darken_color(color.blue), 0xff};
-        color2 = (ei_color_t){lighten_color(color.red), lighten_color(color.green), lighten_color(color.blue), 0xff};
+        color2 = (ei_color_t){lighten_color(color2.red), lighten_color(color2.green), lighten_color(color2.blue), 0xff};
     }
 
     /* On dessine d'abord les parties hautes et basses */
