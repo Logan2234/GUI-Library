@@ -37,7 +37,7 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
         struct liste_events_widgets *suivant = sentinel->liste;
         while (suivant->next != NULL)
         {
-            if (suivant->widget->pick_id == widget->pick_id || (suivant->widget == NULL && widget == NULL))
+            if ((suivant->widget == NULL && widget == NULL) || suivant->widget->pick_id == widget->pick_id)
             {
                 suivant->callback = callback;
                 suivant->user_param = user_param;
@@ -77,7 +77,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
         {
             struct liste_events_widgets *suivant = liste_widget;
             struct liste_events_widgets *ancien = liste_widget;
-            if ((suivant->widget->pick_id == widget->pick_id || (suivant->widget == NULL && widget == NULL)) && suivant->callback == callback &&
+            if (((suivant->widget == NULL && widget == NULL) || suivant->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
                 suivant->user_param == user_param && suivant->eventtype == eventtype)
             {
                 liste_widget = liste_widget->next;
@@ -86,7 +86,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
             }
             while (suivant->next != NULL)
             {
-                if (suivant->next->widget->pick_id == widget->pick_id && suivant->callback == callback &&
+                if (((suivant->next->widget == NULL && widget == NULL) || suivant->next->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
                     suivant->user_param == user_param && suivant->eventtype == eventtype)
                 {
                     ancien = suivant->next;
@@ -100,7 +100,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
                     suivant = suivant->next;
                 }
             }
-            if ((suivant->widget->pick_id == widget->pick_id || (suivant->widget == NULL && widget == NULL)) && suivant->callback == callback &&
+            if (((suivant->widget == NULL && widget == NULL) || suivant->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
                 suivant->user_param == user_param && suivant->eventtype == eventtype)
             {
                 suivant = ancien->next;

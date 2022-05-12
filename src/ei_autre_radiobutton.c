@@ -16,6 +16,11 @@ void radiobutton_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_s
 {
 
     struct liste_textes *textes = ((ei_radiobutton_t *) widget)->textes;
+    while (textes != NULL)
+    {
+        //  TODO
+        textes = textes->next;
+    }
 
 }
 
