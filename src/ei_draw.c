@@ -129,20 +129,25 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
             {
                 /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
                 if (pixel_ptr_dest == last_pixel_of_current_line_dest)
-                 {
-                     last_value_of_j = j;
-                     break;
-                 }
-                uint8_t *dest = (uint8_t *)pixel_ptr_dest;
-                uint8_t *src = (uint8_t *)pixel_ptr_src;
+                {
+                    last_value_of_j = j;
+                    break;
+                }
+                if (alpha == EI_TRUE){
+                    uint8_t *dest = (uint8_t *)pixel_ptr_dest;
+                    uint8_t *src = (uint8_t *)pixel_ptr_src;
 
 
-                *(dest + ig) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig) / 255;
-                *(dest + ir) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir) / 255;
-                *(dest + ib) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib) / 255;
+                    *(dest + ig) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig) / 255;
+                    *(dest + ir) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir) / 255;
+                    *(dest + ib) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib) / 255;
 
-                *pixel_ptr_dest++;
-                *pixel_ptr_src++;
+                    *pixel_ptr_dest++;
+                    *pixel_ptr_src++;
+                }
+                else {
+                    *pixel_ptr_dest++ = *pixel_ptr_src++;
+                }
             }
             if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
                 pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
