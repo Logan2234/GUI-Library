@@ -43,12 +43,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
-    hw_surface_lock(racine_surface);
-    // hw_surface_lock(pick_surface);
-    draw_widgets_and_family(widget_racine);
-    hw_surface_unlock(racine_surface);
-    // hw_surface_unlock(pick_surface);
-    hw_surface_update_rects(racine_surface, NULL);
+    update_surface(NULL);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
@@ -67,10 +62,7 @@ void ei_app_run()
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
-                hw_surface_lock(racine_surface);
-                draw_widgets_and_family(widget_racine);
-                hw_surface_unlock(racine_surface);
-                hw_surface_update_rects(racine_surface, NULL);
+                update_surface(NULL);
             }
             // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
         }
@@ -84,10 +76,7 @@ void ei_app_run()
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : NULL;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
-                hw_surface_lock(racine_surface);
-                draw_widgets_and_family(widget_racine);
-                hw_surface_unlock(racine_surface);
-                hw_surface_update_rects(racine_surface, NULL);
+                update_surface(NULL);
             }
             pressed_widget = NULL;
         }
@@ -96,10 +85,7 @@ void ei_app_run()
         {
             pointed_widget = search_widget_by_click(event);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
-            hw_surface_lock(racine_surface);
-            draw_widgets_and_family(widget_racine);
-            hw_surface_unlock(racine_surface);
-            hw_surface_update_rects(racine_surface, NULL);
+            update_surface(NULL);
         }
     }
     // On doit faire ça ?

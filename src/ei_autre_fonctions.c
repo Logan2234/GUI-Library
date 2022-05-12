@@ -100,3 +100,11 @@ void create_close_button_for_each_toplevel(ei_widget_t *widget)
     if (widget->children_head != NULL)
         return create_close_button_for_each_toplevel(widget->children_head);
 }
+
+void update_surface(ei_linked_rect_t *rectangles_list)
+{
+    hw_surface_lock(ei_app_root_surface());
+    draw_widgets_and_family(ei_app_root_widget());
+    hw_surface_unlock(ei_app_root_surface());
+    hw_surface_update_rects(ei_app_root_surface(), NULL);
+}

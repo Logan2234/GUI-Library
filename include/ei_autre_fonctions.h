@@ -46,3 +46,6 @@ ei_widget_t *search_widget_by_click(ei_event_t *event);
  * Elle permet d'attribuer à chaque widget toplevel un bouton de fermeture.
  */
 void create_close_button_for_each_toplevel(ei_widget_t *widget);
+
+/* Fonction simplifiant la mise à jour des surfaces pour le dessins */
+void update_surface(ei_linked_rect_t *rectangles_list);
