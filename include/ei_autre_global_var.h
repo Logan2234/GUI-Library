@@ -1,15 +1,18 @@
 /* Paramètres par défaut des frames */
 static ei_anchor_t default_anchor_frame = ei_anc_center;
 static ei_relief_t default_relief_frame = ei_relief_none;
+static ei_size_t default_frame_size = {100, 100};
 
 /* Paramètres par défaut des buttons */
 static ei_anchor_t default_anchor_button = ei_anc_center;
 static ei_relief_t default_relief_button = ei_relief_raised;
+static ei_size_t default_button_size = {60, 40};
 
 /* Paramètres par défaut des toplevel */
 static int constante_4 = 4;
 static ei_axis_set_t default_axis = ei_axis_both;
 static ei_bool_t vrai = EI_TRUE;
+static ei_size_t default_toplevel_size = {320, 240};
 
 /* Variables globales de configuration des close_buttons */
 static const ei_color_t close_button_color = {0xff, 0x00, 0x00, 0xff};

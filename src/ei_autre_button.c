@@ -3,6 +3,7 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_application.h"
+#include "ei_autre_global_var.h"
 
 extern int widget_id;
 
@@ -46,10 +47,10 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_draw_polygon(surface, partie_basse, color, clipper);
 
     /* Puis on dessine un plus petit rounded rectangle par dessus */
-    rectangle.top_left.x += *((ei_toplevel_t *)widget)->border_width;
-    rectangle.top_left.y += *((ei_toplevel_t *)widget)->border_width;
-    rectangle.size.width -= 2 * *((ei_toplevel_t *)widget)->border_width;
-    rectangle.size.height -= 2 * *((ei_toplevel_t *)widget)->border_width;
+    rectangle.top_left.x += *bouton->border_width;
+    rectangle.top_left.y += *bouton->border_width;
+    rectangle.size.width -= 2 * *bouton->border_width;
+    rectangle.size.height -= 2 * *bouton->border_width;
     ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
 
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
@@ -140,8 +141,8 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
 
-    widget->requested_size = (ei_size_t){100, 40};
-    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
+    widget->requested_size = default_button_size;
+    widget->screen_location = (ei_rect_t){0, 0, default_button_size};
     widget->content_rect = &widget->screen_location;
 }
 

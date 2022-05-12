@@ -4,6 +4,7 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 #include "ei_autre_fonctions.h"
+#include "ei_autre_global_var.h"
 
 extern int widget_id;
 
@@ -41,23 +42,28 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         /* Et enfin le coin inférieur gauche pour créer la partie supérieure */
         zone_rectangle->next->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x, widget->screen_location.top_left.y + widget->requested_size.height};
 
+        ei_color_t color1 = *((ei_frame_t *)widget)->color;
+        ei_color_t color2 = *((ei_frame_t *)widget)->color;
+        lighten_color(&color1);
+        darken_color(&color2);
+
         if (*((ei_frame_t *)widget)->relief == ei_relief_raised)
         {
-            ei_draw_polygon(surface, zone_rectangle, ei_default_light_background_color, NULL);
+            ei_draw_polygon(surface, zone_rectangle, color1, NULL);
 
             /* Le premier point devient le point en bas à droite pour dessiner la partie inférieure */
             zone_rectangle->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y + widget->requested_size.height};
 
-            ei_draw_polygon(surface, zone_rectangle, ei_default_dark_background_color, NULL);
+            ei_draw_polygon(surface, zone_rectangle, color2, NULL);
         }
         else
         {
-            ei_draw_polygon(surface, zone_rectangle, ei_default_dark_background_color, NULL);
+            ei_draw_polygon(surface, zone_rectangle, color1, NULL);
 
             /* Le premier point devient le point en bas à droite pour dessiner la partie inférieure */
             zone_rectangle->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y + widget->requested_size.height};
 
-            ei_draw_polygon(surface, zone_rectangle, ei_default_light_background_color, NULL);
+            ei_draw_polygon(surface, zone_rectangle, color2, NULL);
         }
         free(zone_rectangle->next->next->next->next);
         free(zone_rectangle->next->next->next);
@@ -103,8 +109,8 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     widget->children_tail = NULL;
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
-    widget->requested_size = (ei_size_t){100, 100};
-    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
+    widget->requested_size = default_frame_size;
+    widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
     widget->content_rect = &widget->screen_location;
 }
 

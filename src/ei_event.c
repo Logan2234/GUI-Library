@@ -81,7 +81,7 @@ void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_c
                 suivant->user_param == user_param && suivant->eventtype == eventtype)
             {
                 liste_widget = liste_widget->next;
-                free(ancien);
+                // free(ancien);
                 return;
             }
             while (suivant != NULL && suivant->next != NULL)

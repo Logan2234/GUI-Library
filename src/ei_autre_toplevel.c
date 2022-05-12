@@ -4,6 +4,7 @@
 #include "ei_widgetclass.h"
 #include "ei_types.h"
 #include "ei_autre_fonctions.h"
+#include "ei_autre_global_var.h"
 
 extern int widget_id;
 
@@ -74,8 +75,8 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
 
-    widget->requested_size = (ei_size_t){320, 240};
-    widget->screen_location = (ei_rect_t){0, 0, widget->requested_size};
+    widget->requested_size = default_toplevel_size;
+    widget->screen_location = (ei_rect_t){0, 0, default_toplevel_size};
     widget->content_rect = &widget->screen_location;
 }
 

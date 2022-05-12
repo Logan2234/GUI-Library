@@ -1,9 +1,6 @@
 #include "ei_widgetclass.h"
 #include "ei_geometrymanager.h"
 
-static const ei_color_t ei_default_dark_background_color = {0x65, 0x62, 0x63, 0xff};
-static const ei_color_t ei_default_light_background_color = {0xBD, 0xBC, 0xBC, 0xff};
-
 /* Everything about frame */
 typedef struct ei_frame_t
 {

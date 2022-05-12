@@ -1,6 +1,7 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_struct.h"
 #include "ei_application.h"
+#include "ei_autre_global_var.h"
 
 extern struct liste_geometrymanager *liste_geometrymanager;
 
@@ -23,8 +24,12 @@ void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
 
 void ei_geometrymanager_unmap(ei_widget_t *widget)
 {
+    widget->geom_params->manager->releasefunc(widget);
     widget->geom_params = NULL;
     ei_app_invalidate_rect(&widget->screen_location);
+    widget->screen_location = (!strcmp(widget->wclass->name, "frame"))    ? (ei_rect_t){0, 0, default_frame_size}
+                              : (!strcmp(widget->wclass->name, "button")) ? (ei_rect_t){0, 0, default_button_size}
+                                                                          : (ei_rect_t){0, 0, default_toplevel_size};
 }
 
 ei_geometrymanager_t *ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
@@ -43,13 +48,13 @@ void ei_register_placer_manager(void)
     ei_geometrymanager_register(placer);
 }
 
-void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *width, 
+void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *width,
               int *height, float *rel_x, float *rel_y, float *rel_width, float *rel_height)
 {
-    
+
     /* Gestion du paramètre geom_params du widget */
     widget->geom_params = ei_geometrymanager_from_name("placer");
-    
+
     /* Initialisation des variables pour contrer les NULL */
     ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
 
@@ -60,7 +65,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     int width2, height2;
     float rel_x2, rel_y2;
     float rel_height2, rel_width2;
-    
+
     x2 = ((x == NULL) ? widget->content_rect->top_left.x : *x);
     y2 = ((y == NULL) ? widget->content_rect->top_left.y : *y);
     rel_x2 = ((rel_x == NULL) ? 0 : *rel_x);
