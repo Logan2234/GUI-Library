@@ -10,7 +10,6 @@ extern int widget_id;
 
 void ei_widget_destroy(ei_widget_t *widget)
 {
-    put_null_in_list(widget);
     printf("->%s\n", widget->wclass->name);
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
