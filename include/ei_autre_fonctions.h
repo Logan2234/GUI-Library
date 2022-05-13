@@ -29,9 +29,10 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
 
 /*
  * Fonction qui est lancée une et une seule fois en début de ei_app_run.
- * Elle permet d'attribuer à chaque widget toplevel un bouton de fermeture.
+ * Elle permet d'attribuer à chaque widget toplevel un bouton de fermeture
+ * et un évènement de drag pour le déplacement.
  */
-void create_close_button_for_each_toplevel(ei_widget_t *widget);
+void init_toplevel(ei_widget_t *widget);
 
 /* Fonction simplifiant la mise à jour des surfaces pour le dessins */
 void update_surface(ei_linked_rect_t *rectangles_list);
