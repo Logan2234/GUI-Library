@@ -48,7 +48,10 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sentinel->next = nouveau2;
 
-    ei_draw_polygon(surface, premier_point, *(((ei_toplevel_t *)widget)->color), clipper);
+    ei_rect_t new_clipper_toplevel = *clipper;
+    new_clipper_toplevel.top_left.y += 35;
+    new_clipper_toplevel.size.height -= 35;
+    ei_fill(surface, (((ei_toplevel_t *)widget)->color), &new_clipper_toplevel);
 
     free_linked_point_pointeur(premier_point);
 
@@ -182,11 +185,13 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
     widget->requested_size = default_toplevel_size;
     widget->screen_location = (ei_rect_t){0, 0, default_toplevel_size};
     widget->content_rect = &widget->screen_location;
+    widget->content_rect->size.height -= 35;
+    widget->content_rect->top_left.y += 35;
 }
 
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)
 {
-    // TODO
+    widget->geom_params->manager->runfunc(widget);
 }
 
 ei_widgetclass_t *return_class_toplevel(void)

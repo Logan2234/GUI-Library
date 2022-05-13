@@ -59,6 +59,9 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
         height_parent = widget->parent->screen_location.size.height;
     }
     ei_geometry_param_t *placer = (ei_geometry_param_t *)calloc(1, sizeof(struct ei_placer_t));
+
+    placer->manager = ei_geometrymanager_from_name("placer");
+
     ((ei_placer_t *)placer)->manager = *placer;
     ((ei_placer_t *)placer)->anchor = anchor;
     ((ei_placer_t *)placer)->x = ((x == NULL) ? widget->content_rect->top_left.x : *x);
