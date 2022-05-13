@@ -42,7 +42,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 
 void ei_app_run()
 {
-    create_close_button_for_each_toplevel(widget_racine);
+    init_toplevel(widget_racine);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
