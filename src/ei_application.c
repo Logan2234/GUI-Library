@@ -83,7 +83,6 @@ void ei_app_run()
             pointed_widget = ei_widget_pick(&event->param.mouse.where);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
         }
-        // printf("%p\n", widget_racine->children_head->children_head);
     }
     free(event);
 }

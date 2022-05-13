@@ -15,7 +15,7 @@ void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
     
     if (widget != origin && widget->next_sibling != NULL)
         ei_kill_widget(widget->next_sibling, origin);
-    if (widget == origin)
+    if (widget == origin && widget != ei_app_root_widget())
     {
         ei_widget_t *sent = origin->parent->children_head;
         (sent->pick_id == origin->pick_id) ? origin->parent->children_head = origin->parent->children_head->next_sibling : NULL;
