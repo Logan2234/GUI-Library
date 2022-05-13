@@ -16,19 +16,6 @@ void draw_widgets_and_family(ei_widget_t *widget)
         draw_widgets_and_family(current_widget->children_head);
 }
 
-void free_widgets_and_family(ei_widget_t *widget)
-{
-    ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
-        free_widgets_and_family(current_widget->next_sibling);
-
-    if (current_widget->children_head != NULL)
-        free_widgets_and_family(current_widget->children_head);
-
-    (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
-    free(widget);
-}
-
 void free_linked_point_pointeur(ei_linked_point_t *liste)
 {
     ei_linked_point_t *courant = liste;
@@ -92,12 +79,20 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
         return search_widget_by_id(current_widget->children_head, id);
 }
 
+ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+    ei_widget_destroy(widget->parent);
+    return EI_TRUE;
+}
+
+ei_callback_t close_toplevel_widget = close_toplevel;
+
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
     if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
     }
     if (widget->next_sibling != NULL)
