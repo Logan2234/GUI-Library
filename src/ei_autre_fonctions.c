@@ -95,7 +95,6 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
     {
-        printf("Coucou\n");
         deplacement = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;

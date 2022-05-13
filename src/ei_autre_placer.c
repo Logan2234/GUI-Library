@@ -1,22 +1,22 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_placer.h"
 
-void placer_runfunc(struct ei_placer_t *placer)
+void placer_runfunc(ei_widget_t *widget)
 {
     /* Gestion du paramètre geom_params du widget */
-    int width_parent = placer->widget->requested_size.width;
-    int height_parent = placer->widget->requested_size.height;
-    placer->widget->geom_params = ei_geometrymanager_from_name("placer");
+    int width_parent = widget->requested_size.width;
+    int height_parent = widget->requested_size.height;
 
     /* Initialisation des variables pour contrer les NULL */
     ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
+    ei_placer_t *placer = (ei_placer_t *)widget->geom_params;
 
-    if (placer->widget->parent != NULL)
+    if (widget->parent != NULL)
     {
-        top_left->x = ((placer->rel_x != -1) ? placer->widget->parent->content_rect->top_left.x : 0);
-        top_left->y = ((placer->rel_y != -1) ? placer->widget->parent->content_rect->top_left.y : 0);
-        width_parent = placer->widget->parent->content_rect->size.width;
-        height_parent = placer->widget->parent->content_rect->size.height;
+        top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : 0);
+        top_left->y = ((placer->rel_y != -1) ? widget->parent->content_rect->top_left.y : 0);
+        width_parent = widget->parent->content_rect->size.width;
+        height_parent = widget->parent->content_rect->size.height;
     }
     placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
     placer->rel_y = ((placer->rel_y == -1) ? 0 : placer->rel_y);
@@ -75,15 +75,15 @@ void placer_runfunc(struct ei_placer_t *placer)
     }
 
     /* Maintenant on remplace dans les données de widgets */
-    placer->widget->content_rect->size.width = placer->width;
-    placer->widget->content_rect->size.height = placer->height;
-    placer->widget->content_rect->top_left = *top_left;
+    widget->content_rect->size.width = placer->width;
+    widget->content_rect->size.height = placer->height;
+    widget->content_rect->top_left = *top_left;
     free(top_left);
 }
 
 void placer_releasefunc(struct ei_widget_t *widget)
 {
-    // TODO
+    free((struct ei_placer_t *)widget->geom_params);
 }
 
 ei_geometrymanager_t *return_geometry_manager_placer()

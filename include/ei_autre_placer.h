@@ -2,7 +2,7 @@
 #include "ei_geometrymanager.h"
 
 typedef struct ei_placer_t{
-    ei_widget_t *widget;
+    ei_geometry_param_t manager;
     ei_anchor_t *anchor;
     int x;
     int y;
@@ -14,7 +14,7 @@ typedef struct ei_placer_t{
     float rel_height;
 } ei_placer_t;
 
-void placer_runfunc(struct ei_placer_t *placer);
+void placer_runfunc(ei_widget_t *widget);
 
 void placer_releasefunc(struct ei_widget_t *widget);
 
