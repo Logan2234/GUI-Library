@@ -86,6 +86,26 @@ ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *us
 }
 
 ei_callback_t close_toplevel_widget = close_toplevel;
+extern ei_bool_t deplacement;
+extern ei_point_t origine_deplacement;
+
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+    if (!strcmp(widget->wclass->name, "toplevel") &&
+        event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
+        event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
+    {
+        printf("Coucou\n");
+        deplacement = EI_TRUE;
+        origine_deplacement.x = event->param.mouse.where.x;
+        origine_deplacement.y = event->param.mouse.where.y;
+        printf("-> YES tu viens de cliquer sur la partie supérieure\n");
+        return EI_FALSE;
+    }
+    return EI_FALSE;
+}
+
+ei_callback_t deplacement_callback = deplacement_toplevel;
 
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
@@ -94,6 +114,8 @@ void create_close_button_for_each_toplevel(ei_widget_t *widget)
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
         ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+
+        ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
     }
     if (widget->next_sibling != NULL)
         return create_close_button_for_each_toplevel(widget->next_sibling);
