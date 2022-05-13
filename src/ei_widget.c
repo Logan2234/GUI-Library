@@ -10,14 +10,29 @@ extern int widget_id;
 
 void ei_widget_destroy(ei_widget_t *widget)
 {
-    // TODO
+    printf("->%s\n", widget->wclass->name);
+    ei_widget_t *current_widget = widget;
+    if (current_widget->next_sibling != NULL)
+    {
+        ei_widget_destroy(current_widget->next_sibling);
+        current_widget->next_sibling = NULL;
+    }
+
+    if (current_widget->children_head != NULL)
+    {
+        ei_widget_destroy(current_widget->children_head);
+        current_widget->children_head = NULL;
+    }
+
+    (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
+    widget->wclass->releasefunc(widget);
+    widget = NULL;
 }
 
 ei_widget_t *ei_widget_pick(ei_point_t *where)
 {
     uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
     picking_color_entier += where->x + where->y * hw_surface_get_size(pick_surface).width;
-    printf("->%d\n", *picking_color_entier);
     return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
 }
 

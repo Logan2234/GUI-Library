@@ -38,50 +38,33 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    printf("Coucou");
-    if (!strcmp(widget->wclass->name, "toplevel") &&
-        event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
-        event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
-    {
-        return EI_TRUE;
-    }
-    return EI_FALSE;
-}
-
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
-
-    ei_bind(ei_ev_mouse_buttondown, NULL, "all", deplacement_toplevel, NULL);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-
+    
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
+
         update_surface(rect_to_update);
         hw_event_wait_next(event);
         if (event->type < 5)
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL); // A CHANGER LE TAG
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
 
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
-
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
-            else if (!strcmp(pressed_widget->wclass->name, "toplevel"))
-            {
-            }
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
-
         /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
@@ -90,22 +73,20 @@ void ei_app_run()
             if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
-                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : 0;
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
+                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : 0;
             }
             pressed_widget = NULL;
         }
-
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
         {
             pointed_widget = ei_widget_pick(&event->param.mouse.where);
             *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
         }
+        // printf("%p\n", widget_racine->children_head->children_head);
     }
     free(event);
-
-    ei_unbind(ei_ev_mouse_buttondown, NULL, "all", deplacement_toplevel, NULL);
 }
 
 void ei_app_free()
@@ -114,7 +95,7 @@ void ei_app_free()
     hw_surface_free(pick_surface);
 
     /* On supprime tout les widgets */
-    free_widgets_and_family(widget_racine);
+    ei_widget_destroy(widget_racine);
 
     /* On libère la liste chaînée des widget class */
     while (liste_widgetclass != NULL)
@@ -131,7 +112,7 @@ void ei_app_free()
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
-
+    
     /* On libère la liste chaînée des event types */
     free_liste_eventtypes(liste_events_widgets);
 

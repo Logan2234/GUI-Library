@@ -98,7 +98,7 @@ set(LIB_EI_SOURCES
 	  ${SRC}/ei_event.c 
 	  ${SRC}/ei_autre_event.c 
 	  ${SRC}/ei_autre_radiobutton.c
-	  ${SRC}/ei_autre_fonctions.c)
+	  ${SRC}/ei_autre_fonctions.c include/ei_autre_placer.h)
 
 add_library(ei STATIC			${LIB_EI_SOURCES})
 
