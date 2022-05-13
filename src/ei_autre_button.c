@@ -122,7 +122,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)
 {
-    // TODO
+    widget->geom_params->manager->runfunc(widget);
 }
 
 void button_setdefaultsfunc(struct ei_widget_t *widget)

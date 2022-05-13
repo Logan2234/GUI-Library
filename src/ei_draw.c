@@ -146,7 +146,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     *(dest + ib) = *(src + ia) * *(src + ib) + (255 + *(src + ia)) * *(dest + ib) / 255;
                     }
                     else {
-                        printf("%i\n", logan++);
+                        // printf("%i\n", logan++);
                     }
                     // printf("%d\n", *pixel_ptr_dest);
                     *pixel_ptr_dest++;//= *pixel_ptr_src++;

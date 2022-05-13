@@ -110,7 +110,7 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
 
 void frame_geomnotifyfunc(struct ei_widget_t *widget)
 {
-    // TODO
+    widget->geom_params->manager->runfunc(widget);
 }
 
 ei_widgetclass_t *return_class_frame(void)
