@@ -12,7 +12,7 @@ void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
 {
     if (widget->children_head != NULL)
         ei_kill_widget(widget->children_head, origin);
-    
+
     if (widget != origin && widget->next_sibling != NULL)
         ei_kill_widget(widget->next_sibling, origin);
     if (widget == origin && widget != ei_app_root_widget())
@@ -130,7 +130,7 @@ void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_co
                                                                            : toplevel->color;
     toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante_4
                                                                                                       : toplevel->border_width;
-    toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? &default_toplevel_title 
+    toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? &default_toplevel_title
                                                                           : toplevel->title;
     toplevel->closable = (closable != NULL) ? closable : (toplevel->closable == NULL) ? &vrai
                                                                                       : toplevel->closable;
