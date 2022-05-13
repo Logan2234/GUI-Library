@@ -8,25 +8,29 @@ extern struct liste_geometrymanager *liste_geometrymanager;
 extern ei_surface_t pick_surface;
 extern int widget_id;
 
-void ei_widget_destroy(ei_widget_t *widget)
+void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
 {
-    printf("->%s\n", widget->wclass->name);
-    ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
+    if (widget->children_head != NULL)
+        ei_kill_widget(widget->children_head, origin);
+    
+    if (widget != origin && widget->next_sibling != NULL)
+        ei_kill_widget(widget->next_sibling, origin);
+    if (widget == origin)
     {
-        ei_widget_destroy(current_widget->next_sibling);
-        current_widget->next_sibling = NULL;
-    }
+        ei_widget_t *sent = origin->parent->children_head;
+        (sent->pick_id == origin->pick_id) ? origin->parent->children_head = origin->parent->children_head->next_sibling : NULL;
+        while (sent->next_sibling != NULL && sent->next_sibling->pick_id != origin->parent->pick_id)
+            sent = sent->next_sibling;
 
-    if (current_widget->children_head != NULL)
-    {
-        ei_widget_destroy(current_widget->children_head);
-        current_widget->children_head = NULL;
+        (sent->next_sibling != NULL) ? sent->next_sibling = sent->next_sibling->next_sibling : NULL;
     }
-
     (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
     widget->wclass->releasefunc(widget);
-    widget = NULL;
+}
+
+void ei_widget_destroy(ei_widget_t *widget)
+{
+    ei_kill_widget(widget, widget);
 }
 
 ei_widget_t *ei_widget_pick(ei_point_t *where)

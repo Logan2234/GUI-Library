@@ -62,7 +62,6 @@ void ei_app_run()
     
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
-
         update_surface(rect_to_update);
         hw_event_wait_next(event);
         if (event->type < 5)
