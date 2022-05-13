@@ -56,7 +56,7 @@ void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_
 
 
 
-void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget)
+void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
 {
     ei_eventtype_t a_chercher = event->type;
     struct liste_eventtypes_t *sentinel = liste;
@@ -68,7 +68,7 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
         struct liste_events_widgets *courant = sentinel->liste;
         while (courant != NULL) {
             if (a_chercher == courant->eventtype) {
-                if (specifique == EI_FALSE || (specifique == EI_TRUE && (courant->widget->pick_id == widget->pick_id || (courant->widget == NULL && widget == NULL)))) {
+                if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id))) {
                     arret = courant->callback(courant->widget, event, courant->user_param);
                     if (arret == EI_TRUE)
                         break;

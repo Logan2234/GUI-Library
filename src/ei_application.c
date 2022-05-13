@@ -52,7 +52,7 @@ void ei_app_run()
         update_surface(rect_to_update);
         hw_event_wait_next(event);
         if (event->type < 5)
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL);
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL); // A CHANGER LE TAG
 
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)

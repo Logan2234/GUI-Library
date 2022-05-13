@@ -48,6 +48,7 @@ typedef struct liste_events_widgets
     ei_eventtype_t eventtype;
     ei_callback_t callback;
     void *user_param;
+    ei_tag_t tag;
     struct liste_events_widgets* next;
 } liste_events;
 
