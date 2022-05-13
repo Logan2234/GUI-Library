@@ -77,7 +77,6 @@ void placer_runfunc(struct ei_placer_t *placer)
     /* Maintenant on remplace dans les données de widgets */
     placer->widget->content_rect->size.width = placer->width;
     placer->widget->content_rect->size.height = placer->height;
-
     placer->widget->content_rect->top_left = *top_left;
     free(top_left);
 }

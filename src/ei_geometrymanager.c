@@ -54,6 +54,11 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
 {
     int width_parent = widget->requested_size.width;
     int height_parent = widget->requested_size.height;
+    if (widget->parent != NULL)
+    {
+        width_parent = widget->parent->screen_location.size.width;
+        height_parent =widget->parent->screen_location.size.height;
+    }
     struct ei_placer_t *placer = malloc(sizeof(struct ei_placer_t));
     placer->widget = widget;
     placer->anchor = anchor;
@@ -63,10 +68,10 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     placer->rel_y = ((rel_y == NULL) ? -1 : *rel_y);
     placer->rel_width = ((rel_width == NULL) ? 0 : *rel_width);
     placer->rel_height = ((rel_height == NULL) ? 0 : *rel_height);
-    placer->width = ((width == NULL) ? (rel_width == NULL) ? widget->requested_size.width : 0 : *width);
-    placer->width += placer->rel_width * width_parent;
-    placer->height = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : 0 : *height);
-    placer->height += placer->rel_height* height_parent;
+    placer->width = ((width == NULL) ? (rel_width == NULL) ? widget->requested_size.width : placer->rel_width * width_parent : *width);
+    //placer->width += placer->rel_width * width_parent;
+    placer->height = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : placer->rel_height* height_parent : *height);
+    //placer->height += placer->rel_height* height_parent;
     placer_runfunc(placer);
 }
 
