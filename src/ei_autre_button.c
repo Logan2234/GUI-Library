@@ -129,8 +129,6 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
 
-    widget_id++;
-
     widget->user_data = NULL;
     widget->destructor = NULL;
     widget->parent = NULL;

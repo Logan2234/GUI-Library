@@ -6,6 +6,7 @@
 extern struct liste_widgetclass *liste_widgetclass;
 extern struct liste_geometrymanager *liste_geometrymanager;
 extern ei_surface_t pick_surface;
+extern int widget_id;
 
 void ei_widget_destroy(ei_widget_t *widget)
 {
@@ -16,7 +17,7 @@ ei_widget_t *ei_widget_pick(ei_point_t *where)
 {
     uint32_t *picking_color_entier = (uint32_t *)hw_surface_get_buffer(pick_surface);
     picking_color_entier += where->x + where->y * hw_surface_get_size(pick_surface).width;
-
+    printf("->%d\n", *picking_color_entier);
     return search_widget_by_id(ei_app_root_widget(), *picking_color_entier);
 }
 
@@ -28,6 +29,8 @@ ei_widget_t *ei_widget_create(ei_widgetclass_name_t class_name, ei_widget_t *par
         return NULL;
 
     ei_widget_t *widget = widgetclass->allocfunc();
+
+    widget_id++;
 
     /* Puis on rentre les paramètres fournis en paramètre de ei_widget_create */
     widget->wclass = widgetclass;
@@ -108,7 +111,7 @@ void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_co
                                                                            : toplevel->color;
     toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante_4
                                                                                                       : toplevel->border_width;
-    toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? (char **)"Toplevel"
+    toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? &default_toplevel_title 
                                                                           : toplevel->title;
     toplevel->closable = (closable != NULL) ? closable : (toplevel->closable == NULL) ? &vrai
                                                                                       : toplevel->closable;

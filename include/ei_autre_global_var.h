@@ -13,6 +13,7 @@ static int constante_4 = 4;
 static ei_axis_set_t default_axis = ei_axis_both;
 static ei_bool_t vrai = EI_TRUE;
 static ei_size_t default_toplevel_size = {320, 240};
+static char *default_toplevel_title = "Toplevel";
 
 /* Variables globales de configuration des close_buttons */
 static const ei_color_t close_button_color = {0xd2, 0x00, 0x00, 0xff};
