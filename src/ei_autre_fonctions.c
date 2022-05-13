@@ -65,7 +65,7 @@ ei_color_t int_to_color(uint32_t entier)
     red = entier / (256 * 256);
     green = (entier - red * 256 * 256) / 256;
     blue = (entier - red * 256 * 256 - green * 256);
-    return (ei_color_t){red, green, blue, 0x00};
+    return (ei_color_t){red, green, blue, 0xff};
 }
 
 ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
@@ -103,22 +103,6 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     return EI_FALSE;
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    if (deplacement == EI_FALSE)
-        return EI_FALSE;
-
-    else
-    {
-        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
-        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-        widget->screen_location.top_left.x += delta_x;
-        widget->screen_location.top_left.y += delta_y;
-        deplacement = EI_FALSE;
-        return EI_FALSE;
-    }
-}
-
 ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
     if (deplacement == EI_FALSE)
@@ -136,12 +120,28 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     }
 }
 
-ei_callback_t deplacement_callback = deplacement_toplevel;
-ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
-ei_callback_t deplacement_actif_callback = deplacement_actif;
-
-void create_close_button_for_each_toplevel(ei_widget_t *widget)
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
+    if (deplacement == EI_FALSE)
+        return EI_FALSE;
+
+    else
+    {
+        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
+        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+        widget->screen_location.top_left.x += delta_x;
+        widget->screen_location.top_left.y += delta_y;
+        deplacement = EI_FALSE;
+        return EI_FALSE;
+    }
+}
+
+void init_toplevel(ei_widget_t *widget)
+{
+    ei_callback_t deplacement_callback = deplacement_toplevel;
+    ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
+    ei_callback_t deplacement_actif_callback = deplacement_actif;
+    
     if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
@@ -151,13 +151,11 @@ void create_close_button_for_each_toplevel(ei_widget_t *widget)
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
-
-
     }
     if (widget->next_sibling != NULL)
-        return create_close_button_for_each_toplevel(widget->next_sibling);
+        return init_toplevel(widget->next_sibling);
     if (widget->children_head != NULL)
-        return create_close_button_for_each_toplevel(widget->children_head);
+        return init_toplevel(widget->children_head);
 }
 
 void update_surface(ei_linked_rect_t *rectangles_list)

@@ -1,7 +1,8 @@
 #include "ei_widget.h"
 #include "ei_geometrymanager.h"
 
-typedef struct ei_placer_t{
+typedef struct ei_placer_t
+{
     ei_geometry_param_t manager;
     ei_anchor_t *anchor;
     int x;
@@ -18,10 +19,9 @@ void placer_runfunc(ei_widget_t *widget);
 
 void placer_releasefunc(struct ei_widget_t *widget);
 
-//ei_geometrymanager_t *return_geometry_manager_placer();
-
+// ei_geometrymanager_t *return_geometry_manager_placer();
 
 #ifndef PROJETC_IG_EI_AUTRE_PLACER_H
 #define PROJETC_IG_EI_AUTRE_PLACER_H
 
-#endif //PROJETC_IG_EI_AUTRE_PLACER_H
+#endif // PROJETC_IG_EI_AUTRE_PLACER_H

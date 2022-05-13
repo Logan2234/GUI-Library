@@ -12,7 +12,7 @@ void ei_widgetclass_register(ei_widgetclass_t *widgetclass)
         struct liste_widgetclass *sent = liste_widgetclass;
         while (sent->next != NULL)
             sent = sent->next;
-            
+
         struct liste_widgetclass *new = calloc(1, sizeof(struct liste_widgetclass));
         new->first_widgetclass = widgetclass;
         sent->next = new;
