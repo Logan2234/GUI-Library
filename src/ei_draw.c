@@ -141,17 +141,12 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                 {
                     uint8_t *dest = (uint8_t *)pixel_ptr_dest;
                     uint8_t *src = (uint8_t *)pixel_ptr_src;
-                    if (*(src + ia) == 0){
-                        *(dest + ig_) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_) / 255;
-                        *(dest + ir_) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_) / 255;
-                        *(dest + ib_) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_) / 255;
-                    }
-                    *(dest + ig_) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_) / 255;
-                    *(dest + ir_) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_) / 255;
-                    *(dest + ib_) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_) / 255;
 
-                    // printf("%d\n", *pixel_ptr_dest);
-                    *pixel_ptr_dest++;//= *pixel_ptr_src++;
+                    *(dest + ig_) = (*(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_)) / 255;
+                    *(dest + ir_) = (*(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_)) / 255;
+                    *(dest + ib_) = (*(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_)) / 255;
+ 
+                    *pixel_ptr_dest++;
                     *pixel_ptr_src++;
                 }
                 else
