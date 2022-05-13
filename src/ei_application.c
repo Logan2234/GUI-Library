@@ -40,9 +40,30 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+    if (deplacement == EI_FALSE)
+        return EI_FALSE;
+
+    else
+    {
+        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
+        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+        widget->screen_location.top_left.x += delta_x;
+        widget->screen_location.top_left.y += delta_y;
+        printf("Daleee");
+        deplacement = EI_FALSE;
+        return EI_FALSE;
+    }
+}
+
+ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
+
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
+    
+    ei_bind(ei_ev_mouse_buttonup, NULL, "all", fin_deplacement_callback, NULL);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
@@ -66,6 +87,7 @@ void ei_app_run()
             }
             recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
+
         /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
@@ -80,6 +102,7 @@ void ei_app_run()
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             pressed_widget = NULL;
         }
+
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
         {

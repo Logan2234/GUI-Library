@@ -21,47 +21,9 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
     free((ei_toplevel_t *)widget);
 }
 
-// EFFACER
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    if (!strcmp(widget->wclass->name, "toplevel") &&
-        event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
-        event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
-    {
-        deplacement = EI_TRUE;
-        origine_deplacement.x = event->param.mouse.where.x;
-        origine_deplacement.y = event->param.mouse.where.y;
-        printf("YES tu viens de cliquer sur la partie supérieure\n");
-        return EI_FALSE;
-    }
-    return EI_FALSE;
-}
-
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    if (deplacement == EI_FALSE)
-        return EI_FALSE;
-
-    else
-    {
-        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
-        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-        widget->screen_location.top_left.x += delta_x;
-        widget->screen_location.top_left.y += delta_y;
-        printf("Daleee");
-        deplacement = EI_FALSE;
-        return EI_FALSE;
-    }
-}
-
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-
-
-    // EFFACER
-    ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_toplevel, NULL);
-    ei_bind(ei_ev_mouse_buttonup, NULL, "all", fin_deplacement_toplevel, NULL);
 
     /* On trace le fond */
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));

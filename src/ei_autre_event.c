@@ -54,8 +54,6 @@ void supprimer_liste_event_widget(struct liste_events_widgets *liste, ei_widget_
 }
  */
 
-
-
 void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
 {
     ei_eventtype_t a_chercher = event->type;
@@ -63,12 +61,15 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
     while (sentinel != NULL && sentinel->eventtype != a_chercher)
         sentinel = sentinel->next;
 
-    if (sentinel != NULL) {
-
+    if (sentinel != NULL)
+    {
         struct liste_events_widgets *courant = sentinel->liste;
-        while (courant != NULL) {
-            if (a_chercher == courant->eventtype) {
-                if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id))) {
+        while (courant != NULL)
+        {
+            if (a_chercher == courant->eventtype)
+            {
+                if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id)))
+                {
                     arret = courant->callback(courant->widget, event, courant->user_param);
                     if (arret == EI_TRUE)
                         break;
@@ -79,20 +80,24 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
     }
 }
 
-void free_liste_event_widget(struct liste_events_widgets *liste){
+void free_liste_event_widget(struct liste_events_widgets *liste)
+{
     struct liste_events_widgets *courant = liste;
     struct liste_events_widgets *suivant = liste;
-    while (suivant != NULL) {
+    while (suivant != NULL)
+    {
         courant = suivant;
         suivant = suivant->next;
         free(courant);
     }
 }
 
-void free_liste_eventtypes(struct liste_eventtypes_t *liste){
+void free_liste_eventtypes(struct liste_eventtypes_t *liste)
+{
     struct liste_eventtypes_t *courant = liste;
     struct liste_eventtypes_t *suivant = liste;
-    while (suivant != NULL) {
+    while (suivant != NULL)
+    {
         courant = suivant;
         suivant = suivant->next;
         free_liste_event_widget(courant->liste);
