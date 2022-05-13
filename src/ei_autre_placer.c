@@ -16,8 +16,8 @@ void placer_runfunc(struct ei_placer_t *placer)
         width_parent = placer->widget->parent->content_rect->size.width;
         height_parent =placer->widget->parent->content_rect->size.height;
     }
-    placer->rel_x = ((placer->rel_x == -1) ? 0 : -1);
-    placer->rel_y = ((placer->rel_y == -1) ? 0 : -1);
+    placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
+    placer->rel_y = ((placer->rel_y == -1) ? 0 : placer->rel_y);
     if (placer->anchor == NULL)
     {
         top_left->x += placer->x + placer->rel_x * width_parent;
