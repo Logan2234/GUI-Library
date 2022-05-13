@@ -1,7 +1,6 @@
 #include "ei_autre_struct.h"
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
-#include "ei_placer.h"
 
 extern struct liste_geometrymanager *liste_geometrymanager;
 
@@ -54,7 +53,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
 {
     int width_parent = widget->requested_size.width;
     int height_parent = widget->requested_size.height;
-    struct ei_placer_t *placer;
+    struct ei_placer_t *placer = malloc(sizeof(struct ei_placer_t));
     placer->widget = widget;
     placer->anchor = anchor;
     placer->x = ((x == NULL) ? widget->content_rect->top_left.x : *x);
