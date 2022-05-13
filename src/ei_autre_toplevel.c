@@ -21,7 +21,6 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 // EFFACER
 ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
-    printf("Coucou");
     if (!strcmp(widget->wclass->name, "toplevel") &&
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
