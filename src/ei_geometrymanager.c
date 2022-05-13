@@ -1,6 +1,7 @@
 #include "ei_autre_struct.h"
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
+#include "ei_autre_placer.h"
 
 extern struct liste_geometrymanager *liste_geometrymanager;
 

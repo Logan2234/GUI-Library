@@ -1,4 +1,5 @@
 #include "ei_geometrymanager.h"
+#include "ei_autre_placer.h"
 
 void placer_runfunc(struct ei_placer_t *placer)
 {
