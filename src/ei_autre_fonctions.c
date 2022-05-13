@@ -98,7 +98,6 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         deplacement = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;
-        printf("-> YES tu viens de cliquer sur la partie supérieure\n");
         return EI_FALSE;
     }
     return EI_FALSE;
