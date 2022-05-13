@@ -4,6 +4,7 @@
 #include "ei_autre_draw.h"
 
 extern int widget_id;
+extern ei_surface_t pick_surface;
 
 struct ei_widget_t *toplevel_allocfunc(void)
 {
@@ -146,16 +147,18 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
         sentinel3->next = resize_indicator3;
 
         ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, NULL);
-
+        
         free_linked_point_pointeur(resize_indicator);
     }
 
+
     /* Et enfin, on trace le titre */
     ei_point_t titre_pos = widget->screen_location.top_left;
-    titre_pos.x += 35;
-    titre_pos.y += 4;
-
+    titre_pos.x += 35; titre_pos.y += 4;
     ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, NULL);
+    
+    ei_rect_t new_clipper_including_header = {(ei_point_t){widget->screen_location.top_left.x - *toplevel->border_width, widget->screen_location.top_left.y}, (ei_size_t){widget->requested_size.width + *toplevel->border_width * 2, widget->requested_size.height + *toplevel->border_width}};
+    ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);
 }
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
@@ -164,8 +167,6 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
-
-    widget_id++;
 
     widget->user_data = NULL;
     widget->destructor = NULL; /* Il faut créer la fonction */
