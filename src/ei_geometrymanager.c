@@ -48,7 +48,6 @@ void ei_register_placer_manager(void)
     ei_geometrymanager_register(placer);
 }
 
-
 void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *width,
               int *height, float *rel_x, float *rel_y, float *rel_width, float *rel_height)
 {
@@ -57,7 +56,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     if (widget->parent != NULL)
     {
         width_parent = widget->parent->screen_location.size.width;
-        height_parent =widget->parent->screen_location.size.height;
+        height_parent = widget->parent->screen_location.size.height;
     }
     ei_geometry_param_t *placer = (ei_geometry_param_t *)calloc(1, sizeof(struct ei_placer_t));
     ((ei_placer_t *)placer)->manager = *placer;
@@ -69,13 +68,13 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     ((ei_placer_t *)placer)->rel_width = ((rel_width == NULL) ? 0 : *rel_width);
     ((ei_placer_t *)placer)->rel_height = ((rel_height == NULL) ? 0 : *rel_height);
     ((ei_placer_t *)placer)->width = ((width == NULL) ? (rel_width == NULL) ? widget->requested_size.width : ((ei_placer_t *)placer)->rel_width * width_parent : *width);
-    ((ei_placer_t *)placer)->height = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : ((ei_placer_t *)placer)->rel_height* height_parent : *height);
-    
+    ((ei_placer_t *)placer)->height = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : ((ei_placer_t *)placer)->rel_height * height_parent : *height);
+
     widget->geom_params = placer;
 
     placer_runfunc(widget);
 }
 
-void ei_geometrymanager_releasefunc (struct ei_widget_t* widget){
-
+void ei_geometrymanager_releasefunc(struct ei_widget_t *widget)
+{
 }

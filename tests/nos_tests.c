@@ -16,14 +16,15 @@ extern struct liste_geometrymanager *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
 
-ei_bool_t process_key(ei_widget_t* widget, ei_event_t* event, void* user_param)
+ei_bool_t process_key(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
-	if (event->param.key.key_code == SDLK_ESCAPE) {
-		ei_app_quit_request();
-		return EI_TRUE;
-	}
-        
-        return EI_FALSE;
+    if (event->param.key.key_code == SDLK_ESCAPE)
+    {
+        ei_app_quit_request();
+        return EI_TRUE;
+    }
+
+    return EI_FALSE;
 }
 
 /*
@@ -280,12 +281,12 @@ int test_6()
     ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, &title, NULL, NULL, NULL);
     ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-	ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
+    ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */
     ei_app_run();
 
-	ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
+    ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* We just exited from the main loop. Terminate the application (cleanup). */
     ei_app_free();

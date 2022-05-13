@@ -49,15 +49,15 @@ typedef struct liste_events_widgets
     ei_callback_t callback;
     void *user_param;
     ei_tag_t tag;
-    struct liste_events_widgets* next;
+    struct liste_events_widgets *next;
 } liste_events;
 
 /* Liste chainée de eventype menant vers de liste_events_widgets */
 typedef struct liste_eventtypes_t
 {
     ei_eventtype_t eventtype;
-    struct liste_events_widgets* liste;
-    struct liste_eventtypes_t* next;
+    struct liste_events_widgets *liste;
+    struct liste_eventtypes_t *next;
 } liste_eventtypes_t;
 
 /* Extension 1 : radiobutton */
@@ -74,7 +74,7 @@ typedef struct ei_radiobutton_t
     ei_surface_t *img;
     ei_rect_t **img_rect;
     ei_anchor_t *img_anchor;
-    ei_callback_t *callback;  // Il faudrait faire une liste de callbacks ?
+    ei_callback_t *callback; // Il faudrait faire une liste de callbacks ?
     void **user_param;
 } ei_radiobutton_t;
 

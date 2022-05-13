@@ -26,7 +26,7 @@ void placer_runfunc(ei_widget_t *widget)
         top_left->x += placer->x + placer->rel_x * width_parent;
         top_left->y += placer->y + placer->rel_y * height_parent;
     }
-    
+
     else
     {
         switch (*placer->anchor)
