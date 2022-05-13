@@ -46,7 +46,7 @@ void ei_app_run()
     ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-    
+
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         update_surface(rect_to_update);
@@ -110,7 +110,7 @@ void ei_app_free()
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
-    
+
     /* On libère la liste chaînée des event types */
     free_liste_eventtypes(liste_events_widgets);
 
