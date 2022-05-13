@@ -114,7 +114,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
         while (sent != NULL)
         {
             sent->wclass->geomnotifyfunc(sent);
-            sent = NULL;
+            sent = sent->next_sibling;
         }
         int delta_x = event->param.mouse.where.x - origine_deplacement.x;
         int delta_y = event->param.mouse.where.y - origine_deplacement.y;
