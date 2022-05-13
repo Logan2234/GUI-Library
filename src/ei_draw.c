@@ -108,8 +108,13 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     int ig;
     int ib;
     int ia;
-
     hw_surface_get_channel_indices(source, &ir, &ig, &ib, &ia);
+
+    int ir_;
+    int ig_;
+    int ib_;
+    int ia_;
+    hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
 
     if (dst_rect != NULL)
     {
@@ -119,7 +124,6 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
         uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect->size.width;
 
         uint32_t last_value_of_j = 0;
-        int32_t logan = 0;
         for (uint32_t i = 0; i < src_rect->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
@@ -135,17 +139,15 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                 {
                     uint8_t *dest = (uint8_t *)pixel_ptr_dest;
                     uint8_t *src = (uint8_t *)pixel_ptr_src;
-                    if (*(src + ia) != 0)
-                    {
-                    
-    
-                    *(dest + ig) = *(src + ia) * *(src + ig) + (255 + *(src + ia)) * *(dest + ig) / 255;
-                    *(dest + ir) = *(src + ia) * *(src + ir) + (255 + *(src + ia)) * *(dest + ir) / 255;
-                    *(dest + ib) = *(src + ia) * *(src + ib) + (255 + *(src + ia)) * *(dest + ib) / 255;
+                    if (*(src + ia) == 0){
+                        *(dest + ig_) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_) / 255;
+                        *(dest + ir_) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_) / 255;
+                        *(dest + ib_) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_) / 255;
                     }
-                    else {
-                        printf("%i\n", logan++);
-                    }
+                    *(dest + ig_) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_) / 255;
+                    *(dest + ir_) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_) / 255;
+                    *(dest + ib_) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_) / 255;
+
                     // printf("%d\n", *pixel_ptr_dest);
                     *pixel_ptr_dest++;//= *pixel_ptr_src++;
                     *pixel_ptr_src++;
