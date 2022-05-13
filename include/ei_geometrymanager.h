@@ -13,7 +13,7 @@
 
 #include "ei_types.h"
 #include "ei_widget.h"
-
+#include "ei_autre_placer.h"
 
 /**
  * \brief	A name of a geometry manager.
