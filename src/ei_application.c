@@ -38,19 +38,6 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    printf("Coucou");
-    if (!strcmp(widget->wclass->name, "toplevel") &&
-        event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
-        event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
-    {
-        printf("YES tu viens de cliquer sur la partie supérieure\n");
-        return EI_TRUE;
-    }
-    return EI_FALSE;
-}
-
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
