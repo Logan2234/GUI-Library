@@ -62,7 +62,7 @@ void ei_app_run()
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
-            // recherche_traitants_event(liste_widget, event, EI_TRUE, TROUVER LE WIDGETS)
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
         /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
