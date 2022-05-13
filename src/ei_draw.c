@@ -79,7 +79,7 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
 void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *text,
                   ei_font_t font, ei_color_t color, const ei_rect_t *clipper)
 {
-    if (text != NULL)
+    if (text != NULL && *text != 0)
     {
         ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
         ei_rect_t source = hw_surface_get_rect(surface_source);
@@ -139,7 +139,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     *(dest + ig) = *(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig) / 255;
                     *(dest + ir) = *(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir) / 255;
                     *(dest + ib) = *(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib) / 255;
-
+                    // printf("%d\n", *pixel_ptr_dest);
                     *pixel_ptr_dest++;
                     *pixel_ptr_src++;
                 }
