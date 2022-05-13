@@ -104,7 +104,42 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     return EI_FALSE;
 }
 
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+    if (deplacement == EI_FALSE)
+        return EI_FALSE;
+
+    else
+    {
+        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
+        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+        widget->screen_location.top_left.x += delta_x;
+        widget->screen_location.top_left.y += delta_y;
+        deplacement = EI_FALSE;
+        return EI_FALSE;
+    }
+}
+
+ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+{
+    if (deplacement == EI_FALSE)
+        return EI_FALSE;
+
+    else
+    {
+        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
+        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+        widget->screen_location.top_left.x += delta_x;
+        widget->screen_location.top_left.y += delta_y;
+        origine_deplacement.x = event->param.mouse.where.x;
+        origine_deplacement.y = event->param.mouse.where.y;
+        return EI_FALSE;
+    }
+}
+
 ei_callback_t deplacement_callback = deplacement_toplevel;
+ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
+ei_callback_t deplacement_actif_callback = deplacement_actif;
 
 void create_close_button_for_each_toplevel(ei_widget_t *widget)
 {
@@ -115,6 +150,10 @@ void create_close_button_for_each_toplevel(ei_widget_t *widget)
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
 
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
+        ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
+        ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
+
+
     }
     if (widget->next_sibling != NULL)
         return create_close_button_for_each_toplevel(widget->next_sibling);

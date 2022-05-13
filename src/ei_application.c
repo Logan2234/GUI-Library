@@ -40,30 +40,13 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
-{
-    if (deplacement == EI_FALSE)
-        return EI_FALSE;
 
-    else
-    {
-        int delta_x = event->param.mouse.where.x - origine_deplacement.x;
-        int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-        widget->screen_location.top_left.x += delta_x;
-        widget->screen_location.top_left.y += delta_y;
-        printf("Daleee");
-        deplacement = EI_FALSE;
-        return EI_FALSE;
-    }
-}
 
-ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
 
 void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
     
-    ei_bind(ei_ev_mouse_buttonup, NULL, "all", fin_deplacement_callback, NULL);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
@@ -77,39 +60,43 @@ void ei_app_run()
         if (event->type < 5)
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
 
-        /* Cas où on appuie avec le clic gauche */
-        else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
-        {
+            /* Cas où on appuie avec le clic gauche */
+        else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left) {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
-            if (!strcmp(pressed_widget->wclass->name, "button"))
-            {
-                *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
+            if (!strcmp(pressed_widget->wclass->name, "button")) {
+                *((ei_button_t *) pressed_widget)->relief = ei_relief_sunken;
             }
             recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
 
-        /* Cas où on relache le clic gauche */
-        else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
-        {
+            /* Cas où on relache le clic gauche */
+        else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left) {
             /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
             released_widget = ei_widget_pick(&event->param.mouse.where);
-            if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button"))
-            {
+            if (!strcmp(released_widget->wclass->name, "button") && !strcmp(pressed_widget->wclass->name, "button")) {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
-                *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
-                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : 0;
+                *((ei_button_t *) pressed_widget)->relief = ei_relief_raised;
+                (pressed_widget == released_widget) ? (((ei_button_t *) released_widget)->callback != NULL)
+                                                      ? (*((ei_button_t *) released_widget)->callback)(released_widget,
+                                                                                                       event, NULL) : 0
+                                                    : 0;
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             pressed_widget = NULL;
         }
 
-        /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
-        else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
-        {
+            /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
+        else {
+            if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") &&
+                event->type == ei_ev_mouse_move) {
             pointed_widget = ei_widget_pick(&event->param.mouse.where);
-            *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised : ei_relief_sunken;
+            *((ei_button_t *) pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
+                                                                                           : ei_relief_sunken;
+            }
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
         }
     }
+
     free(event);
 }
 
