@@ -145,3 +145,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     widget->content_rect->top_left = *top_left;
     free(top_left);
 }
+
+void ei_geometrymanager_releasefunc (struct ei_widget_t* widget){
+
+}
