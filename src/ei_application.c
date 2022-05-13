@@ -55,13 +55,11 @@ void ei_app_run()
 {
     create_close_button_for_each_toplevel(widget_racine);
 
-    ei_bind(ei_ev_mouse_buttondown, NULL, "all", deplacement_toplevel, NULL);
-
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-
+    
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
 
@@ -74,14 +72,11 @@ void ei_app_run()
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
-
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
-            else if (!strcmp(pressed_widget->wclass->name, "toplevel"))
-            {
-            }
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
         /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
@@ -96,7 +91,6 @@ void ei_app_run()
             }
             pressed_widget = NULL;
         }
-
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") && event->type == ei_ev_mouse_move)
         {
@@ -106,8 +100,6 @@ void ei_app_run()
         // printf("%p\n", widget_racine->children_head->children_head);
     }
     free(event);
-
-    ei_unbind(ei_ev_mouse_buttondown, NULL, "all", deplacement_toplevel, NULL);
 }
 
 void ei_app_free()
@@ -133,7 +125,7 @@ void ei_app_free()
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
-
+    
     /* On libère la liste chaînée des event types */
     free_liste_eventtypes(liste_events_widgets);
 
