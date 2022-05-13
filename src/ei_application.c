@@ -12,6 +12,8 @@ ei_widget_t *widget_racine;
 ei_surface_t racine_surface;
 ei_surface_t pick_surface;
 int widget_id = 0;
+ei_bool_t deplacement = EI_FALSE;
+ei_point_t origine_deplacement;
 ei_bool_t arret = EI_FALSE;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
@@ -75,6 +77,7 @@ void ei_app_run()
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
                 (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL) ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL) : 0 : 0;
             }
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             pressed_widget = NULL;
         }
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
