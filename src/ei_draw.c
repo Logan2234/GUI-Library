@@ -1,4 +1,5 @@
 #include "ei_draw.h"
+#include "ei_autre_fonctions.h"
 
 uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
 {
@@ -6,30 +7,20 @@ uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
     uint32_t red = color.red - '\0';
     uint32_t blue = (color.blue - '\0');
     uint32_t green = (color.green - '\0');
+
     int red_i, green_i, blue_i, alpha_i;
     hw_surface_get_channel_indices(surface, &red_i, &green_i, &blue_i, &alpha_i);
-    if (!hw_surface_has_alpha(surface))
-    {
-        couleur += (red_i == 0) ? (color.red - '\0') : (red_i == 1) ? (color.red - '\0') * 256
-                                                                    : (color.red - '\0') * 256 * 256;
-        couleur += (blue_i == 0) ? (color.blue - '\0') : (blue_i == 1) ? (color.blue - '\0') * 256
-                                                                       : (color.blue - '\0') * 256 * 256;
-        couleur += (green_i == 0) ? (color.green - '\0') : (green_i == 1) ? (color.green - '\0') * 256
-                                                                          : (color.green - '\0') * 256 * 256;
-    }
-    else
-    {
-        uint32_t alpha = (color.alpha - '\0'); // TODO gérer la transparence
-        couleur += (red_i == 0) ? (color.red - '\0') : (red_i == 1) ? (color.red - '\0') * 256
-                                                                    : (color.red - '\0') * 256 * 256;
-        couleur += (blue_i == 0) ? (color.blue - '\0') : (blue_i == 1) ? (color.blue - '\0') * 256
-                                                                       : (color.blue - '\0') * 256 * 256;
-        couleur += (green_i == 0) ? (color.green - '\0') : (green_i == 1) ? (color.green - '\0') * 256
-                                                                          : (color.green - '\0') * 256 * 256;
-    }
+
+    couleur += (red_i == 0) ? (color.red - '\0') : (red_i == 1) ? (color.red - '\0') * 256
+                                                                : (color.red - '\0') * 256 * 256;
+    couleur += (blue_i == 0) ? (color.blue - '\0') : (blue_i == 1) ? (color.blue - '\0') * 256
+                                                                   : (color.blue - '\0') * 256 * 256;
+    couleur += (green_i == 0) ? (color.green - '\0') : (green_i == 1) ? (color.green - '\0') * 256
+                                                                      : (color.green - '\0') * 256 * 256;
     return couleur;
 }
 
+extern ei_surface_t pick_surface;
 void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *clipper)
 {
     ei_size_t main_window_size = hw_surface_get_size(surface);
@@ -54,6 +45,17 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
                 {
                     last_value_of_j = j;
                     break;
+                }
+
+                /* On gère la transparence */
+                if (!hw_surface_has_alpha(surface))
+                {   
+                    uint32_t old_couleur_entier = *pixel_ptr;
+                    ei_color_t old_couleur = int_to_color(old_couleur_entier);
+                    ei_color_t new_couleur = {(color->red * color->alpha + (255 - color->alpha) * old_couleur.red) / 255,
+                                              (color->green * color->alpha + (255 - color->alpha) * old_couleur.green) / 255,
+                                              (color->blue * color->alpha + (255 - color->alpha) * old_couleur.blue) / 255, 0xdd};
+                    couleur = ei_map_rgba(surface, new_couleur);
                 }
                 *pixel_ptr++ = couleur;
             }

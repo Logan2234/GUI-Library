@@ -48,7 +48,8 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sentinel->next = nouveau2;
 
-    ei_draw_polygon(surface, premier_point, *(((ei_toplevel_t *)widget)->color), clipper);
+    *((ei_toplevel_t *)widget)->color = (ei_color_t){0xaa, 0xaa, 0xaa, 0xaa};
+    ei_fill(surface, (((ei_toplevel_t *)widget)->color), clipper);
 
     free_linked_point_pointeur(premier_point);
 
