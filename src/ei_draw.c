@@ -49,7 +49,7 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
 
                 /* On gère la transparence */
                 if (!hw_surface_has_alpha(surface))
-                {   
+                {
                     uint32_t old_couleur_entier = *pixel_ptr;
                     ei_color_t old_couleur = int_to_color(old_couleur_entier);
                     ei_color_t new_couleur = {(color->red * color->alpha + (255 - color->alpha) * old_couleur.red) / 255,
@@ -59,6 +59,7 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
                 }
                 *pixel_ptr++ = couleur;
             }
+
             if (pixel_ptr == last_pixel_of_current_line && last_value_of_j != 0)
                 pixel_ptr += main_window_size.width - last_value_of_j;
 
@@ -158,7 +159,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     *(dest + ig_) = (*(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_)) / 255;
                     *(dest + ir_) = (*(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_)) / 255;
                     *(dest + ib_) = (*(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_)) / 255;
- 
+
                     *pixel_ptr_dest++;
                     *pixel_ptr_src++;
                 }
