@@ -9,7 +9,9 @@ extern ei_bool_t re_size;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
-    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL) : widget->wclass->drawfunc(widget, racine_surface, pick_surface, &(widget->screen_location));
+    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL)
+                             : ((widget->parent->pick_id == 1) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
+                                                               : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect));
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
         draw_widgets_and_family(current_widget->next_sibling);

@@ -48,13 +48,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sentinel->next = nouveau2;
 
-    ei_rect_t new_clipper_toplevel;
-
-    // if (widget->parent->pick_id == 1)
-    //     new_clipper_toplevel = *widget->content_rect;
-    
-    // else
-        new_clipper_toplevel = *clipper;
+    ei_rect_t new_clipper_toplevel = *clipper;
 
     new_clipper_toplevel.top_left.y += 35;
     new_clipper_toplevel.size.height -= 35;
