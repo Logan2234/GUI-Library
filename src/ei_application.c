@@ -50,12 +50,16 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
 
+    update_surface(rect_to_update);
+    
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
-        update_surface(rect_to_update);
         hw_event_wait_next(event);
         if (event->type < 5)
+        {
+            update_surface(rect_to_update);
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+        }
 
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
@@ -66,6 +70,7 @@ void ei_app_run()
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
             recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+            update_surface(rect_to_update);
         }
 
         /* Cas où on relache le clic gauche */
@@ -85,17 +90,18 @@ void ei_app_run()
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             pressed_widget = NULL;
+            update_surface(rect_to_update);
         }
 
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
-        else
+        else if(event->type == ei_ev_mouse_move)
         {
-            if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button") &&
-                event->type == ei_ev_mouse_move)
+            if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
+                update_surface(rect_to_update);
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
         }
