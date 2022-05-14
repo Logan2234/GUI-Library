@@ -121,17 +121,17 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     else
     {
         if (deplacement == EI_TRUE) {  // On aura jamais deplacement et re_size en true
-            ei_widget_t *sent = widget->children_head;
-            while (sent != NULL) {
-                sent->wclass->geomnotifyfunc(sent);
-                sent = sent->next_sibling;
-            }
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
             widget->screen_location.top_left.x += delta_x;
             widget->screen_location.top_left.y += delta_y;
             origine_deplacement.x = event->param.mouse.where.x;
             origine_deplacement.y = event->param.mouse.where.y;
+            ei_widget_t *sent = widget->children_head;
+            while (sent != NULL) {
+                sent->wclass->geomnotifyfunc(sent);
+                sent = sent->next_sibling;
+            }
             return EI_FALSE;
 
         } else

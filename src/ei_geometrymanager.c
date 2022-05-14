@@ -77,7 +77,3 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
 
     placer_runfunc(widget);
 }
-
-void ei_geometrymanager_releasefunc(struct ei_widget_t *widget)
-{
-}

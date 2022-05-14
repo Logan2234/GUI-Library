@@ -37,10 +37,10 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
             /* On dessine toutes la partie rectangulaire */
             for (uint32_t j = 0; j < clipper->size.width; j++)
             {
-                /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
-                if (pixel_ptr > origine + main_window_size.width * main_window_size.height)
+                /* On gère le cas où on dépasse la bordure haute ou basse de l'écran en arrêtant les deux boucles */
+                if (pixel_ptr > origine + main_window_size.width * main_window_size.height || pixel_ptr < origine)
                     break;
-
+                
                 if (pixel_ptr == last_pixel_of_current_line)
                 {
                     last_value_of_j = j;
@@ -68,7 +68,8 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
 
             last_pixel_of_current_line += main_window_size.width;
 
-            if (pixel_ptr > origine + main_window_size.width * main_window_size.height)
+            /* Cas où on dépasse la bordure haute ou basse */
+            if (pixel_ptr > origine + main_window_size.width * main_window_size.height || pixel_ptr < origine)
                 break;
         }
     }

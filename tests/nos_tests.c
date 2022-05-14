@@ -293,6 +293,56 @@ int test_6()
 
     return (EXIT_SUCCESS);
 }
+
+int test_7()
+{
+    ei_widget_t *toplevel;
+    ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
+    ei_color_t root_bgcol2 = {0xff, 0xff, 0xb4, 0xff};
+
+    ei_widget_t *frame;
+    ei_widget_t *frame2;
+    ei_size_t frame_size = {500, 500};
+    ei_size_t frame_size2 = {100, 100};
+    int frame_x = 250;
+    int frame_y = 250;
+    int toplevel_x = 200;
+    int toplevel_y = 200;
+    float frame_x_rel = 0.5;
+    float frame_y_rel = 0.5;
+    ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
+    ei_relief_t frame_relief = ei_relief_raised;
+    int frame_border_width = 6;
+    ei_anchor_t ancre = ei_anc_center;
+
+    /* Create the application and change the color of the background. */
+    ei_app_create(screen_size, EI_FALSE);
+    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
+    int border_width = 0;
+    ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
+    ei_size_t toplevel_size = {300, 300};
+    char *title = "Test 6";
+
+    ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, &title, NULL, NULL, NULL);
+    ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+    /* Run the application's main loop. */
+    ei_app_run();
+
+    ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+    /* We just exited from the main loop. Terminate the application (cleanup). */
+    ei_app_free();
+
+    return (EXIT_SUCCESS);
+}
+
+
+
 /*
  main --
  Main function of the tests.
@@ -314,8 +364,8 @@ int main(int argc, char **argv)
         retour = test_5();
     else if (!strcmp(argv[1], "test6"))
         retour = test_6();
-    // else if (!strcmp(argv[1], "test7"))
-    //     retour = test_7();
+    else if (!strcmp(argv[1], "test7"))
+        retour = test_7();
     // else if (!strcmp(argv[1], "test8"))
     //     retour = test_8();
     // else if (!strcmp(argv[1], "test9"))
