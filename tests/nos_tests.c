@@ -296,51 +296,69 @@ int test_6()
 
 int test_7()
 {
-    ei_widget_t *toplevel;
-    ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
-    ei_color_t root_bgcol2 = {0xff, 0xff, 0xb4, 0xff};
+	ei_size_t	screen_size	= {800, 800};
+        ei_color_t      root_bgcol      = {0x52, 0x7f, 0xb4, 0xff};
 
-    ei_widget_t *frame;
-    ei_widget_t *frame2;
-    ei_size_t frame_size = {500, 500};
-    ei_size_t frame_size2 = {100, 100};
-    int frame_x = 250;
-    int frame_y = 250;
-    int toplevel_x = 200;
-    int toplevel_y = 200;
-    float frame_x_rel = 0.5;
-    float frame_y_rel = 0.5;
-    ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
-    ei_relief_t frame_relief = ei_relief_raised;
-    int frame_border_width = 6;
-    ei_anchor_t ancre = ei_anc_center;
+        ei_color_t	button_color	= {0x88, 0x88, 0x88, 0xff};
+        ei_color_t      text_color      = {0x00, 0x00, 0x00, 0xff};
+        ei_relief_t     relief          = ei_relief_raised;
+        int             button_border_width    = 4;
+        char*           button_title    = "Click";
 
-    /* Create the application and change the color of the background. */
-    ei_app_create(screen_size, EI_FALSE);
-    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	ei_anchor_t	button_anchor	= ei_anc_southeast;
+        float           button_rel_x    = 1.0;
+        float           button_rel_y    = 1.0;
+        int		button_x	= -16;
+        int		button_y	= -16;
+        float           button_rel_size_x = 0.5;
+	
+        ei_size_t       window_size     = {400,400};
+        char*           window_title    = "Hello World";
+        ei_color_t      window_color    = {0xA0,0xA0,0xA0, 0xff};
+        int             window_border_width    = 2;
+        ei_bool_t       closable        = EI_TRUE;
+        ei_axis_set_t   window_resizable = ei_axis_none;
+        ei_point_t	window_position	 = {30, 10};        
+        
+        ei_size_t       window_size2     = {200,200};
+        char*           window_title2    = "Goodbye world";
+        ei_color_t      window_color2    = {0xA0,0x50,0x50, 0xaa};
+        int             window_border_width2    = 4;
+        ei_bool_t       closable2        = EI_TRUE;
+        ei_axis_set_t   window_resizable2 = ei_anc_none;
+        float	window_position2_x	 = 0.2;        
 
-    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
-    int border_width = 0;
-    ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
-    ei_size_t toplevel_size = {300, 300};
-    char *title = "Test 6";
+        
+        ei_widget_t*    button;
+        ei_widget_t*    toplevel, *toplevel2;
 
-    ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, &title, NULL, NULL, NULL);
-    ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
+	ei_app_create(screen_size, EI_FALSE); 
+        ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);        
 
-    ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
+        toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
+        toplevel2 = ei_widget_create("toplevel", toplevel, NULL, NULL);
+        button = ei_widget_create("button", toplevel, NULL, NULL);
+        
+        ei_toplevel_configure(toplevel, &window_size, &window_color, &window_border_width, &window_title, &closable, &window_resizable, NULL);
+        ei_toplevel_configure(toplevel2, &window_size2, &window_color2, &window_border_width2, &window_title2, &closable2, &window_resizable2, NULL);
+        ei_button_configure(button, NULL, &button_color, 
+                            &button_border_width, NULL, &relief, &button_title, NULL, &text_color, NULL,
+                            NULL, NULL, NULL, NULL, NULL);
 
-    /* Run the application's main loop. */
-    ei_app_run();
+        ei_place(toplevel, NULL, &(window_position.x), &(window_position.y), NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_place(toplevel2, NULL, NULL, NULL, NULL, NULL, &window_position2_x, &window_position2_x, NULL, NULL);
+        ei_place(button, &button_anchor, &button_x, &button_y, NULL,NULL, &button_rel_x, &button_rel_y, &button_rel_size_x, NULL);
 
-    ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
+	ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
-    /* We just exited from the main loop. Terminate the application (cleanup). */
-    ei_app_free();
+        ei_app_run();
 
-    return (EXIT_SUCCESS);
+	ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+	ei_app_free();
+
+	return (EXIT_SUCCESS);
 }
-
 
 
 /*
