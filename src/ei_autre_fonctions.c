@@ -137,9 +137,9 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
         } else
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-            if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
+            if (event->param.mouse.where.x < widget->screen_location.top_left.x + 30 && (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-            if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
+            if (event->param.mouse.where.y < widget->screen_location.top_left.y *((ei_toplevel_t *) widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             return EI_FALSE;
         }
@@ -168,9 +168,9 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         } else
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-            if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
+            if (event->param.mouse.where.x < widget->screen_location.top_left.x + 30 && (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-            if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
+            if (event->param.mouse.where.y < widget->screen_location.top_left.y *((ei_toplevel_t *) widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             re_size = EI_FALSE;
             return EI_FALSE;
