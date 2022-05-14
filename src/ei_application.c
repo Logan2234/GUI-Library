@@ -13,6 +13,7 @@ ei_surface_t racine_surface;
 ei_surface_t pick_surface;
 int widget_id = 0;
 ei_bool_t deplacement = EI_FALSE;
+ei_bool_t re_size = EI_FALSE;
 ei_point_t origine_deplacement;
 ei_bool_t arret = EI_FALSE;
 

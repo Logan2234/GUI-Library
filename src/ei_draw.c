@@ -87,11 +87,13 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
         ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
         ei_rect_t source = hw_surface_get_rect(surface_source);
         ei_rect_t dest;
-        dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
-
+        //dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
+        dest.size.height = (clipper!=NULL) ? (hw_surface_get_size(surface_source).height > clipper->size.height) ? clipper->size.height : hw_surface_get_size(surface_source).height : hw_surface_get_size(surface_source).height;
+        dest.size.width = (clipper!=NULL) ? (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width : hw_surface_get_size(surface_source).width;
         dest.top_left.x = where->x;
+        dest.top_left.x += (source.size.width - dest.size.width)/2;
         dest.top_left.y = where->y;
-
+        dest.top_left.y += (source.size.height - dest.size.height)/2;
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
     }
 }
@@ -126,12 +128,23 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
 
         uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect->size.width;
 
+        uint32_t ecart_heigth = src_rect->size.height - dst_rect->size.height;
+        uint32_t ecart_width = src_rect->size.width - dst_rect->size.width;
+
         uint32_t last_value_of_j = 0;
         for (uint32_t i = 0; i < src_rect->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
+            if (ecart_heigth != 0 && (i<= ecart_heigth /2 || i >= ecart_heigth/2 + dst_rect->size.height)){
+                pixel_ptr_src += main_window_size_src.width;
+                continue;
+            }
             for (uint32_t j = 0; j < src_rect->size.width; j++)
             {
+                if (ecart_width!= 0 && (j<= ecart_width /2 || j > ecart_width/2 + dst_rect->size.width)){
+                    *pixel_ptr_src++;
+
+                    continue;}
                 /* On gère le cas où on dépasse la bordure basse de l'écran en arrêtant les deux boucles*/
                 // if (pixel_ptr_dest == last_pixel_of_current_line_dest)
                 // {
