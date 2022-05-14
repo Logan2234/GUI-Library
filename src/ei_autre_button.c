@@ -110,7 +110,11 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
                 break;
             }
         }
-        ei_draw_text(surface, &point, *text, font, text_color, &widget->screen_location);
+        ei_rect_t clipper;
+        clipper.size.width = widget->screen_location.size.width - 2 * *bouton->border_width;
+        clipper.size.height = widget->screen_location.size.height - 2 * *bouton->border_width;
+        clipper.top_left = widget->screen_location.top_left;
+        ei_draw_text(surface, &point, *text, font, text_color, &clipper);
     }
 
     free_linked_point_pointeur(partie_haute);
