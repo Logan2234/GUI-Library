@@ -148,7 +148,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 
 ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
-    if (deplacement == EI_FALSE)
+    if (deplacement == EI_FALSE && re_size == EI_FALSE)
         return EI_FALSE;
 
     else
