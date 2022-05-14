@@ -101,9 +101,9 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
-                update_surface(rect_to_update);
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            update_surface(rect_to_update);
         }
     }
     free(event);

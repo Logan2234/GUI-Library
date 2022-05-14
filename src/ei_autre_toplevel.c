@@ -50,10 +50,10 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
     ei_rect_t new_clipper_toplevel;
 
-    if (widget->parent->pick_id == 1)
-        new_clipper_toplevel = *widget->content_rect;
+    // if (widget->parent->pick_id == 1)
+    //     new_clipper_toplevel = *widget->content_rect;
     
-    else
+    // else
         new_clipper_toplevel = *clipper;
 
     new_clipper_toplevel.top_left.y += 35;
