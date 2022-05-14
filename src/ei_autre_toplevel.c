@@ -134,7 +134,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     free_linked_point_pointeur(header);
 
     /* On trace un petit triangle qui indique qu'on peut resize la fenêtre */
-    if (*toplevel->resizable == EI_TRUE)
+    if (*toplevel->resizable != ei_axis_none)
     {
         ei_linked_point_t *resize_indicator = calloc(1, sizeof(ei_linked_point_t));
         ei_linked_point_t *sentinel3 = resize_indicator;
