@@ -9,7 +9,7 @@ extern ei_bool_t re_size;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
-    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL) : widget->wclass->drawfunc(widget, racine_surface, pick_surface, &(widget->screen_location));
+    (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL) : widget->wclass->drawfunc(widget, racine_surface, pick_surface, (widget->parent->content_rect));
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
         draw_widgets_and_family(current_widget->next_sibling);
@@ -66,7 +66,7 @@ ei_color_t int_to_color(uint32_t entier)
     red = entier / (256 * 256);
     green = (entier - red * 256 * 256) / 256;
     blue = (entier - red * 256 * 256 - green * 256);
-    return (ei_color_t){red, green, blue, 0xff}; 
+    return (ei_color_t){red, green, blue, 0xff};
 }
 
 ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
@@ -104,11 +104,9 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     }
 
     if (!strcmp(widget->wclass->name, "toplevel") && *toplevel->resizable != ei_axis_none &&
-        widget->screen_location.top_left.x + widget->screen_location.size.width - 12 <= event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width + *((ei_toplevel_t *) widget)->border_width &&
-        widget->screen_location.top_left.y + widget->screen_location.size.height - 12 <= event->param.mouse.where.y <= widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width)
-    {
+        widget->screen_location.top_left.x + widget->screen_location.size.width - 12 <= event->param.mouse.where.x && event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width + *((ei_toplevel_t *)widget)->border_width &&
+        widget->screen_location.top_left.y + widget->screen_location.size.height - 12 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width)
         re_size = EI_TRUE;
-    }
 
     return EI_FALSE;
 }
@@ -120,7 +118,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 
     else
     {
-        if (deplacement == EI_TRUE) {  // On aura jamais deplacement et re_size en true
+        if (deplacement == EI_TRUE)
+        { // On aura jamais deplacement et re_size en true
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
             widget->screen_location.top_left.x += delta_x;
@@ -128,18 +127,19 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             origine_deplacement.x = event->param.mouse.where.x;
             origine_deplacement.y = event->param.mouse.where.y;
             ei_widget_t *sent = widget->children_head;
-            while (sent != NULL) {
+            while (sent != NULL)
+            {
                 sent->wclass->geomnotifyfunc(sent);
                 sent = sent->next_sibling;
             }
             return EI_FALSE;
-
-        } else
+        }
+        else
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
             if (event->param.mouse.where.x >= widget->screen_location.top_left.x + 30 && (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-            if (event->param.mouse.where.y >= widget->screen_location.top_left.y + *((ei_toplevel_t *) widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
+            if (event->param.mouse.where.y >= widget->screen_location.top_left.y + *((ei_toplevel_t *)widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             return EI_FALSE;
         }
@@ -148,13 +148,18 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 
 ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
+
     if (deplacement == EI_FALSE && re_size == EI_FALSE)
         return EI_FALSE;
 
     else
-    { if (deplacement == EI_TRUE) {  // On aura jamais deplacement et re_size en true
+    {
+        if (deplacement == EI_TRUE)
+        {
+            // On aura jamais deplacement et re_size en true
             ei_widget_t *sent = widget->children_head;
-            while (sent != NULL) {
+            while (sent != NULL)
+            {
                 sent->wclass->geomnotifyfunc(sent);
                 sent = sent->next_sibling;
             }
@@ -164,13 +169,13 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             widget->screen_location.top_left.y += delta_y;
             deplacement = EI_FALSE;
             return EI_FALSE;
-
-        } else
+        }
+        else if (re_size == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
             if (event->param.mouse.where.x < widget->screen_location.top_left.x + 30 && (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-            if (event->param.mouse.where.y < widget->screen_location.top_left.y + *((ei_toplevel_t *) widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
+            if (event->param.mouse.where.y < widget->screen_location.top_left.y + *((ei_toplevel_t *)widget)->border_width && (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both))
                 widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             re_size = EI_FALSE;
             return EI_FALSE;
@@ -183,16 +188,16 @@ void init_toplevel(ei_widget_t *widget)
     ei_callback_t deplacement_callback = deplacement_toplevel;
     ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
     ei_callback_t deplacement_actif_callback = deplacement_actif;
-    
+
     if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
         ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
     }
-        ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
-        ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
-        ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
+    ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
+    ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
+    ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
     if (widget->next_sibling != NULL)
         return init_toplevel(widget->next_sibling);
     if (widget->children_head != NULL)

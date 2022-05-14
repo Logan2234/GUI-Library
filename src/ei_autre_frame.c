@@ -3,6 +3,7 @@
 #include "ei_autre_global_var.h"
 
 extern int widget_id;
+extern ei_surface_t racine_surface;
 
 struct ei_widget_t *frame_allocfunc(void)
 {
@@ -67,8 +68,15 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         free(zone_rectangle->next);
         free(zone_rectangle);
 
+        ei_rect_t new_clipper_frame;
+
         /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
-        ei_rect_t new_clipper_frame = *clipper;
+        if (widget->parent->pick_id == 1)
+            new_clipper_frame = *widget->content_rect;
+
+        else
+            new_clipper_frame = *clipper;
+
         int border_size = *((ei_frame_t *)widget)->border_width;
         new_clipper_frame.top_left.x += border_size;
         new_clipper_frame.top_left.y += border_size;
@@ -77,7 +85,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         ei_fill(surface, ((ei_frame_t *)widget)->color, &new_clipper_frame);
     }
     else
-        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+        ei_fill(surface, ((ei_frame_t *)widget)->color, widget->content_rect);
 
     /* Dessin du texte si nécessaire */
     (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
@@ -86,7 +94,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_surface_t *image = (((ei_frame_t *)widget)->img != NULL) ? hw_image_load(((ei_frame_t *)widget)->img, surface) : NULL;
 
     /* Dessin de la surface offscreen de picking */
-    ei_fill(pick_surface, widget->pick_color, clipper);
+    ei_fill(pick_surface, widget->pick_color, widget->content_rect);
 }
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
@@ -103,8 +111,19 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     widget->children_tail = NULL;
     widget->next_sibling = NULL;
     widget->geom_params = NULL;
-    widget->requested_size = default_frame_size;
-    widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
+
+    /* Si c'est la racine */
+    if (widget_id == 1)
+    {
+        widget->requested_size = hw_surface_get_size(racine_surface);
+        widget->screen_location = hw_surface_get_rect(racine_surface);
+    }
+
+    else
+    {
+        widget->requested_size = default_frame_size;
+        widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
+    }
     widget->content_rect = &widget->screen_location;
 }
 

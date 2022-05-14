@@ -121,7 +121,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
 
-    ei_fill(pick_surface, widget->pick_color, clipper);
+    ei_fill(pick_surface, widget->pick_color, widget->content_rect);
 }
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)

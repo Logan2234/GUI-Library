@@ -35,9 +35,9 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_geometrymanager_register(return_geometry_manager_placer());
 
     /* Création du widget root et de ses surfaces */
-    widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
+    widget_racine = ei_widget_create("frame", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
@@ -100,7 +100,6 @@ void ei_app_run()
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
         }
     }
-
     free(event);
 }
 
