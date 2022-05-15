@@ -158,6 +158,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->screen_location.top_left.y += delta_y;
             origine_deplacement.x = event->param.mouse.where.x;
             origine_deplacement.y = event->param.mouse.where.y;
+            widget->content_rect = &widget->screen_location;
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
@@ -197,16 +198,17 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
         {
             // On aura jamais deplacement et re_size en true
+            int delta_x = event->param.mouse.where.x - origine_deplacement.x;
+            int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+            widget->screen_location.top_left.x += delta_x;
+            widget->screen_location.top_left.y += delta_y;
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
                 sent->wclass->geomnotifyfunc(sent);
                 sent = sent->next_sibling;
             }
-            int delta_x = event->param.mouse.where.x - origine_deplacement.x;
-            int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-            widget->screen_location.top_left.x += delta_x;
-            widget->screen_location.top_left.y += delta_y;
+            widget->content_rect = &widget->screen_location;
             deplacement = EI_FALSE;
             return EI_FALSE;
         }
