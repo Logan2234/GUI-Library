@@ -9,6 +9,7 @@ extern ei_surface_t pick_surface;
 extern ei_bool_t deplacement;
 extern ei_point_t origine_deplacement;
 
+
 struct ei_widget_t *toplevel_allocfunc(void)
 {
     ei_toplevel_t *widget_toplevel = calloc(1, sizeof(ei_toplevel_t));
@@ -192,6 +193,12 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
+    ei_widget_t *sent = widget->children_head;
+    while (sent != NULL)
+    {
+        sent->wclass->geomnotifyfunc(sent);
+        sent = sent->next_sibling;
+    }
 }
 
 ei_widgetclass_t *return_class_toplevel(void)
