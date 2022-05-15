@@ -134,15 +134,29 @@ int test_2()
 */
 int test_3()
 {
-
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
+
+	ei_widget_t*	frame;
+	ei_size_t	frame_size		= {300,200};
+	int		frame_x			= 150;
+	int		frame_y			= 200;
+	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
+	ei_relief_t	frame_relief		= ei_relief_raised;
+	int		frame_border_width	= 6;
+
     ei_app_create(screen_size, EI_FALSE);
+    
     ei_surface_t image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
     ei_widget_t *root = ei_app_root_widget();
+    
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
     printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
-    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, &image, NULL, NULL);
+    
+    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, &image, NULL, NULL);
+	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */

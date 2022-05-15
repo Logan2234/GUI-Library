@@ -83,11 +83,11 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
+    // (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
 
     /* Dessin de l'image si nécessaire */
     if (((ei_frame_t *)widget)->img != NULL)
-        ei_copy_surface(surface, clipper, ((ei_frame_t *)widget)->img, NULL, EI_FALSE);
+        // ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, ((ei_frame_t *)widget)->img_rect, EI_FALSE);
 
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, widget->content_rect);

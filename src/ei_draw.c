@@ -122,28 +122,33 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     int ib_;
     int ia_;
     hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
-
+    
+    ei_rect_t *src_rect2 = calloc(1, sizeof(ei_rect_t));
+    src_rect2->size.width = (src_rect == NULL) ? hw_surface_get_rect(source).size.width : src_rect->size.width;
+    src_rect2->size.height = (src_rect == NULL) ? hw_surface_get_rect(source).size.height : src_rect->size.height;
+    src_rect2->top_left = (src_rect == NULL) ? hw_surface_get_rect(source).top_left : src_rect->top_left;
+    ei_rect_t dst_rect2 = (dst_rect == NULL) ? hw_surface_get_rect(destination) : *dst_rect ;
     if (dst_rect != NULL)
     {
         uint32_t *pixel_ptr_dest = origine_dest;
         uint32_t *pixel_ptr_src = origine_src;
 
-        uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect->size.width;
+        uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect2.size.width;
 
-        uint32_t ecart_heigth = src_rect->size.height - dst_rect->size.height;
-        uint32_t ecart_width = src_rect->size.width - dst_rect->size.width;
+        uint32_t ecart_heigth = src_rect2->size.height - dst_rect2.size.height;
+        uint32_t ecart_width = src_rect2->size.width - dst_rect2.size.width;
 
         uint32_t last_value_of_j = 0;
-        for (uint32_t i = 0; i < (uint32_t)src_rect->size.height; i++)
+        for (uint32_t i = 0; i < (uint32_t)src_rect2->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
-            if (ecart_heigth != 0 && (i<= ecart_heigth /2 || i >= ecart_heigth/2 + dst_rect->size.height)){
+            if (ecart_heigth != 0 && (i<= ecart_heigth /2 || i >= ecart_heigth/2 + dst_rect2.size.height)){
                 pixel_ptr_src += main_window_size_src.width;
                 continue;
             }
-            for (uint32_t j = 0; j < (uint32_t)src_rect->size.width; j++)
+            for (uint32_t j = 0; j < (uint32_t)src_rect2->size.width; j++)
             {
-                if (ecart_width!= 0 && (j<= ecart_width /2 || j > ecart_width/2 + dst_rect->size.width)){
+                if (ecart_width!= 0 && (j<= ecart_width /2 || j > ecart_width/2 + dst_rect2.size.width)){
                     *pixel_ptr_src++;
 
                     continue;}
@@ -169,22 +174,22 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     *pixel_ptr_dest++ = *pixel_ptr_src++;
             }
             if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
-                pixel_ptr_dest += dst_rect->size.width - last_value_of_j;
+                pixel_ptr_dest += dst_rect2.size.width - last_value_of_j;
 
             else
-                pixel_ptr_dest += main_window_size_dest.width - dst_rect->size.width;
+                pixel_ptr_dest += main_window_size_dest.width - dst_rect2.size.width;
 
-            last_pixel_of_current_line_dest += dst_rect->size.width;
+            last_pixel_of_current_line_dest += dst_rect2.size.width;
         }
     }
     else
     {
-        for (int i = 0; i < dst_rect->size.width * dst_rect->size.height; i++)
+        for (int i = 0; i < dst_rect2.size.width * dst_rect2.size.height; i++)
             *origine_dest++ = *origine_src++;
     }
     hw_surface_unlock(destination);
     ei_linked_rect_t *liste_rects = calloc(1, sizeof(ei_linked_rect_t));
-    liste_rects->rect = *dst_rect;
+    liste_rects->rect = dst_rect2;
     hw_surface_update_rects(destination, liste_rects);
     free(liste_rects);
 }
