@@ -347,6 +347,9 @@ int test_7()
     ei_toplevel_configure(toplevel, &window_size, &window_color, &window_border_width, &window_title, &closable, &window_resizable, NULL);
     ei_toplevel_configure(toplevel2, &window_size2, &window_color2, &window_border_width2, &window_title2, &closable2, &window_resizable2, NULL);
 
+    /*printf("%p \n", toplevel);
+    printf("%p \n", toplevel2);*/
+
     ei_place(toplevel, NULL, &(window_position.x), &(window_position.y), NULL, NULL, NULL, NULL, NULL, NULL);
     ei_place(toplevel2, NULL, NULL, NULL, NULL, NULL, &window_position2_x, &window_position2_x, NULL, NULL);
 
