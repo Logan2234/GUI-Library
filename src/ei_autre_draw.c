@@ -21,9 +21,7 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
         int x = center.x + (int)((float)rayon * cosf(angle_debut + (float)i * pas));
         int y = center.y - (int)((float)rayon * sinf(angle_debut + (float)i * pas));
         while (suivant->next != NULL)
-        {
             suivant = suivant->next;
-        }
         if (suivant->point.x != x || suivant->point.y != y)
         {
             ei_linked_point_t *nouveau = malloc(sizeof(ei_linked_point_t));
