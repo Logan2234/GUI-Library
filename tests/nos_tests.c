@@ -143,7 +143,12 @@ int test_3()
     printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, &image, NULL, NULL);
+    ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+    /* Run the application's main loop. */
     ei_app_run();
+
+    ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
     ei_app_free();
     return (EXIT_SUCCESS);
 }
