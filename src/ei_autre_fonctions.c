@@ -180,7 +180,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             }
-
+            widget->content_rect = &widget->screen_location;
             return EI_FALSE;
         }
     }
@@ -225,6 +225,8 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             }
             re_size = EI_FALSE;
+            widget->content_rect = &widget->screen_location;
+            widget->requested_size = widget->screen_location.size;
         }
         return EI_FALSE;
     }
