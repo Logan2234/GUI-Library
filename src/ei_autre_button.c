@@ -24,6 +24,12 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(((ei_button_t *)widget)->text_color);
     free(((ei_button_t *)widget)->text_anchor);
     free(((ei_button_t *)widget)->img_anchor);
+    free(((ei_button_t *)widget)->callback);
+    free(((ei_button_t *)widget)->color);
+    free(((ei_button_t *)widget)->img);
+    free(((ei_button_t *)widget)->img_rect);
+    free(((ei_button_t *)widget)->text);
+    free(((ei_button_t *)widget)->user_param);
     free(((ei_button_t *)widget));
 }
 

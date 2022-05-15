@@ -16,6 +16,16 @@ void frame_releasefunc(struct ei_widget_t *widget)
     free(widget->pick_color);
     free(widget->content_rect);
     free(widget->geom_params);
+    free(((ei_frame_t *)widget)->border_width);
+    free(((ei_frame_t *)widget)->color);
+    free(((ei_frame_t *)widget)->img);
+    free(((ei_frame_t *)widget)->img_anchor);
+    free(((ei_frame_t *)widget)->img_rect);
+    free(((ei_frame_t *)widget)->relief);
+    free(((ei_frame_t *)widget)->text);
+    free(((ei_frame_t *)widget)->text_anchor);
+    free(((ei_frame_t *)widget)->text_color);
+    free(((ei_frame_t *)widget)->text_font);
     free((ei_frame_t *)widget);
 }
 

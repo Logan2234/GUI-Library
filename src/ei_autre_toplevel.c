@@ -21,6 +21,12 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
     free(widget->pick_color);
     free(widget->geom_params);
     free(widget->content_rect);
+    free(((ei_toplevel_t *)widget)->border_width);
+    free(((ei_toplevel_t *)widget)->closable);
+    free(((ei_toplevel_t *)widget)->color);
+    free(((ei_toplevel_t *)widget)->min_size);
+    free(((ei_toplevel_t *)widget)->resizable);
+    free(((ei_toplevel_t *)widget)->title);
     free((ei_toplevel_t *)widget);
 }
 
