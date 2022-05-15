@@ -14,7 +14,8 @@ struct ei_widget_t *button_allocfunc(void)
 void button_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
-    free(((ei_button_t *)widget)->color);
+    free(widget->geom_params);
+    free((ei_color_t *)(((ei_button_t *)widget)->color));
     free(((ei_button_t *)widget)->border_width);
     free(((ei_button_t *)widget)->corner_radius);
     free(((ei_button_t *)widget)->relief);
@@ -67,11 +68,16 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_color_t text_color = *bouton->text_color;
         char **text = bouton->text;
         ei_font_t font = (*bouton->text_font != NULL) ? (ei_default_font) : *bouton->text_font;
-        int largeur_texte = hw_surface_get_size(hw_text_create_surface(*text, font, color)).width;
-        int hauteur_texte = hw_surface_get_size(hw_text_create_surface(*text, font, color)).height;
+        
+        ei_surface_t text_surface = hw_text_create_surface(*text, font, color);
+        int largeur_texte = hw_surface_get_size(text_surface).width;
+        int hauteur_texte = hw_surface_get_size(text_surface).height;
+        hw_surface_free(text_surface);
+
         int largeur_boutton = widget->screen_location.size.width;
         int hauteur_boutton = widget->screen_location.size.height;
         ei_point_t point = widget->screen_location.top_left;
+        
         ei_anchor_t *anchor = bouton->text_anchor;
         if (anchor == NULL)
         {

@@ -96,6 +96,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
         dest.top_left.y = where->y;
         dest.top_left.y += (source.size.height - dest.size.height)/2;
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
+        hw_surface_free(surface_source);
     }
 }
 
@@ -185,4 +186,5 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     ei_linked_rect_t *liste_rects = calloc(1, sizeof(ei_linked_rect_t));
     liste_rects->rect = *dst_rect;
     hw_surface_update_rects(destination, liste_rects);
+    free(liste_rects);
 }

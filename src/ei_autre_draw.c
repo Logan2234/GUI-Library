@@ -230,5 +230,6 @@ void ei_draw_img(ei_surface_t surface, const ei_point_t *where, const char **fil
         dest.top_left.y = where->y;
 
         ei_copy_surface(surface, &dest, surface_source, &source, EI_FALSE);
+        // hw_surface_free(surface_source);
     }
 }

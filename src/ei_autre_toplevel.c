@@ -18,6 +18,7 @@ struct ei_widget_t *toplevel_allocfunc(void)
 void toplevel_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
+    free(widget->geom_params);
     free((ei_toplevel_t *)widget);
 }
 

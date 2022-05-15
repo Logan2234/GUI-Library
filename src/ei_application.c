@@ -121,6 +121,7 @@ void ei_app_free()
     while (liste_widgetclass != NULL)
     {
         struct liste_widgetclass *next = liste_widgetclass->next;
+        free(liste_widgetclass->first_widgetclass);
         free(liste_widgetclass);
         liste_widgetclass = next;
     }
@@ -129,6 +130,7 @@ void ei_app_free()
     while (liste_geometrymanager != NULL)
     {
         struct liste_geometrymanager *next = liste_geometrymanager->next;
+        free(liste_geometrymanager->geometrymanager_cell);
         free(liste_geometrymanager);
         liste_geometrymanager = next;
     }
