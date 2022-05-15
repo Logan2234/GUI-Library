@@ -135,16 +135,16 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
         uint32_t *pixel_ptr_dest = origine_dest;
         uint32_t *pixel_ptr_src = origine_src;
 
-        uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect2->size.width;
+        //uint32_t *last_pixel_of_current_line_dest = origine_dest + (dst_rect->top_left.y + 1) * dst_rect2->size.width;
 
-        uint32_t ecart_heigth = src_rect2->size.height - dst_rect2->size.height;
-        uint32_t ecart_width = src_rect2->size.width - dst_rect2->size.width;
+        //uint32_t ecart_heigth = src_rect2->size.height - dst_rect2->size.height;
+        //uint32_t ecart_width = src_rect2->size.width - dst_rect2->size.width;
 
-        uint32_t last_value_of_j = 0;
+        //uint32_t last_value_of_j = 0;
         for (uint32_t i = 0; i < (uint32_t)src_rect2->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
-            if (ecart_heigth != 0 && (i<= ecart_heigth /2 || i >= ecart_heigth/2 + dst_rect2->size.height)){
+            if (i >= dst_rect2->size.height){
                 pixel_ptr_src += main_window_size_src.width;
                 continue;
             }
@@ -176,13 +176,13 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                 else
                     *pixel_ptr_dest++ = *pixel_ptr_src++;
             }
-            if (pixel_ptr_dest == last_pixel_of_current_line_dest && last_value_of_j != 0)
-                pixel_ptr_dest += dst_rect2->size.width - last_value_of_j;
+            //if (pixel_ptr_dest == last_pixel_of_current_line_dest)
+              //  pixel_ptr_dest += dst_rect2->size.width - last_value_of_j;
 
-            else
-                pixel_ptr_dest += main_window_size_dest.width - dst_rect2->size.width;
-
-            last_pixel_of_current_line_dest += dst_rect2->size.width;
+            //else
+                pixel_ptr_dest += (dst_rect2->size.width < src_rect2->size.width) ? main_window_size_dest.width - dst_rect2->size.width : main_window_size_dest.width - src_rect2->size.width;
+            //pixel_ptr_dest += main_window_size_dest.width - src_rect2->size.width;
+            //last_pixel_of_current_line_dest += dst_rect2->size.width;
         }
     }
     else
