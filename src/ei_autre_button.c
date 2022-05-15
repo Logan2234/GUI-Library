@@ -15,6 +15,7 @@ void button_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
+    free(widget->content_rect);
     free((ei_color_t *)(((ei_button_t *)widget)->color));
     free(((ei_button_t *)widget)->border_width);
     free(((ei_button_t *)widget)->corner_radius);
@@ -50,8 +51,8 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_linked_point_t *partie_haute = ei_rounded_frame(&rectangle, *bouton->corner_radius, 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(&rectangle, *bouton->corner_radius, 2);
 
-    ei_draw_polygon(surface, partie_haute, color2, clipper);
-    ei_draw_polygon(surface, partie_basse, color, clipper);
+    ei_draw_polygon(surface, partie_haute, color2, &widget->screen_location);
+    ei_draw_polygon(surface, partie_basse, color, &widget->screen_location);
 
     /* Puis on dessine un plus petit rounded rectangle par dessus */
     rectangle.top_left.x += *bouton->border_width;
@@ -62,27 +63,21 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
-    /* Gestion de l'affichage du text sur le bouton */
-    if (strcmp(*bouton->text, ""))
+    /* Dessin du texte si nécessaire */
+    if (bouton->text != NULL) 
     {
-        ei_color_t text_color = *bouton->text_color;
-        char **text = bouton->text;
-        ei_font_t font = (*bouton->text_font != NULL) ? (ei_default_font) : *bouton->text_font;
-        
-        ei_point_t point = compute_location(widget, bouton->text_anchor);
-            
-        ei_rect_t clipper;
-        clipper.size.width = widget->screen_location.size.width - 2 * *bouton->border_width;
-        clipper.size.height = widget->screen_location.size.height - 2 * *bouton->border_width;
-        clipper.top_left = widget->screen_location.top_left;
-        ei_draw_text(surface, &point, *text, font, text_color, &clipper);
+        ei_point_t where = compute_location(widget, bouton->text_anchor);
+        if (*bouton->relief != ei_relief_none && *bouton->border_width != 0)
+            ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, widget->content_rect);
+        else
+            ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
 
-    ei_fill(pick_surface, widget->pick_color, widget->content_rect);
+    ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)
@@ -107,7 +102,10 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
 
     widget->requested_size = default_button_size;
     widget->screen_location = (ei_rect_t){0, 0, default_button_size};
-    widget->content_rect = &widget->screen_location;
+
+    ei_rect_t *content_rect_button = calloc(1, sizeof(ei_rect_t));
+    *content_rect_button = widget->screen_location;
+    widget->content_rect = content_rect_button;
 }
 
 ei_widgetclass_t *return_class_button(void)

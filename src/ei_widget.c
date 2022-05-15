@@ -68,20 +68,27 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
                         ei_anchor_t *text_anchor, ei_surface_t *img, ei_rect_t **img_rect, ei_anchor_t *img_anchor)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
-    ei_color_t *color_frame = malloc(sizeof(ei_color_t));
-    int *border_width_frame = malloc(sizeof(int));
-    ei_relief_t *relief_frame = malloc(sizeof(ei_relief_t));
-    ei_font_t *text_font_frame = malloc(sizeof(ei_font_t));
-    ei_color_t *text_color_frame = malloc(sizeof(ei_color_t));
-    ei_anchor_t *text_anchor_frame = malloc(sizeof(ei_anchor_t));
-    ei_anchor_t *img_anchor_frame = malloc(sizeof(ei_anchor_t));
+
+    ei_color_t *color_frame = calloc(1, sizeof(ei_color_t));
+    int *border_width_frame = calloc(1, sizeof(int));
+    ei_relief_t *relief_frame = calloc(1, sizeof(ei_relief_t));
+    char ** text_frame = calloc(1, sizeof(char *));
+    ei_font_t *text_font_frame = calloc(1, sizeof(ei_font_t));
+    ei_color_t *text_color_frame = calloc(1, sizeof(ei_color_t));
+    ei_anchor_t *text_anchor_frame = calloc(1, sizeof(ei_anchor_t));
+    ei_surface_t *img_frame = calloc(1, sizeof(ei_surface_t));
+    ei_rect_t **img_rect_frame = calloc(1, sizeof(ei_rect_t *));
+    ei_anchor_t *img_anchor_frame = calloc(1, sizeof(ei_anchor_t));
 
     *color_frame = (color != NULL) ? *color : (frame->color == NULL) ? ei_default_background_color : *frame->color;
     *border_width_frame = (border_width != NULL) ? *border_width : (frame->border_width == NULL) ? 0 : *frame->border_width;
     *relief_frame = (relief != NULL) ? *relief : (frame->relief == NULL) ? default_relief_frame : *frame->relief;
+    text_frame = (text != NULL) ? text : NULL;
     *text_font_frame = (text_font != NULL) ? *text_font : (frame->text_font == NULL) ? ei_default_font : *frame->text_font;
     *text_color_frame = (text_color != NULL) ? *text_color : (frame->text_color == NULL) ? (ei_color_t)ei_font_default_color : *frame->text_color;
     *text_anchor_frame = (text_anchor != NULL) ? *text_anchor : (frame->text_anchor == NULL) ? default_anchor_frame : *frame->text_anchor;
+    img_frame = (img != NULL) ? img : NULL;
+    img_rect_frame = (img_rect != NULL) ? img_rect : NULL;
     *img_anchor_frame = (img_anchor != NULL) ? *img_anchor : (frame->img_anchor == NULL) ? default_anchor_frame : *frame->img_anchor;
 
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
@@ -89,12 +96,12 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
     frame->color = color_frame;
     frame->border_width = border_width_frame;
     frame->relief = relief_frame;
-    frame->text = text;
+    frame->text = text_frame;
     frame->text_font = text_font_frame;
     frame->text_color = text_color_frame;
     frame->text_anchor = text_anchor_frame;
-    frame->img = img;
-    frame->img_rect = img_rect;
+    frame->img = img_frame;
+    frame->img_rect = img_rect_frame;
     frame->img_anchor = img_anchor_frame;
 }
 
@@ -105,23 +112,34 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                          ei_anchor_t *img_anchor, ei_callback_t *callback, void **user_param)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
-    ei_color_t *color_button = malloc(sizeof(ei_color_t));
-    int *border_width_button = malloc(sizeof(int));
-    int *corner_radius_button = malloc(sizeof(int));
-    ei_relief_t *relief_button = malloc(sizeof(ei_relief_t));
-    ei_font_t *text_font_button = malloc(sizeof(ei_font_t));
-    ei_color_t *text_color_button = malloc(sizeof(ei_color_t));
-    ei_anchor_t *text_anchor_button = malloc(sizeof(ei_anchor_t));
-    ei_anchor_t *img_anchor_button = malloc(sizeof(ei_anchor_t));
+
+    ei_color_t *color_button = calloc(1, sizeof(ei_color_t));
+    int *border_width_button = calloc(1, sizeof(int));
+    int *corner_radius_button = calloc(1, sizeof(int));
+    ei_relief_t *relief_button = calloc(1, sizeof(ei_relief_t));
+    char ** text_button = calloc(1, sizeof(char *));
+    ei_font_t *text_font_button = calloc(1, sizeof(ei_font_t));
+    ei_color_t *text_color_button = calloc(1, sizeof(ei_color_t));
+    ei_anchor_t *text_anchor_button = calloc(1, sizeof(ei_anchor_t));
+    ei_surface_t *img_button = calloc(1, sizeof(ei_surface_t));
+    ei_anchor_t *img_anchor_button = calloc(1, sizeof(ei_anchor_t));
+    ei_rect_t **img_rect_button = calloc(1, sizeof(ei_rect_t *));
+    ei_callback_t *callback_button = calloc(1, sizeof(ei_callback_t));
+    void **user_param_button = calloc(1, sizeof(void *));
 
     *color_button = (color != NULL) ? *color : (bouton->color == NULL) ? ei_default_background_color : *bouton->color;
     *relief_button = (relief != NULL) ? *relief : (bouton->relief == NULL) ? default_relief_button : *bouton->relief;
     *border_width_button = (border_width != NULL) ? *border_width : (bouton->border_width == NULL) ? (int)k_default_button_border_width : *bouton->border_width;
     *corner_radius_button = (corner_radius != NULL) ? *corner_radius : (bouton->corner_radius == NULL) ? (int)k_default_button_corner_radius : *bouton->corner_radius;
+    text_button = (text != NULL) ? text : NULL;
     *text_font_button = (text_font != NULL) ? *text_font : (bouton->text_font == NULL) ? ei_default_font : *bouton->text_font;
     *text_color_button = (text_color != NULL) ? *text_color : (bouton->text_color == NULL) ? (ei_color_t)ei_font_default_color : *bouton->text_color;
     *text_anchor_button = (text_anchor != NULL) ? *text_anchor : (bouton->text_anchor == NULL) ? default_anchor_button : *bouton->text_anchor;
+    img_button = (img != NULL) ? img : NULL;
+    img_rect_button = (img_rect != NULL) ? img_rect : NULL;
     *img_anchor_button = (img_anchor != NULL) ? *img_anchor : (bouton->img_anchor == NULL) ? default_anchor_button : *bouton->img_anchor;
+    callback_button = (callback != NULL) ? callback : (bouton->callback != NULL) ? bouton->callback : NULL;
+    user_param_button = (user_param != NULL) ? user_param : (bouton->user_param != NULL) ? bouton->user_param : NULL;
 
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
 
@@ -129,33 +147,42 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     bouton->border_width = border_width_button;
     bouton->corner_radius = corner_radius_button;
     bouton->relief = relief_button;
-    bouton->text = text;
+    bouton->text = text_button;
     bouton->text_font = text_font_button;
     bouton->text_color = text_color_button;
     bouton->text_anchor = text_anchor_button;
-    bouton->img = img;
-    bouton->img_rect = img_rect;
+    bouton->img = img_button;
+    bouton->img_rect = img_rect_button;
     bouton->img_anchor = img_anchor_button;
-    bouton->callback = callback;
-    bouton->user_param = user_param;
+    bouton->callback = callback_button;
+    bouton->user_param = user_param_button;
 }
 
 void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_color_t *color, int *border_width,
                            char **title, ei_bool_t *closable, ei_axis_set_t *resizable, ei_size_t **min_size)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-    widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240}
-                                                                                                              : widget->requested_size;
-    toplevel->color = (color != NULL) ? color : (&toplevel->color == NULL) ? (ei_color_t *)&ei_default_background_color
-                                                                           : toplevel->color;
-    toplevel->border_width = (border_width != NULL) ? border_width : (toplevel->border_width == NULL) ? (int *)&constante_4
-                                                                                                      : toplevel->border_width;
-    toplevel->title = (title != NULL) ? title : (toplevel->title == NULL) ? &default_toplevel_title
-                                                                          : toplevel->title;
-    toplevel->closable = (closable != NULL) ? closable : (toplevel->closable == NULL) ? &vrai
-                                                                                      : toplevel->closable;
-    toplevel->resizable = (resizable != NULL) ? resizable : (toplevel->resizable == NULL) ? &default_axis
-                                                                                          : toplevel->resizable;
-    toplevel->min_size = (min_size != NULL) ? min_size : (toplevel->min_size) ? (ei_size_t **)&(ei_size_t){160, 120}
-                                                                              : toplevel->min_size;
+    
+    ei_color_t *color_toplevel = calloc(1, sizeof(ei_color_t));
+    int *border_width_toplevel = calloc(1, sizeof(int));
+    char ** title_toplevel = calloc(1, sizeof(char *));
+    ei_bool_t *closable_toplevel = calloc(1, sizeof(ei_bool_t));
+    ei_axis_set_t *resizable_toplevel = calloc(1, sizeof(ei_axis_set_t));
+    ei_size_t **min_size_toplevel = calloc(1, sizeof(ei_size_t*));
+
+    *color_toplevel = (color != NULL) ? *color : (toplevel->color == NULL) ? ei_default_background_color : *toplevel->color;
+    *border_width_toplevel = (border_width != NULL) ? *border_width : (toplevel->border_width == NULL) ? 4 : *toplevel->border_width;
+    title_toplevel = (title != NULL) ? title : NULL;
+    *closable_toplevel = (closable != NULL) ? *closable : (toplevel->closable == NULL) ? EI_TRUE : *toplevel->closable;
+    *resizable_toplevel = (resizable != NULL) ? *resizable : (toplevel->resizable == NULL) ? ei_axis_both : *toplevel->resizable;
+    min_size_toplevel = (min_size != NULL) ? min_size : (toplevel->min_size == NULL) ? &default_toplevel_min_size : toplevel->min_size;
+
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240} : widget->requested_size;
+    
+    toplevel->color = color_toplevel;
+    toplevel->border_width = border_width_toplevel;
+    toplevel->title = title_toplevel;
+    toplevel->closable = closable_toplevel;
+    toplevel->resizable = resizable_toplevel;
+    toplevel->min_size = min_size_toplevel;
 }
