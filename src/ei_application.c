@@ -57,8 +57,8 @@ void ei_app_run()
         hw_event_wait_next(event);
         if (event->type < 5)
         {
-            update_surface(rect_to_update);
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            update_surface(rect_to_update);
         }
 
         /* Cas où on appuie avec le clic gauche */
@@ -87,8 +87,8 @@ void ei_app_run()
                                                           : 0
                                                     : 0;
             }
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             pressed_widget = NULL;
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             update_surface(rect_to_update);
         }
 

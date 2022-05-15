@@ -9,6 +9,7 @@ extern ei_surface_t pick_surface;
 extern ei_bool_t deplacement;
 extern ei_point_t origine_deplacement;
 
+
 struct ei_widget_t *toplevel_allocfunc(void)
 {
     ei_toplevel_t *widget_toplevel = calloc(1, sizeof(ei_toplevel_t));
