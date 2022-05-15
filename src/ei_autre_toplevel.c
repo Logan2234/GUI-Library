@@ -193,6 +193,12 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
+    ei_widget_t *sent = widget->children_head;
+    while (sent != NULL)
+    {
+        sent->wclass->geomnotifyfunc(sent);
+        sent = sent->next_sibling;
+    }
 }
 
 ei_widgetclass_t *return_class_toplevel(void)
