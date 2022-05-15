@@ -78,19 +78,19 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour3 = calloc(1, sizeof(ei_linked_point_t));
-    nouveau_contour3->point.x = widget->screen_location.top_left.x + widget->screen_location.size.height + *toplevel->border_width;
+    nouveau_contour3->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width;
     nouveau_contour3->point.y = widget->screen_location.top_left.y + 35;
     sent->next = nouveau_contour3;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour4 = calloc(1, sizeof(ei_linked_point_t));
-    nouveau_contour4->point.x = widget->screen_location.top_left.x + widget->screen_location.size.height;
+    nouveau_contour4->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
     nouveau_contour4->point.y = widget->screen_location.top_left.y + 35;
     sent->next = nouveau_contour4;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour5 = calloc(1, sizeof(ei_linked_point_t));
-    nouveau_contour5->point.x = widget->screen_location.top_left.x + widget->screen_location.size.height;
+    nouveau_contour5->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
     nouveau_contour5->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sent->next = nouveau_contour5;
     sent = sent->next;
@@ -193,6 +193,7 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
+
     ei_widget_t *sent = widget->children_head;
     while (sent != NULL)
     {
