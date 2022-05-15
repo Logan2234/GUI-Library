@@ -137,11 +137,12 @@ int test_3()
 
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
     ei_app_create(screen_size, EI_FALSE);
+    ei_surface_t image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
     ei_widget_t *root = ei_app_root_widget();
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
     printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
-    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, &image, NULL, NULL);
     ei_app_run();
     ei_app_free();
     return (EXIT_SUCCESS);
@@ -348,7 +349,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-
+    argv[1] = "test3";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
