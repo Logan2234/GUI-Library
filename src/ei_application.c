@@ -37,7 +37,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     /* Création du widget root et de ses surfaces */
     racine_surface = hw_create_window(main_window_size, fullscreen);
     pick_surface = hw_surface_create(racine_surface, main_window_size, EI_TRUE);
-    widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", NULL, NULL, NULL);
+    widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0 ", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
@@ -83,8 +83,7 @@ void ei_app_run()
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
                 (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL)
-                                                          ? (*((ei_button_t *)released_widget)->callback)(released_widget,
-                                                                                                          event, NULL)
+                                                          ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL)
                                                           : 0
                                                     : 0;
             }
