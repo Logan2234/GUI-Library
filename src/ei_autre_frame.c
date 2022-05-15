@@ -20,9 +20,7 @@ void frame_releasefunc(struct ei_widget_t *widget)
     free(((ei_frame_t *)widget)->color);
     free(((ei_frame_t *)widget)->img);
     free(((ei_frame_t *)widget)->img_anchor);
-    free(((ei_frame_t *)widget)->img_rect);
     free(((ei_frame_t *)widget)->relief);
-    free(((ei_frame_t *)widget)->text);
     free(((ei_frame_t *)widget)->text_anchor);
     free(((ei_frame_t *)widget)->text_color);
     free(((ei_frame_t *)widget)->text_font);

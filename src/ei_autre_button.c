@@ -16,7 +16,7 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(widget->pick_color);
     free(widget->geom_params);
     free(widget->content_rect);
-    free((ei_color_t *)(((ei_button_t *)widget)->color));
+    free(((ei_button_t *)widget)->color);
     free(((ei_button_t *)widget)->border_width);
     free(((ei_button_t *)widget)->corner_radius);
     free(((ei_button_t *)widget)->relief);
@@ -24,11 +24,7 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(((ei_button_t *)widget)->text_color);
     free(((ei_button_t *)widget)->text_anchor);
     free(((ei_button_t *)widget)->img_anchor);
-    free(((ei_button_t *)widget)->callback);
-    free(((ei_button_t *)widget)->color);
     free(((ei_button_t *)widget)->img);
-    free(((ei_button_t *)widget)->img_rect);
-    free(((ei_button_t *)widget)->text);
     free(((ei_button_t *)widget)->user_param);
     free(((ei_button_t *)widget));
 }
