@@ -87,7 +87,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
     /* Dessin de l'image si nécessaire */
     if (((ei_frame_t *)widget)->img != NULL)
-        // ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, ((ei_frame_t *)widget)->img_rect, EI_FALSE);
+        ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, ((ei_frame_t *)widget)->img_rect, EI_FALSE);
 
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, widget->content_rect);

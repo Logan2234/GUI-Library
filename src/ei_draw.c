@@ -122,7 +122,6 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     int ib_;
     int ia_;
     hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
-    
     ei_rect_t *src_rect2 = calloc(1, sizeof(ei_rect_t));
     src_rect2->size.width = (src_rect == NULL) ? hw_surface_get_rect(source).size.width : src_rect->size.width;
     src_rect2->size.height = (src_rect == NULL) ? hw_surface_get_rect(source).size.height : src_rect->size.height;
