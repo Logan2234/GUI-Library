@@ -32,10 +32,10 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
         uint32_t *pixel_ptr = origine + (depart.x + depart.y * main_window_size.width);
         uint32_t *last_pixel_of_current_line = origine + (depart.y + 1) * main_window_size.width;
         uint32_t last_value_of_j = 0;
-        for (uint32_t i = 0; i < clipper->size.height; i++)
+        for (int i = 0; i < clipper->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
-            for (uint32_t j = 0; j < clipper->size.width; j++)
+            for (int j = 0; j < clipper->size.width; j++)
             {
                 /* On gère le cas où on dépasse la bordure haute ou basse de l'écran en arrêtant les deux boucles */
                 if (pixel_ptr > origine + main_window_size.width * main_window_size.height || pixel_ptr < origine)
@@ -75,7 +75,7 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
     }
     else
     {
-        for (uint32_t i = 0; i < main_window_size.width * main_window_size.height; i++)
+        for (int i = 0; i < main_window_size.width * main_window_size.height; i++)
             *origine++ = couleur;
     }
 }
@@ -134,14 +134,14 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
         uint32_t ecart_width = src_rect->size.width - dst_rect->size.width;
 
         uint32_t last_value_of_j = 0;
-        for (uint32_t i = 0; i < src_rect->size.height; i++)
+        for (uint32_t i = 0; i < (uint32_t)src_rect->size.height; i++)
         {
             /* On dessine toutes la partie rectangulaire */
             if (ecart_heigth != 0 && (i<= ecart_heigth /2 || i >= ecart_heigth/2 + dst_rect->size.height)){
                 pixel_ptr_src += main_window_size_src.width;
                 continue;
             }
-            for (uint32_t j = 0; j < src_rect->size.width; j++)
+            for (uint32_t j = 0; j < (uint32_t)src_rect->size.width; j++)
             {
                 if (ecart_width!= 0 && (j<= ecart_width /2 || j > ecart_width/2 + dst_rect->size.width)){
                     *pixel_ptr_src++;
@@ -179,7 +179,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     }
     else
     {
-        for (uint32_t i = 0; i < dst_rect->size.width * dst_rect->size.height; i++)
+        for (int i = 0; i < dst_rect->size.width * dst_rect->size.height; i++)
             *origine_dest++ = *origine_src++;
     }
     hw_surface_unlock(destination);

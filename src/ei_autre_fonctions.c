@@ -235,7 +235,7 @@ void init_toplevel(ei_widget_t *widget)
 
     if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
-        ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
+        ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
         ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);

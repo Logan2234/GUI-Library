@@ -8,7 +8,7 @@
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
 {
     ei_linked_point_t *liste_point = malloc(sizeof(ei_linked_point_t));
-    int longueur_arc = abs((int)((float)rayon * (angle_fin - angle_debut)));
+    uint32_t longueur_arc = abs((int)((float)rayon * (angle_fin - angle_debut)));
     float pas = (angle_fin - angle_debut) / (float)longueur_arc;
     liste_point->point.x = center.x + (int)((float)rayon * cosf(angle_debut));
     liste_point->point.y = center.y - (int)((float)rayon * sinf(angle_debut));
