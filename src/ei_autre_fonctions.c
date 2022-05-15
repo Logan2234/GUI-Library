@@ -158,7 +158,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->screen_location.top_left.y += delta_y;
             origine_deplacement.x = event->param.mouse.where.x;
             origine_deplacement.y = event->param.mouse.where.y;
-            widget->content_rect = &widget->screen_location;
+            widget->content_rect = &widget->screen_location; // FIXME NON il faut que le content_rect soit updaté de la meme maniere que le screenlocation c'est a dire qu'on lui donne le delta de la meme maniere
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
