@@ -20,9 +20,13 @@ void frame_releasefunc(struct ei_widget_t *widget)
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
+    ei_frame_t *frame = (ei_frame_t *)widget;
 
     int h = widget->requested_size.height / 2;
-    if (*((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
+
+    ei_rect_t new_clipper_frame;
+
+    if (*frame->relief != ei_relief_none && *frame->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
@@ -32,20 +36,23 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
         /* D'abord on ajoute le point supérieur gauche */
         zone_rectangle->point = widget->screen_location.top_left;
+        
         /* Puis le coin supérieur droit */
         zone_rectangle->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y};
+        
         /* Ajout des points intermédiaires */
         zone_rectangle->next->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width - h, widget->screen_location.top_left.y + h};
         zone_rectangle->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x + h, widget->screen_location.top_left.y + h};
+        
         /* Et enfin le coin inférieur gauche pour créer la partie supérieure */
         zone_rectangle->next->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x, widget->screen_location.top_left.y + widget->requested_size.height};
 
-        ei_color_t color1 = *((ei_frame_t *)widget)->color;
-        ei_color_t color2 = *((ei_frame_t *)widget)->color;
+        ei_color_t color1 = *frame->color;
+        ei_color_t color2 = *frame->color;
         lighten_color(&color1);
         darken_color(&color2);
 
-        if (*((ei_frame_t *)widget)->relief == ei_relief_raised)
+        if (*frame->relief == ei_relief_raised)
         {
             ei_draw_polygon(surface, zone_rectangle, color1, NULL);
 
@@ -70,24 +77,36 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         free(zone_rectangle);
 
         /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
-        ei_rect_t new_clipper_frame = *clipper;
+        new_clipper_frame = *clipper;
 
-        int border_size = *((ei_frame_t *)widget)->border_width;
+        int border_size = *frame->border_width;
         new_clipper_frame.top_left.x += border_size;
         new_clipper_frame.top_left.y += border_size;
         new_clipper_frame.size.height -= 2 * border_size;
         new_clipper_frame.size.width -= 2 * border_size;
-        ei_fill(surface, ((ei_frame_t *)widget)->color, &new_clipper_frame);
+        ei_fill(surface, frame->color, &new_clipper_frame);
     }
     else
-        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+        ei_fill(surface, frame->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    // (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
+    if (frame->text != NULL) 
+    {
+        ei_point_t where = compute_location(widget, frame->text_anchor);
+        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
+            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, widget->content_rect);
+        else
+            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
+    }
 
     /* Dessin de l'image si nécessaire */
-    if (((ei_frame_t *)widget)->img != NULL)
-        ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, ((ei_frame_t *)widget)->img_rect, EI_FALSE);
+    if (frame->img != NULL && frame->text == NULL)
+    {
+        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
+            ei_copy_surface(surface, &new_clipper_frame, frame->img, frame->img_rect, EI_FALSE);
+        else
+            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
+    }
 
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, widget->content_rect);

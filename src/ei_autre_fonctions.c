@@ -291,53 +291,53 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre)
     int hauteur_texte = hw_surface_get_size(text_surface).height;
     hw_surface_free(text_surface);
 
-    // ei_point_t point = widget->content_rect->top_left;
-    // int largeur_boutton = widget->screen_location.size.width;
-    // int hauteur_boutton = widget->screen_location.size.height;
-    // if (ancre == NULL)
-    // {
-    //     point.x += (largeur_boutton - largeur_texte) / 2;
-    //     point.y += (hauteur_boutton - hauteur_texte) / 2;
-    // }
-    // else
-    // {
-    //     switch(*ancre)
-    //     {
-    //     case ei_anc_none:
-    //         point.x += (largeur_boutton - largeur_texte) / 2;
-    //         point.y += (hauteur_boutton - hauteur_texte) / 2;
-    //         break;
-    //     case ei_anc_northwest:
-    //         break;
-    //     case ei_anc_north:
-    //         point.x += (largeur_boutton - largeur_texte) / 2;
-    //         break;
-    //     case ei_anc_northeast:
-    //         point.x += (largeur_boutton - largeur_texte);
-    //         break;
-    //     case ei_anc_west:
-    //         point.y += (hauteur_boutton - hauteur_texte) / 2;
-    //         break;
-    //     case ei_anc_center:
-    //         point.x += (largeur_boutton - largeur_texte) / 2;
-    //         point.y += (hauteur_boutton - hauteur_texte) / 2;
-    //         break;
-    //     case ei_anc_east:
-    //         point.x += (largeur_boutton - largeur_texte);
-    //         point.y += (hauteur_boutton - hauteur_texte) / 2;
-    //         break;
-    //     case ei_anc_southwest:
-    //         point.y += (hauteur_boutton - hauteur_texte);
-    //         break;
-    //     case ei_anc_south:
-    //         point.x += (largeur_boutton - largeur_texte) / 2;
-    //         point.y += (hauteur_boutton - hauteur_texte);
-    //         break;
-    //     case ei_anc_southeast:
-    //         point.x += (largeur_boutton - largeur_texte);
-    //         point.y += (hauteur_boutton - hauteur_texte);
-    //         break;
-    //     }
-    // }
-    // return point;
+    ei_point_t point = widget->content_rect->top_left;
+    int largeur_boutton = widget->screen_location.size.width;
+    int hauteur_boutton = widget->screen_location.size.height;
+    if (ancre == NULL)
+    {
+        point.x += (largeur_boutton - largeur_texte) / 2;
+        point.y += (hauteur_boutton - hauteur_texte) / 2;
+    }
+    else
+    {
+        switch(*ancre)
+        {
+        case ei_anc_none:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_northwest:
+            break;
+        case ei_anc_north:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            break;
+        case ei_anc_northeast:
+            point.x += (largeur_boutton - largeur_texte);
+            break;
+        case ei_anc_west:
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_center:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_east:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_southwest:
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_south:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_southeast:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        }
+    }
+    return point;
 }

@@ -147,6 +147,7 @@ int test_3()
     ei_app_create(screen_size, EI_FALSE);
     
     ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
+    char * text = "Coucou Nils surtout ferme bien ta gueule";
     ei_widget_t *root = ei_app_root_widget();
     
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
@@ -155,8 +156,8 @@ int test_3()
     
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, NULL);
-	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
+	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, &text, NULL, NULL, NULL, NULL, NULL, NULL);
+	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */
@@ -368,7 +369,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-    // argv[1] = "test3";
+    argv[1] = "test3";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
