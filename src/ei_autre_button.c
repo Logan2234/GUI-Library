@@ -69,61 +69,8 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         char **text = bouton->text;
         ei_font_t font = (*bouton->text_font != NULL) ? (ei_default_font) : *bouton->text_font;
         
-        ei_surface_t text_surface = hw_text_create_surface(*text, font, color);
-        int largeur_texte = hw_surface_get_size(text_surface).width;
-        int hauteur_texte = hw_surface_get_size(text_surface).height;
-        hw_surface_free(text_surface);
-
-        int largeur_boutton = widget->screen_location.size.width;
-        int hauteur_boutton = widget->screen_location.size.height;
-        ei_point_t point = widget->screen_location.top_left;
-        
-        ei_anchor_t *anchor = bouton->text_anchor;
-        if (anchor == NULL)
-        {
-            point.x += (largeur_boutton - largeur_texte) / 2;
-            point.y += (hauteur_boutton - hauteur_texte) / 2;
-        }
-        else
-        {
-            switch (*anchor)
-            {
-            case ei_anc_none:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_northwest:
-                break;
-            case ei_anc_north:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                break;
-            case ei_anc_northeast:
-                point.x += (largeur_boutton - largeur_texte);
-                break;
-            case ei_anc_west:
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_center:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_east:
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_southwest:
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
-            case ei_anc_south:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
-            case ei_anc_southeast:
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
-            }
-        }
+        ei_point_t point = compute_location(widget, bouton->text_anchor);
+            
         ei_rect_t clipper;
         clipper.size.width = widget->screen_location.size.width - 2 * *bouton->border_width;
         clipper.size.height = widget->screen_location.size.height - 2 * *bouton->border_width;
