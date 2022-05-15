@@ -74,12 +74,39 @@ ei_color_t int_to_color(uint32_t entier)
 ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
 {
     ei_widget_t *current_widget = widget;
+    ei_widget_t *res = NULL;
+
     if (current_widget->pick_id == id)
         return current_widget;
-    if (current_widget->next_sibling != NULL)
-        return search_widget_by_id(current_widget->next_sibling, id);
+
     if (current_widget->children_head != NULL)
-        return search_widget_by_id(current_widget->children_head, id);
+        res = search_widget_by_id(current_widget->children_head, id);
+    
+    if (res != NULL)
+        return res;
+    
+    if (current_widget->next_sibling != NULL)
+        res = search_widget_by_id(current_widget->next_sibling, id);
+    
+    if (res !=NULL)
+        return res;
+    return NULL;
+
+    // if (current_widget->pick_id == id)
+    // {
+    //     return current_widget;
+    // }
+    // if (current_widget->children_head != NULL)
+    //     res = search_widget_by_id(current_widget->children_head, id);
+    // while (current_widget->next_sibling != NULL)
+    // {
+    //     res = search_widget_by_id(current_widget->next_sibling, id);
+    //     if (res == NULL)
+    //         current_widget = current_widget->next_sibling;
+    //     else
+    //         return res;
+    // }
+    
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
@@ -209,12 +236,12 @@ void init_toplevel(ei_widget_t *widget)
     if (!strcmp(widget->wclass->name, "toplevel") && *((ei_toplevel_t *)widget)->closable == EI_TRUE)
     {
         ei_widget_t *button = ei_widget_create("button", widget, NULL, NULL);
-        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, NULL, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
         ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+        ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
+        ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
+        ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
     }
-    ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
-    ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
-    ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
     if (widget->next_sibling != NULL)
         return init_toplevel(widget->next_sibling);
     if (widget->children_head != NULL)

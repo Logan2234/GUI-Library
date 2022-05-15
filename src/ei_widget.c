@@ -95,27 +95,37 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
                          ei_anchor_t *img_anchor, ei_callback_t *callback, void **user_param)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
+    ei_color_t *color_button = malloc(sizeof(ei_color_t));
+    int *border_width_button = malloc(sizeof(int));
+    int *corner_radius_button = malloc(sizeof(int));
+    ei_relief_t *relief_button = malloc(sizeof(ei_relief_t));
+    ei_font_t *text_font_button = malloc(sizeof(ei_font_t));
+    ei_color_t *text_color_button = malloc(sizeof(ei_color_t));
+    ei_anchor_t *text_anchor_button = malloc(sizeof(ei_anchor_t));
+    ei_anchor_t *img_anchor_button = malloc(sizeof(ei_anchor_t));
+
+    *color_button = (color != NULL) ? *color : (bouton->color == NULL) ? ei_default_background_color : *bouton->color;
+    *relief_button = (relief != NULL) ? *relief : (bouton->relief == NULL) ? default_relief_button : *bouton->relief;
+    *border_width_button = (border_width != NULL) ? *border_width : (bouton->border_width == NULL) ? (int)k_default_button_border_width : *bouton->border_width;
+    *corner_radius_button = (corner_radius != NULL) ? *corner_radius : (bouton->corner_radius == NULL) ? (int)k_default_button_corner_radius : *bouton->corner_radius;
+    *text_font_button = (text_font != NULL) ? *text_font : (bouton->text_font == NULL) ? ei_default_font : *bouton->text_font;
+    *text_color_button = (text_color != NULL) ? *text_color : (bouton->text_color == NULL) ? (ei_color_t)ei_font_default_color : *bouton->text_color;
+    *text_anchor_button = (text_anchor != NULL) ? *text_anchor : (bouton->text_anchor == NULL) ? default_anchor_button : *bouton->text_anchor;
+    *img_anchor_button = (img_anchor != NULL) ? *img_anchor : (bouton->img_anchor == NULL) ? default_anchor_button : *bouton->img_anchor;
+
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
 
-    bouton->color = (color != NULL) ? color : (bouton->color == NULL) ? &ei_default_background_color
-                                                                      : bouton->color;
-    bouton->border_width = (border_width != NULL) ? border_width : (bouton->border_width == NULL) ? (int *)&k_default_button_border_width
-                                                                                                  : bouton->border_width;
-    bouton->corner_radius = (corner_radius != NULL) ? corner_radius : (bouton->corner_radius == NULL) ? (int *)&k_default_button_corner_radius
-                                                                                                      : bouton->corner_radius;
-    bouton->relief = (relief != NULL) ? relief : (bouton->relief == NULL) ? &default_relief_button
-                                                                          : bouton->relief;
+    bouton->color = color_button;
+    bouton->border_width = border_width_button;
+    bouton->corner_radius = corner_radius_button;
+    bouton->relief = relief_button;
     bouton->text = text;
-    bouton->text_font = (text_font != NULL) ? text_font : (bouton->text_font == NULL) ? ei_default_font
-                                                                                      : bouton->text_font;
-    bouton->text_color = (text_color != NULL) ? text_color : (bouton->text_color == NULL) ? (ei_color_t *)&ei_font_default_color
-                                                                                          : bouton->text_color;
-    bouton->text_anchor = (text_anchor != NULL) ? text_anchor : (bouton->text_anchor == NULL) ? &default_anchor_button
-                                                                                              : bouton->text_anchor;
+    bouton->text_font = text_font_button;
+    bouton->text_color = text_color_button;
+    bouton->text_anchor = text_anchor_button;
     bouton->img = img;
     bouton->img_rect = img_rect;
-    bouton->img_anchor = (img_anchor != NULL) ? img_anchor : (bouton->img_anchor == NULL) ? &default_anchor_button
-                                                                                          : bouton->img_anchor;
+    bouton->img_anchor = img_anchor_button;
     bouton->callback = callback;
     bouton->user_param = user_param;
 }

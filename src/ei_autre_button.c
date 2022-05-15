@@ -14,7 +14,15 @@ struct ei_widget_t *button_allocfunc(void)
 void button_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
-    free((ei_button_t *)widget);
+    free(((ei_button_t *)widget)->color);
+    free(((ei_button_t *)widget)->border_width);
+    free(((ei_button_t *)widget)->corner_radius);
+    free(((ei_button_t *)widget)->relief);
+    free(((ei_button_t *)widget)->text_font);
+    free(((ei_button_t *)widget)->text_color);
+    free(((ei_button_t *)widget)->text_anchor);
+    free(((ei_button_t *)widget)->img_anchor);
+    free(((ei_button_t *)widget));
 }
 
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
