@@ -73,8 +73,6 @@ void ei_app_run()
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             update_surface(rect_to_update);
-            free(surface_a_update->next);
-            free(surface_a_update);
         }
 
             /* Cas où on relache le clic gauche */
@@ -93,7 +91,11 @@ void ei_app_run()
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                update_surface(rect_to_update);
+                free(surface_a_update->next);
+                free(surface_a_update);
+            }
         }
 
             /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
