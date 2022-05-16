@@ -72,8 +72,9 @@ void ei_app_run()
                 update_surface(rect_to_update);
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                update_surface(rect_to_update);
+            update_surface(rect_to_update);
+            free(surface_a_update->next);
+            free(surface_a_update);
             }
         }
 
