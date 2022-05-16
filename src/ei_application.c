@@ -50,8 +50,6 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
 
-    update_surface(rect_to_update);
-
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
@@ -104,7 +102,7 @@ void ei_app_run()
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             update_surface(rect_to_update);
         }
-
+        
     }
     free(event);
 
