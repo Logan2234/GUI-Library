@@ -96,6 +96,14 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
     }
     
+    else if (!strcmp(widget->wclass->name, "toplevel"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width;
+        widget->content_rect->size.height = widget->screen_location.size.height;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y;
+    }
+
     else
         widget->content_rect = &widget->screen_location;
     
