@@ -143,6 +143,7 @@ int test_3()
 	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
 	ei_relief_t	frame_relief		= ei_relief_raised;
 	int		frame_border_width	= 6;
+    ei_anchor_t anchor = ei_anc_center;
 
     ei_app_create(screen_size, EI_FALSE);
     
@@ -155,7 +156,7 @@ int test_3()
     
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, NULL);
+	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &anchor);
 	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
@@ -371,7 +372,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-    // argv[1] = "test3";
+    argv[1] = "test3";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
