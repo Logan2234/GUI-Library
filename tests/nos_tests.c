@@ -131,24 +131,28 @@ int test_2()
     Test des fonctions:
     - ei_app_root_widget
     - ei_frame_configure
+    - Affichage du text et d'images dans des frames
 */
 int test_3()
 {
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
 
-	ei_widget_t*	frame;
-	ei_size_t	frame_size		= {300,200};
-	int		frame_x			= 150;
-	int		frame_y			= 200;
-	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
-	ei_relief_t	frame_relief		= ei_relief_raised;
-	int		frame_border_width	= 6;
-    ei_anchor_t anchor = ei_anc_southeast;
+    ei_widget_t *frame, *frame2;
+    ei_size_t frame_size = {0, 0};
+    ei_size_t frame_size2 = {0, 0};
+    int frame_x = 150;
+    int frame_y = 200;
+    int frame_x2 = 200;
+    int frame_y2 = 400;
+    ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
+    ei_relief_t frame_relief = ei_relief_raised;
+    int frame_border_width = 6;
+    ei_anchor_t ancre = ei_anc_southeast;
 
     ei_app_create(screen_size, EI_FALSE);
 
     ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
-    char *text = "Coucou Nils";
+    char *text = "Coucou Nillllllllllllllllllllllllllllllllllls";
     ei_widget_t *root = ei_app_root_widget();
 
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
@@ -156,9 +160,14 @@ int test_3()
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
 
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &anchor);
-	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
+    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+    ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, &text, NULL, NULL, NULL, NULL, NULL, NULL);
+    ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    frame2 = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+    ei_frame_configure(frame2, &frame_size2, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &ancre);
+    ei_place(frame2, NULL, &frame_x2, &frame_y2, NULL, NULL, NULL, NULL, NULL, NULL);
+
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */
@@ -171,12 +180,62 @@ int test_3()
     return (EXIT_SUCCESS);
 }
 
+int test_4()
+{
+    ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
+
+    ei_widget_t *button, *button2;
+    ei_size_t button_size = {0, 0};
+    ei_size_t button_size2 = {200, 200};
+    int button_x = 100;
+    int button_y = 100;
+    int button_x2 = 300;
+    int button_y2 = 300;
+    ei_color_t button_color = {0x88, 0x88, 0x88, 0xff};
+    char *button_title = "Click !";
+    ei_color_t button_text_color = {0x00, 0x00, 0x00, 0xff};
+    int button_corner_radius = 20;
+    ei_relief_t button_relief = ei_relief_raised;
+    int button_border_width = 6;
+
+    /* Create the application and change the color of the background. */
+    ei_app_create(screen_size, EI_FALSE);
+    ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
+
+    /* Create, configure and place the button on screen. */
+    button = ei_widget_create("button", ei_app_root_widget(), NULL, NULL);
+    ei_button_configure(button, &button_size, &button_color,
+                        &button_border_width, &button_corner_radius, &button_relief, &button_title, NULL, &button_text_color, NULL,
+                        NULL, NULL, NULL, NULL, NULL);
+    ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    button2 = ei_widget_create("button", ei_app_root_widget(), NULL, NULL);
+    ei_button_configure(button2, &button_size2, &button_color,
+                        &button_border_width, &button_corner_radius, &button_relief, NULL, NULL, NULL, NULL,
+                        &image, NULL, NULL, NULL, NULL);
+    ei_place(button2, NULL, &button_x2, &button_y2, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    /* Hook the keypress callback to the event. */
+    ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+    /* Run the application's main loop. */
+    ei_app_run();
+
+    /* We just exited from the main loop. Terminate the application (cleanup). */
+    ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
+
+    ei_app_free();
+
+    return (EXIT_SUCCESS);
+}
+
 /*
     Test des fonctions:
     - ei_widget_create pour les trois widgets définis
     - ei_app_free avec les widgets
 */
-int test_4()
+int test_5()
 {
     ei_app_create(screen_size, EI_FALSE);
 
@@ -228,7 +287,7 @@ int test_4()
     return (EXIT_SUCCESS);
 }
 
-int test_5()
+int test_6()
 {
     ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
     ei_color_t root_bgcol2 = {0xff, 0xff, 0xb4, 0xff};
@@ -271,7 +330,7 @@ int test_5()
     return (EXIT_SUCCESS);
 }
 
-int test_6()
+int test_7()
 {
     ei_widget_t *toplevel;
     ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
@@ -318,7 +377,7 @@ int test_6()
     return (EXIT_SUCCESS);
 }
 
-int test_7()
+int test_8()
 {
     ei_size_t screen_size = {800, 800};
     ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
@@ -375,7 +434,6 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-    argv[1] = "test5";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
@@ -390,8 +448,8 @@ int main(int argc, char **argv)
         retour = test_6();
     else if (!strcmp(argv[1], "test7"))
         retour = test_7();
-    // else if (!strcmp(argv[1], "test8"))
-    //     retour = test_8();
+    else if (!strcmp(argv[1], "test8"))
+        retour = test_8();
     // else if (!strcmp(argv[1], "test9"))
     //     retour = test_9();
     // else if (!strcmp(argv[1], "test10"))

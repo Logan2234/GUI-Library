@@ -57,8 +57,9 @@ void ei_app_run()
         hw_event_wait_next(event);
         if (event->type < 5)
         {
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            uint8_t drapeau = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            if (drapeau == 1)
+                update_surface(rect_to_update);
         }
 
             /* Cas où on appuie avec le clic gauche */
@@ -86,10 +87,13 @@ void ei_app_run()
                                                       ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL)
                                                       : 0
                                                     : 0;
+                update_surface(rect_to_update);
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                update_surface(rect_to_update);
+            }
         }
 
             /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
@@ -100,12 +104,17 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
+                update_surface(rect_to_update);
             }
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                update_surface(rect_to_update);
+            }
         }
+
     }
     free(event);
+
 }
 
 void ei_app_free()

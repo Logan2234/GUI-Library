@@ -93,21 +93,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
     if (res != NULL)
         return res;
     return NULL;
-
-    // if (current_widget->pick_id == id)
-    // {
-    //     return current_widget;
-    // }
-    // if (current_widget->children_head != NULL)
-    //     res = search_widget_by_id(current_widget->children_head, id);
-    // while (current_widget->next_sibling != NULL)
-    // {
-    //     res = search_widget_by_id(current_widget->next_sibling, id);
-    //     if (res == NULL)
-    //         current_widget = current_widget->next_sibling;
-    //     else
-    //         return res;
-    // }
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
@@ -161,6 +146,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->content_rect->top_left.y += delta_y;
             ((ei_placer_t *)widget->geom_params)->x += delta_x;
             ((ei_placer_t *)widget->geom_params)->y += delta_y;
+
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
@@ -174,9 +160,10 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             if (re_size == EI_TRUE)
             {
                 ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+                ei_size_t minimo = **(toplevel->min_size);
                 if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
                 {
-                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
+                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
                     {
                         widget->screen_location.size.width =
                             event->param.mouse.where.x - widget->screen_location.top_left.x;
@@ -188,7 +175,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 
                 if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
                 {
-                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
+                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
                     {
                         widget->screen_location.size.height =
                             event->param.mouse.where.y - widget->screen_location.top_left.y;
@@ -242,9 +229,10 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         else if (re_size == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+            ei_size_t minimo = **(toplevel->min_size);
             if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
-                if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
+                if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
                 {
                     widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
                     widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
@@ -253,7 +241,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
 
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
             {
-                if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
+                if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
                 {
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
                     widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
@@ -319,70 +307,88 @@ void darken_color(ei_color_t *couleur)
     couleur->blue = (couleur->blue >= 50) ? couleur->blue - 50 : 0;
 }
 
-ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre)
+ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t about_text)
 {
-    ei_surface_t text_surface;
-
-    if (!strcmp(widget->wclass->name, "frame") == 1)
+    
+    int largeur_contenu;
+    int hauteur_contenu;
+    
+    if (about_text == EI_TRUE)
     {
-        ei_frame_t *widget_class = (ei_frame_t *)widget;
-        text_surface = hw_text_create_surface(*widget_class->text, *widget_class->text_font, *widget_class->text_color);
+        ei_surface_t text_surface;
+        if (!strcmp(widget->wclass->name, "frame") == 1)
+        {
+            text_surface = hw_text_create_surface(*((ei_frame_t *)widget)->text, *((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color);
+        }
+        else
+        {
+            text_surface = hw_text_create_surface(*((ei_button_t *)widget)->text, *((ei_button_t *)widget)->text_font, *((ei_button_t *)widget)->text_color);
+        }
+        largeur_contenu = hw_surface_get_size(text_surface).width;
+        hauteur_contenu = hw_surface_get_size(text_surface).height;
+        hw_surface_free(text_surface);
     }
     else
     {
-        ei_button_t *widget_class = (ei_button_t *)widget;
-        text_surface = hw_text_create_surface(*widget_class->text, *widget_class->text_font, *widget_class->text_color);
+        if (!strcmp(widget->wclass->name, "frame") == 1)
+        {
+            largeur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).width;
+            hauteur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).height;
+        }
+        else
+        {
+            largeur_contenu = hw_surface_get_size(((ei_button_t *)widget)->img).width;
+            hauteur_contenu = hw_surface_get_size(((ei_button_t *)widget)->img).height;
+        }
     }
-    int largeur_texte = hw_surface_get_size(text_surface).width;
-    int hauteur_texte = hw_surface_get_size(text_surface).height;
-    hw_surface_free(text_surface);
 
-    ei_point_t point = widget->screen_location.top_left;
-    int largeur_boutton = widget->screen_location.size.width;
-    int hauteur_boutton = widget->screen_location.size.height;
+    ei_point_t point = widget->content_rect->top_left;
+    int largeur_parent = widget->content_rect->size.width;
+    int hauteur_parent = widget->content_rect->size.height;
+    
     if (ancre == NULL)
     {
-        point.x += (largeur_boutton - largeur_texte) / 2;
-        point.y += (hauteur_boutton - hauteur_texte) / 2;
+        point.x += (largeur_parent - largeur_contenu) / 2;
+        point.y += (hauteur_parent - hauteur_contenu) / 2;
     }
     else
     {
         switch (*ancre)
         {
-        case ei_anc_none:
-            point.x += (largeur_boutton - largeur_texte) / 2;
-            point.y += (hauteur_boutton - hauteur_texte) / 2;
-            break;
-        case ei_anc_northwest:
-            break;
-        case ei_anc_north:
-            point.x += (largeur_boutton - largeur_texte) / 2;
-            break;
-        case ei_anc_northeast:
-            point.x += (largeur_boutton - largeur_texte);
-            break;
-        case ei_anc_west:
-            point.y += (hauteur_boutton - hauteur_texte) / 2;
-            break;
-        case ei_anc_center:
-            point.x += (largeur_boutton - largeur_texte) / 2;
-            point.y += (hauteur_boutton - hauteur_texte) / 2;
-            break;
-        case ei_anc_east:
-            point.x += (largeur_boutton - largeur_texte);
-            point.y += (hauteur_boutton - hauteur_texte) / 2;
-            break;
-        case ei_anc_southwest:
-            point.y += (hauteur_boutton - hauteur_texte);
-            break;
-        case ei_anc_south:
-            point.x += (largeur_boutton - largeur_texte) / 2;
-            point.y += (hauteur_boutton - hauteur_texte);
-            break;
-        case ei_anc_southeast:
-            point.x += (largeur_boutton - largeur_texte);
-            point.y += (hauteur_boutton - hauteur_texte);
-            break;
+            case ei_anc_none:
+                point.x += (largeur_parent - largeur_contenu) / 2;
+                point.y += (hauteur_parent - hauteur_contenu) / 2;
+                break;
+            case ei_anc_northwest:
+                break;
+            case ei_anc_north:
+                point.x += (largeur_parent - largeur_contenu) / 2;
+                break;
+            case ei_anc_northeast:
+                point.x += (largeur_parent - largeur_contenu);
+                break;
+            case ei_anc_west:
+                point.y += (hauteur_parent - hauteur_contenu) / 2;
+                break;
+            case ei_anc_center:
+                point.x += (largeur_parent - largeur_contenu) / 2;
+                point.y += (hauteur_parent - hauteur_contenu) / 2;
+                break;
+            case ei_anc_east:
+                point.x += (largeur_parent - largeur_contenu);
+                point.y += (hauteur_parent - hauteur_contenu) / 2;
+                break;
+            case ei_anc_southwest:
+                point.y += (hauteur_parent - hauteur_contenu);
+                break;
+            case ei_anc_south:
+                point.x += (largeur_parent - largeur_contenu) / 2;
+                point.y += (hauteur_parent - hauteur_contenu);
+                break;
+            case ei_anc_southeast:
+                point.x += (largeur_parent - largeur_contenu);
+                point.y += (hauteur_parent - hauteur_contenu);
+                break;
         }
     }
     return point;
