@@ -13,8 +13,8 @@ void placer_runfunc(ei_widget_t *widget)
     ei_placer_t *placer = (ei_placer_t *)widget->geom_params;
     if (widget->parent != NULL)
     {
-        top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : 0);
-        top_left->y = ((placer->rel_y != -1) ? widget->parent->content_rect->top_left.y : 0);
+        top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : widget->parent->content_rect->top_left.x);
+        top_left->y = ((placer->rel_y != -1) ? widget->parent->content_rect->top_left.y : widget->parent->content_rect->top_left.y);
         width_parent = widget->parent->content_rect->size.width;
         height_parent = widget->parent->content_rect->size.height;
     }

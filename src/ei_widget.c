@@ -144,7 +144,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     ei_surface_t *img_button = (img != NULL) ? img : NULL;
     img_rect_button_in = (img_rect != NULL) ? *img_rect : NULL;
     *img_anchor_button = (img_anchor != NULL) ? *img_anchor : (bouton->img_anchor == NULL) ? default_anchor_button : *bouton->img_anchor;
-    callback_button = (callback != NULL) ? callback : (bouton->callback != NULL) ? bouton->callback : NULL;
+    *callback_button = (callback != NULL) ? *callback : (bouton->callback != NULL) ? *bouton->callback : NULL;
     user_param_button_in = (user_param != NULL) ? *user_param : (bouton->user_param != NULL) ? *bouton->user_param : NULL;
 
     *text_button = text_button_in;
