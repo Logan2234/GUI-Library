@@ -68,9 +68,12 @@ void ei_app_run()
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
+                update_surface(rect_to_update);
             }
-            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-            update_surface(rect_to_update);
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                update_surface(rect_to_update);
+            }
         }
 
             /* Cas où on relache le clic gauche */
@@ -100,9 +103,12 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
+                update_surface(rect_to_update);
             }
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                update_surface(rect_to_update);
+            }
         }
     }
     free(event);

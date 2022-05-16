@@ -96,6 +96,55 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     }
 
     /* Dessin de l'image si nécessaire */
+    if (((ei_frame_t *)widget)->img != NULL){
+        ei_rect_t rect = hw_surface_get_rect(((ei_frame_t *)widget)->img);
+        ei_rect_t *get_rect = &rect;
+        // rect->size.width = (((ei_frame_t *)widget)->img_rect == NULL) ? hw_surface_get_rect(((ei_frame_t *)widget)->img).size.width : ((ei_frame_t *)widget)->img_rect.size.width;
+        // rect->size.height = (((ei_frame_t *)widget)->img_rect == NULL) ? hw_surface_get_rect(((ei_frame_t *)widget)->img).size.height : ((ei_frame_t *)widget)->img_rect->size.height;
+        // rect->top_left = (((ei_frame_t *)widget)->img_rect == NULL) ? hw_surface_get_rect(((ei_frame_t *)widget)->img).top_left : ((ei_frame_t *)widget)->img_rect->top_left;
+        if (((ei_frame_t *)widget)->img_anchor != NULL)
+        {
+            switch (*((ei_frame_t *)widget)->img_anchor)
+            {
+            case ei_anc_none:
+                //point.x += (largeur_boutton - largeur_texte) / 2;
+                //point.y += (hauteur_boutton - hauteur_texte) / 2;
+                break;
+            case ei_anc_northwest:
+                break;
+            case ei_anc_north:
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
+                break;
+            case ei_anc_northeast:
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
+                break;
+            case ei_anc_west:
+                get_rect->top_left.y -= (widget->content_rect->size.height - get_rect->size.height) / 2;
+                break;
+            case ei_anc_center:
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
+                get_rect->top_left.y -= (widget->content_rect->size.height - get_rect->size.height / 2);
+                break;
+            case ei_anc_east:
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height/ 2;
+                break;
+            case ei_anc_southwest:
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
+                break;
+            case ei_anc_south:
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
+                break;
+            case ei_anc_southeast:
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
+                break;
+            }
+        }
+        ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, get_rect, EI_FALSE);
+        printf("fuck virgile\n");
+    }
     if (frame->img != NULL && frame->text == NULL)
     {
         // ei_point_t where = compute_location(widget, frame->img_anchor);

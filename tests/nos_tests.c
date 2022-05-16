@@ -136,47 +136,36 @@ int test_3()
 {
     root_bgcol = (ei_color_t){0x42, 0xA4, 0xA4, 0xff};
 
-    ei_widget_t *frame, *frame2;
-    ei_size_t frame_size = {300, 200};
-    ei_size_t frame_size2 = {600, 600};
-    int frame_x = 150;
-    int frame_y = 200;
-    int frame_x2 = 200;
-    int frame_y2 = 400;
-    ei_color_t frame_color = {0x88, 0x88, 0x88, 0xff};
-    ei_relief_t frame_relief = ei_relief_raised;
-    int frame_border_width = 6;
-    ei_anchor_t ancre = ei_anc_center;
-
+	ei_widget_t*	frame;
+	ei_size_t	frame_size		= {300,200};
+	int		frame_x			= 150;
+	int		frame_y			= 200;
+	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
+	ei_relief_t	frame_relief		= ei_relief_raised;
+	int		frame_border_width	= 6;
+    ei_anchor_t anchor = ei_anc_southeast;
 
     ei_app_create(screen_size, EI_FALSE);
-
+    
     ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
-    char *text = "Coucou Nils";
+    char * text = "Coucou Nils surtout ferme bien ta gueule";
     ei_widget_t *root = ei_app_root_widget();
-
+    
     printf("\nParent de ei_app_root_widget: %p\n", root->parent);
     printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
-
+    
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-    ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, &text, NULL, NULL, NULL, NULL, NULL, NULL);
-    ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
-
-    frame2 = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
-    ei_frame_configure(frame2, &frame_size2, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &ancre);
-    ei_place(frame2, NULL, &frame_x2, &frame_y2, NULL, NULL, NULL, NULL, NULL, NULL);
-
+	frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
+	ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &anchor);
+	ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL );
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
     /* Run the application's main loop. */
     ei_app_run();
 
     ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
-
     ei_app_free();
-
     return (EXIT_SUCCESS);
 }
 
@@ -335,9 +324,9 @@ int test_7()
     ei_size_t window_size = {400, 400};
     char *window_title = "Hello World";
     ei_color_t window_color = {0xA0, 0xA0, 0xA0, 0xff};
-    int window_border_width = 4;
+    int window_border_width = 2;
     ei_bool_t closable = EI_TRUE;
-    ei_axis_set_t window_resizable = ei_axis_none;
+    ei_axis_set_t window_resizable = ei_axis_both;
     ei_point_t window_position = {30, 10};
 
     ei_size_t window_size2 = {200, 200};
@@ -345,7 +334,7 @@ int test_7()
     ei_color_t window_color2 = {0xA0, 0x50, 0x50, 0xaa};
     int window_border_width2 = 4;
     ei_bool_t closable2 = EI_TRUE;
-    ei_axis_set_t window_resizable2 = ei_anc_none;
+    ei_axis_set_t window_resizable2 = ei_axis_both;
     float window_position2_x = 0.2;
 
     ei_widget_t *toplevel, *toplevel2;
@@ -384,7 +373,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-
+    argv[1] = "test3";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
