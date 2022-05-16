@@ -2,6 +2,7 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
+#include "ei_autre_placer.h"
 
 extern int widget_id;
 
@@ -15,7 +16,7 @@ void button_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
-    // free(widget->content_rect);
+    free(widget->content_rect);
     free(((ei_button_t *)widget)->color);
     free(((ei_button_t *)widget)->border_width);
     free(((ei_button_t *)widget)->corner_radius);
@@ -24,7 +25,6 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(((ei_button_t *)widget)->text_color);
     free(((ei_button_t *)widget)->text_anchor);
     free(((ei_button_t *)widget)->img_anchor);
-    free(((ei_button_t *)widget)->img);
     free(((ei_button_t *)widget)->user_param);
     free(((ei_button_t *)widget));
 }
@@ -66,13 +66,49 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
     /* Dessin du texte si nécessaire */
-    if (bouton->text != NULL) 
+    if (bouton->text != NULL)
     {
-        ei_point_t where = compute_location(widget, bouton->text_anchor);
-        if (*bouton->relief != ei_relief_none && *bouton->border_width != 0)
-            ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, widget->content_rect);
-        else
-            ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
+        ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
+        ei_size_t taille_bouton = hw_surface_get_size(surface_text);
+        free(surface_text);
+
+        if (widget->screen_location.size.height <= taille_bouton.height)
+        {
+            ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height + *bouton->border_width * 2;
+            widget->requested_size.height = taille_bouton.height + *bouton->border_width * 2;
+        }
+        if (widget->screen_location.size.width <= taille_bouton.width)
+        {
+            ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width + *bouton->border_width * 2;
+            widget->requested_size.width = taille_bouton.width + *bouton->border_width * 2;
+        }
+        widget->geom_params->manager->runfunc(widget);
+
+        ei_point_t where = compute_location(widget, bouton->text_anchor, EI_TRUE);
+        ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
+    }
+
+    /* Dessin de l'image si nécessaire */
+    else if (bouton->img != NULL && bouton->text == NULL)
+    {
+        /* Le bouton prend la taille de l'image si celle-ci est plus grande */
+        ei_size_t taille_bouton = hw_surface_get_size(*(bouton->img));
+        if (widget->screen_location.size.height <= taille_bouton.height)
+        {
+            ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
+            widget->requested_size.height = taille_bouton.height;
+        }
+        if (widget->screen_location.size.width <= taille_bouton.width)
+        {
+            ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width;
+            widget->requested_size.width = taille_bouton.width;
+        }
+        widget->geom_params->manager->runfunc(widget);
+
+        // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
+        // hw_surface_set_origin(bouton->img, (ei_point_t){0, 200});
+        (bouton->img_rect != NULL) ? ei_copy_surface(surface, clipper, *bouton->img, *bouton->img_rect, EI_FALSE)
+                                   : ei_copy_surface(surface, clipper, *bouton->img, NULL, EI_FALSE);
     }
 
     free_linked_point_pointeur(partie_haute);

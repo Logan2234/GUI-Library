@@ -1,6 +1,7 @@
 #include "ei_autre_struct.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
+#include "ei_autre_placer.h"
 
 extern int widget_id;
 extern ei_surface_t racine_surface;
@@ -17,8 +18,7 @@ void frame_releasefunc(struct ei_widget_t *widget)
     free(widget->content_rect);
     free(widget->geom_params);
     free(((ei_frame_t *)widget)->border_width);
-    free(((ei_frame_t *)widget)->color);
-    free(((ei_frame_t *)widget)->img);
+    free((ei_color_t *)((ei_frame_t *)widget)->color);
     free(((ei_frame_t *)widget)->img_anchor);
     free(((ei_frame_t *)widget)->relief);
     free(((ei_frame_t *)widget)->text_anchor);
@@ -88,18 +88,45 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     /* Dessin du texte si nécessaire */
     if (frame->text != NULL)
     {
-        ei_point_t where = compute_location(widget, frame->text_anchor);
-        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
-            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, widget->content_rect);
-        else
-            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
+        ei_surface_t surface_text = hw_text_create_surface(*frame->text, *frame->text_font, *frame->text_color);
+        ei_size_t taille_frame = hw_surface_get_size(surface_text);
+        free(surface_text);
+
+        if (widget->screen_location.size.height <= taille_frame.height)
+        {
+            ((ei_placer_t *)widget->geom_params)->height = taille_frame.height + *frame->border_width *2;
+            widget->requested_size.height = taille_frame.height + *frame->border_width *2;
+        }
+        if (widget->screen_location.size.width <= taille_frame.width)
+        {
+            ((ei_placer_t *)widget->geom_params)->width = taille_frame.width + *frame->border_width *2;
+            widget->requested_size.width = taille_frame.width + *frame->border_width *2;
+        }
+        widget->geom_params->manager->runfunc(widget);
+        
+        ei_point_t where = compute_location(widget, frame->text_anchor, EI_TRUE);
+        ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
     }
 
     /* Dessin de l'image si nécessaire */
-    if (frame->img != NULL && frame->text == NULL)
+    else if (frame->img != NULL && frame->text == NULL)
     {
-        // ei_point_t where = compute_location(widget, frame->img_anchor);
-        // hw_surface_set_origin(*frame->img, where);
+        /* La frame prend la taille de l'image si celle-ci est plus grande */
+        ei_size_t taille_frame = hw_surface_get_size(frame->img);
+        if (widget->screen_location.size.height <= taille_frame.height)
+        {
+            ((ei_placer_t *)widget->geom_params)->height = taille_frame.height;
+            widget->requested_size.height = taille_frame.height;
+        }
+        if (widget->screen_location.size.width <= taille_frame.width)
+        {
+            ((ei_placer_t *)widget->geom_params)->width = taille_frame.width;
+            widget->requested_size.width = taille_frame.width;
+        }
+        widget->geom_params->manager->runfunc(widget);
+        
+        ei_point_t where = compute_location(widget, frame->img_anchor, EI_FALSE);
+        // hw_surface_set_origin(frame->img, (ei_point_t){0, 200});
         (frame->img_rect != NULL) ? ei_copy_surface(surface, clipper, frame->img, *frame->img_rect, EI_FALSE)
                                   : ei_copy_surface(surface, clipper, frame->img, NULL, EI_FALSE);
     }
