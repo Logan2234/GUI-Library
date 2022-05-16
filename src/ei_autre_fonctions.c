@@ -180,6 +180,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                     {
                         widget->screen_location.size.width =
                             event->param.mouse.where.x - widget->screen_location.top_left.x;
+                        ((ei_placer_t *)widget->geom_params)->width = event->param.mouse.where.x - widget->screen_location.top_left.x;
                         widget->content_rect->size.width =
                             event->param.mouse.where.x - widget->content_rect->top_left.x;
                     }
@@ -191,6 +192,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                     {
                         widget->screen_location.size.height =
                             event->param.mouse.where.y - widget->screen_location.top_left.y;
+                        ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y;
                         widget->content_rect->size.height =
                             event->param.mouse.where.y - widget->content_rect->top_left.y;
                     }
