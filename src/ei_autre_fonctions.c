@@ -314,8 +314,8 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre)
     hw_surface_free(text_surface);
 
     ei_point_t point = widget->content_rect->top_left;
-    int largeur_boutton = widget->screen_location.size.width;
-    int hauteur_boutton = widget->screen_location.size.height;
+    int largeur_boutton = widget->content_rect->size.width;
+    int hauteur_boutton = widget->content_rect->size.height;
     if (ancre == NULL)
     {
         point.x += (largeur_boutton - largeur_texte) / 2;
