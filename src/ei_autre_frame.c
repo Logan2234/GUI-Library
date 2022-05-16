@@ -14,7 +14,16 @@ struct ei_widget_t *frame_allocfunc(void)
 void frame_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
+    free(widget->content_rect);
     free(widget->geom_params);
+    free(((ei_frame_t *)widget)->border_width);
+    free(((ei_frame_t *)widget)->color);
+    free(((ei_frame_t *)widget)->img);
+    free(((ei_frame_t *)widget)->img_anchor);
+    free(((ei_frame_t *)widget)->relief);
+    free(((ei_frame_t *)widget)->text_anchor);
+    free(((ei_frame_t *)widget)->text_color);
+    free(((ei_frame_t *)widget)->text_font);
     free((ei_frame_t *)widget);
 }
 
@@ -23,8 +32,6 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_frame_t *frame = (ei_frame_t *)widget;
 
     int h = widget->requested_size.height / 2;
-
-    ei_rect_t new_clipper_frame;
 
     if (*frame->relief != ei_relief_none && *frame->border_width != 0)
     {
@@ -75,19 +82,8 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         free(zone_rectangle->next->next);
         free(zone_rectangle->next);
         free(zone_rectangle);
-
-        /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
-        new_clipper_frame = *clipper;
-
-        int border_size = *frame->border_width;
-        new_clipper_frame.top_left.x += border_size;
-        new_clipper_frame.top_left.y += border_size;
-        new_clipper_frame.size.height -= 2 * border_size;
-        new_clipper_frame.size.width -= 2 * border_size;
-        ei_fill(surface, frame->color, &new_clipper_frame);
     }
-    else
-        ei_fill(surface, frame->color, clipper);
+    ei_fill(surface, frame->color, clipper);
 
     /* Dessin du texte si nécessaire */
     if (frame->text != NULL) 
@@ -103,13 +99,13 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     if (frame->img != NULL && frame->text == NULL)
     {
         if (*frame->relief != ei_relief_none && *frame->border_width != 0)
-            ei_copy_surface(surface, &new_clipper_frame, frame->img, frame->img_rect, EI_FALSE);
+            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
         else
             ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
     }
 
     /* Dessin de la surface offscreen de picking */
-    ei_fill(pick_surface, widget->pick_color, widget->content_rect);
+    ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
@@ -139,7 +135,10 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
         widget->requested_size = default_frame_size;
         widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
     }
-    widget->content_rect = &widget->screen_location;
+
+    ei_rect_t *content_rect_frame = calloc(1, sizeof(ei_rect_t));
+    *content_rect_frame = widget->screen_location;
+    widget->content_rect = content_rect_frame;
 }
 
 void frame_geomnotifyfunc(struct ei_widget_t *widget)

@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
 	ei_unbind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
-	// ei_app_free();
+	ei_app_free();
 
 	return (EXIT_SUCCESS);
 }
