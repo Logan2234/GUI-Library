@@ -75,7 +75,6 @@ void ei_app_run()
             update_surface(rect_to_update);
             free(surface_a_update->next);
             free(surface_a_update);
-            }
         }
 
             /* Cas où on relache le clic gauche */
