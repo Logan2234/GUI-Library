@@ -43,14 +43,14 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
         /* D'abord on ajoute le point supérieur gauche */
         zone_rectangle->point = widget->screen_location.top_left;
-        
+
         /* Puis le coin supérieur droit */
         zone_rectangle->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y};
-        
+
         /* Ajout des points intermédiaires */
         zone_rectangle->next->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width - h, widget->screen_location.top_left.y + h};
         zone_rectangle->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x + h, widget->screen_location.top_left.y + h};
-        
+
         /* Et enfin le coin inférieur gauche pour créer la partie supérieure */
         zone_rectangle->next->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x, widget->screen_location.top_left.y + widget->requested_size.height};
 
@@ -86,7 +86,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_fill(surface, frame->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    if (frame->text != NULL) 
+    if (frame->text != NULL)
     {
         ei_point_t where = compute_location(widget, frame->text_anchor);
         if (*frame->relief != ei_relief_none && *frame->border_width != 0)
@@ -97,12 +97,9 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
     /* Dessin de l'image si nécessaire */
     if (frame->img != NULL && frame->text == NULL)
-    {
-        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
-            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
-        else
-            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
-    }
+        // ei_point_t where = compute_location(widget, frame->img_anchor);
+        (frame->img_rect != NULL) ? ei_copy_surface(surface, clipper, frame->img, *frame->img_rect, EI_FALSE)
+                                  : ei_copy_surface(surface, clipper, frame->img, NULL, EI_FALSE);
 
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);

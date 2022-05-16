@@ -31,6 +31,7 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+
     /* On trace le fond */
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));
     ei_linked_point_t *sentinel = premier_point;
@@ -54,12 +55,12 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sentinel->next = nouveau2;
 
-    ei_rect_t new_clipper_toplevel = *clipper;
+    // ei_rect_t new_clipper_toplevel = *clipper;
 
-    new_clipper_toplevel.top_left.y += 35;
-    new_clipper_toplevel.size.height -= 35;
+    // new_clipper_toplevel.top_left.y += 35;
+    // new_clipper_toplevel.size.height -= 35;
 
-    ei_draw_polygon(surface, premier_point, *toplevel->color, &new_clipper_toplevel);
+    ei_draw_polygon(surface, premier_point, *toplevel->color, clipper);
 
     free_linked_point_pointeur(premier_point);
 
@@ -111,7 +112,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau_contour7->point.y = widget->screen_location.top_left.y + 35;
     sent->next = nouveau_contour7;
 
-    ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, NULL);
+    ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
 
     free_linked_point_pointeur(contour);
 
@@ -137,7 +138,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_linked_point_t *nouveau_header3 = ei_draw_arc(centre_gauche, 15, 1.57075, 3.1415);
     sentinel2->next = nouveau_header3;
 
-    ei_draw_polygon(surface, header, (ei_color_t){0x63, 0x69, 0x70, 0xff}, NULL);
+    ei_draw_polygon(surface, header, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
 
     free_linked_point_pointeur(header);
 
@@ -160,7 +161,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
         resize_indicator3->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width;
         sentinel3->next = resize_indicator3;
 
-        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, NULL);
+        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
 
         free_linked_point_pointeur(resize_indicator);
     }
@@ -169,7 +170,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_point_t titre_pos = widget->screen_location.top_left;
     titre_pos.x += 35;
     titre_pos.y += 4;
-    ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, NULL);
+    ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, clipper);
 
     ei_rect_t new_clipper_including_header = {(ei_point_t){widget->screen_location.top_left.x - *toplevel->border_width, widget->screen_location.top_left.y}, (ei_size_t){widget->requested_size.width + *toplevel->border_width * 2, widget->requested_size.height + *toplevel->border_width}};
     ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);

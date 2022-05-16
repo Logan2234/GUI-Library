@@ -2,6 +2,7 @@
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
 #include "ei_autre_struct.h"
+#include "ei_autre_placer.h"
 
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
@@ -11,7 +12,7 @@ uint32_t id_deplacement;
 void draw_widgets_and_family(ei_widget_t *widget)
 {
     (widget->parent == NULL) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL)
-                             : ((widget->parent->pick_id == 1) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
+                             : ((widget->parent->pick_id == 1) ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL)
                                                                : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect));
     ei_widget_t *current_widget = widget;
     if (current_widget->next_sibling != NULL)
@@ -89,7 +90,7 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
     if (current_widget->next_sibling != NULL)
         res = search_widget_by_id(current_widget->next_sibling, id);
 
-    if (res !=NULL)
+    if (res != NULL)
         return res;
     return NULL;
 
@@ -107,7 +108,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
     //     else
     //         return res;
     // }
-
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
@@ -159,6 +159,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             origine_deplacement.y = event->param.mouse.where.y;
             widget->content_rect->top_left.x += delta_x;
             widget->content_rect->top_left.y += delta_y;
+            ((ei_placer_t *)widget->geom_params)->x += delta_x;
+            ((ei_placer_t *)widget->geom_params)->y += delta_y;
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
@@ -168,30 +170,35 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             return EI_FALSE;
         }
         else
-        { if (re_size == EI_TRUE) {
-
-                printf("HOLAAA \n");
-                ei_toplevel_t *toplevel = (ei_toplevel_t *) widget;
-                if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both) {
-                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30) {
+        {
+            if (re_size == EI_TRUE)
+            {
+                ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+                if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
+                {
+                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
+                    {
                         widget->screen_location.size.width =
-                                event->param.mouse.where.x - widget->screen_location.top_left.x;
+                            event->param.mouse.where.x - widget->screen_location.top_left.x;
                         widget->content_rect->size.width =
-                                event->param.mouse.where.x - widget->content_rect->top_left.x;
+                            event->param.mouse.where.x - widget->content_rect->top_left.x;
                     }
                 }
 
-                if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both) {
-                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35) {
+                if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
+                {
+                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
+                    {
                         widget->screen_location.size.height =
-                                event->param.mouse.where.y - widget->screen_location.top_left.y;
+                            event->param.mouse.where.y - widget->screen_location.top_left.y;
                         widget->content_rect->size.height =
-                                event->param.mouse.where.y - widget->content_rect->top_left.y;
+                            event->param.mouse.where.y - widget->content_rect->top_left.y;
                     }
                 }
 
                 ei_widget_t *sent = widget->children_head;
-                while (sent != NULL) {
+                while (sent != NULL)
+                {
                     sent->wclass->geomnotifyfunc(sent);
                     sent = sent->next_sibling;
                 }
@@ -218,6 +225,9 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             widget->screen_location.top_left.y += delta_y;
             widget->content_rect->top_left.x += delta_x;
             widget->content_rect->top_left.y += delta_y;
+            ((ei_placer_t *)widget->geom_params)->x += delta_x;
+            ((ei_placer_t *)widget->geom_params)->y += delta_y;
+
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
@@ -233,10 +243,10 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
-                    {
-                        widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-                        widget->content_rect->size.width =  event->param.mouse.where.x - widget->content_rect->top_left.x;
-                    }
+                {
+                    widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                    widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
+                }
             }
 
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
@@ -244,7 +254,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
                 {
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
-                    widget->content_rect->size.height =  event->param.mouse.where.y - widget->content_rect->top_left.y;
+                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
 
@@ -273,7 +283,7 @@ void init_toplevel(ei_widget_t *widget)
         {
             ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
             ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
-            ei_place(button, &close_button_anchor, &close_button_x  , &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+            ei_place(button, &close_button_anchor, &close_button_x, &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
         }
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
@@ -335,42 +345,42 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre)
     }
     else
     {
-        switch(*ancre)
+        switch (*ancre)
         {
-            case ei_anc_none:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_northwest:
-                break;
-            case ei_anc_north:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                break;
-            case ei_anc_northeast:
-                point.x += (largeur_boutton - largeur_texte);
-                break;
-            case ei_anc_west:
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_center:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_east:
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte) / 2;
-                break;
-            case ei_anc_southwest:
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
-            case ei_anc_south:
-                point.x += (largeur_boutton - largeur_texte) / 2;
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
-            case ei_anc_southeast:
-                point.x += (largeur_boutton - largeur_texte);
-                point.y += (hauteur_boutton - hauteur_texte);
-                break;
+        case ei_anc_none:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_northwest:
+            break;
+        case ei_anc_north:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            break;
+        case ei_anc_northeast:
+            point.x += (largeur_boutton - largeur_texte);
+            break;
+        case ei_anc_west:
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_center:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_east:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte) / 2;
+            break;
+        case ei_anc_southwest:
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_south:
+            point.x += (largeur_boutton - largeur_texte) / 2;
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
+        case ei_anc_southeast:
+            point.x += (largeur_boutton - largeur_texte);
+            point.y += (hauteur_boutton - hauteur_texte);
+            break;
         }
     }
     return point;
