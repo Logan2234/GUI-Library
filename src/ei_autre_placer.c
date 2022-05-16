@@ -79,7 +79,7 @@ void placer_runfunc(ei_widget_t *widget)
     widget->screen_location.size.width = placer->width;
     widget->screen_location.size.height = placer->height;
     widget->screen_location.top_left = *top_left;
-
+    
     if (!strcmp(widget->wclass->name, "frame"))
     {
         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_frame_t *)widget)->border_width;
@@ -87,6 +87,7 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_frame_t *)widget)->border_width;
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
     }
+    
     else if (!strcmp(widget->wclass->name, "button"))
     {
         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_button_t *)widget)->border_width;
@@ -94,6 +95,10 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_button_t *)widget)->border_width;
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
     }
+    
+    else
+        widget->content_rect = &widget->screen_location;
+    
     free(top_left);
 }
 
