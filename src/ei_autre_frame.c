@@ -19,8 +19,12 @@ void frame_releasefunc(struct ei_widget_t *widget)
     free(widget->geom_params);
     free(((ei_frame_t *)widget)->border_width);
     free((ei_color_t *)((ei_frame_t *)widget)->color);
+    // free(*((ei_frame_t *)widget)->img_rect);
+    free(((ei_frame_t *)widget)->img_rect);
     free(((ei_frame_t *)widget)->img_anchor);
     free(((ei_frame_t *)widget)->relief);
+    // free(*((ei_frame_t *)widget)->text);
+    free(((ei_frame_t *)widget)->text);
     free(((ei_frame_t *)widget)->text_anchor);
     free(((ei_frame_t *)widget)->text_color);
     free(((ei_frame_t *)widget)->text_font);
@@ -86,7 +90,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_fill(surface, frame->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    if (frame->text != NULL)
+    if (*frame->text != NULL)
     {
         ei_surface_t surface_text = hw_text_create_surface(*frame->text, *frame->text_font, *frame->text_color);
         ei_size_t taille_frame = hw_surface_get_size(surface_text);
@@ -109,7 +113,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     }
 
     /* Dessin de l'image si nécessaire */
-    else if (frame->img != NULL && frame->text == NULL)
+    else if (frame->img != NULL && *frame->text == NULL)
     {
         /* La frame prend la taille de l'image si celle-ci est plus grande */
         ei_size_t taille_frame = hw_surface_get_size(frame->img);
@@ -174,7 +178,6 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     //         }
     //     }
     //     ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, get_rect, EI_FALSE);
-    //     printf("fuck virgile\n");
     // }
     // if (frame->img != NULL && frame->text == NULL)
         // ei_point_t where = compute_location(widget, frame->img_anchor);

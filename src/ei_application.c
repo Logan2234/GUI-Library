@@ -49,17 +49,16 @@ void ei_app_run()
     ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-
     update_surface(rect_to_update);
 
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
+
         if (event->type < 5)
         {
-            uint8_t drapeau = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            if (drapeau == 1)
-                update_surface(rect_to_update);
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            update_surface(rect_to_update);
         }
 
             /* Cas où on appuie avec le clic gauche */
@@ -84,7 +83,7 @@ void ei_app_run()
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
                 (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL)
-                                                      ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL)
+                                                      ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, *((ei_button_t *)released_widget)->user_param)
                                                       : 0
                                                     : 0;
                 update_surface(rect_to_update);

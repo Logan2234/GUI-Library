@@ -31,6 +31,6 @@ static int close_button_height = 17;
 static float close_button_rel_x = 0;
 static float close_button_rel_y = 0;
 static int close_button_x = 10;
-static int close_button_y = 10;
+static int close_button_y = -25;
 // static float close_button_rel_width;
 // static float close_button_rel_height;
