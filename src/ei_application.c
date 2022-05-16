@@ -57,8 +57,9 @@ void ei_app_run()
         hw_event_wait_next(event);
         if (event->type < 5)
         {
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            uint8_t drapeau = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            if (drapeau == 1)
+                update_surface(rect_to_update);
         }
 
             /* Cas où on appuie avec le clic gauche */
