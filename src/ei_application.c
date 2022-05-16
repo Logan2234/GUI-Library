@@ -16,7 +16,6 @@ ei_bool_t deplacement = EI_FALSE;
 ei_bool_t re_size = EI_FALSE;
 ei_point_t origine_deplacement;
 ei_bool_t arret = EI_FALSE;
-ei_linked_rect_t *surface_a_update;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -93,8 +92,7 @@ void ei_app_run()
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             if (deplacement == EI_TRUE || re_size == EI_TRUE) {
                 update_surface(rect_to_update);
-                free(surface_a_update->next);
-                free(surface_a_update);
+
             }
         }
 
@@ -110,9 +108,7 @@ void ei_app_run()
             }
             if (deplacement == EI_TRUE || re_size == EI_TRUE) {
                 recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                update_surface(surface_a_update);
-                free(surface_a_update->next);
-                free(surface_a_update);
+                update_surface(rect_to_update);
             }
         }
     }
