@@ -55,10 +55,6 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height;
     sentinel->next = nouveau2;
 
-    // ei_rect_t new_clipper_toplevel = *clipper;
-
-    // new_clipper_toplevel.top_left.y += 35;
-    // new_clipper_toplevel.size.height -= 35;
 
     ei_draw_polygon(surface, premier_point, *toplevel->color, clipper);
 
@@ -112,7 +108,12 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau_contour7->point.y = widget->screen_location.top_left.y + 35;
     sent->next = nouveau_contour7;
 
-    ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
+    ei_rect_t new_clipper_toplevel = *clipper;
+    new_clipper_toplevel.top_left.x -= *toplevel->border_width;
+    new_clipper_toplevel.size.width += 2 * *toplevel->border_width;
+    new_clipper_toplevel.size.height += *toplevel->border_width;
+
+    ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
 
     free_linked_point_pointeur(contour);
 
@@ -138,7 +139,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_linked_point_t *nouveau_header3 = ei_draw_arc(centre_gauche, 15, 1.57075, 3.1415);
     sentinel2->next = nouveau_header3;
 
-    ei_draw_polygon(surface, header, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
+    ei_draw_polygon(surface, header, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
 
     free_linked_point_pointeur(header);
 
@@ -161,7 +162,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
         resize_indicator3->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width;
         sentinel3->next = resize_indicator3;
 
-        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, clipper);
+        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
 
         free_linked_point_pointeur(resize_indicator);
     }

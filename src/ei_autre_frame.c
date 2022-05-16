@@ -97,9 +97,12 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
     /* Dessin de l'image si nécessaire */
     if (frame->img != NULL && frame->text == NULL)
+    {
         // ei_point_t where = compute_location(widget, frame->img_anchor);
+        // hw_surface_set_origin(*frame->img, where);
         (frame->img_rect != NULL) ? ei_copy_surface(surface, clipper, frame->img, *frame->img_rect, EI_FALSE)
                                   : ei_copy_surface(surface, clipper, frame->img, NULL, EI_FALSE);
+    }
 
     /* Dessin de la surface offscreen de picking */
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);

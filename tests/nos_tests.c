@@ -335,7 +335,7 @@ int test_7()
     ei_size_t window_size = {400, 400};
     char *window_title = "Hello World";
     ei_color_t window_color = {0xA0, 0xA0, 0xA0, 0xff};
-    int window_border_width = 2;
+    int window_border_width = 4;
     ei_bool_t closable = EI_TRUE;
     ei_axis_set_t window_resizable = ei_axis_none;
     ei_point_t window_position = {30, 10};
@@ -384,6 +384,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
+
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))

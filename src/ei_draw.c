@@ -102,7 +102,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
 
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
-{
+{ // FIXME Le cas ou dst_rect est null créé une seg fault Nils
     ei_size_t main_window_size_dest = hw_surface_get_size(destination);
     ei_size_t main_window_size_src = hw_surface_get_size(source);
 
