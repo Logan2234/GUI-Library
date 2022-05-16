@@ -14,15 +14,26 @@ struct ei_widget_t *frame_allocfunc(void)
 void frame_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
+    free(widget->content_rect);
     free(widget->geom_params);
+    free(((ei_frame_t *)widget)->border_width);
+    free(((ei_frame_t *)widget)->color);
+    free(((ei_frame_t *)widget)->img);
+    free(((ei_frame_t *)widget)->img_anchor);
+    free(((ei_frame_t *)widget)->relief);
+    free(((ei_frame_t *)widget)->text_anchor);
+    free(((ei_frame_t *)widget)->text_color);
+    free(((ei_frame_t *)widget)->text_font);
     free((ei_frame_t *)widget);
 }
 
 void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
+    ei_frame_t *frame = (ei_frame_t *)widget;
 
     int h = widget->requested_size.height / 2;
-    if (*((ei_frame_t *)widget)->relief != ei_relief_none && *((ei_frame_t *)widget)->border_width != 0)
+
+    if (*frame->relief != ei_relief_none && *frame->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
@@ -32,20 +43,23 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
         /* D'abord on ajoute le point supérieur gauche */
         zone_rectangle->point = widget->screen_location.top_left;
+        
         /* Puis le coin supérieur droit */
         zone_rectangle->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width, widget->screen_location.top_left.y};
+        
         /* Ajout des points intermédiaires */
         zone_rectangle->next->next->point = (ei_point_t){widget->screen_location.top_left.x + widget->requested_size.width - h, widget->screen_location.top_left.y + h};
         zone_rectangle->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x + h, widget->screen_location.top_left.y + h};
+        
         /* Et enfin le coin inférieur gauche pour créer la partie supérieure */
         zone_rectangle->next->next->next->next->point = (ei_point_t){widget->screen_location.top_left.x, widget->screen_location.top_left.y + widget->requested_size.height};
 
-        ei_color_t color1 = *((ei_frame_t *)widget)->color;
-        ei_color_t color2 = *((ei_frame_t *)widget)->color;
+        ei_color_t color1 = *frame->color;
+        ei_color_t color2 = *frame->color;
         lighten_color(&color1);
         darken_color(&color2);
 
-        if (*((ei_frame_t *)widget)->relief == ei_relief_raised)
+        if (*frame->relief == ei_relief_raised)
         {
             ei_draw_polygon(surface, zone_rectangle, color1, NULL);
 
@@ -68,22 +82,18 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
         free(zone_rectangle->next->next);
         free(zone_rectangle->next);
         free(zone_rectangle);
-
-        /* On créé le rectangle qui s'affiche par-dessus, qui a donc une plus petite taille */
-        ei_rect_t new_clipper_frame = *clipper;
-
-        int border_size = *((ei_frame_t *)widget)->border_width;
-        new_clipper_frame.top_left.x += border_size;
-        new_clipper_frame.top_left.y += border_size;
-        new_clipper_frame.size.height -= 2 * border_size;
-        new_clipper_frame.size.width -= 2 * border_size;
-        ei_fill(surface, ((ei_frame_t *)widget)->color, &new_clipper_frame);
     }
-    else
-        ei_fill(surface, ((ei_frame_t *)widget)->color, clipper);
+    ei_fill(surface, frame->color, clipper);
 
     /* Dessin du texte si nécessaire */
-    // (((ei_frame_t *)widget)->text != NULL) ? ei_draw_text(surface, ((ei_frame_t *)widget)->text_anchor, *((ei_frame_t *)widget)->text, ((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color, clipper) : NULL;
+    if (frame->text != NULL) 
+    {
+        ei_point_t where = compute_location(widget, frame->text_anchor);
+        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
+            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, widget->content_rect);
+        else
+            ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
+    }
 
     /* Dessin de l'image si nécessaire */
     if (((ei_frame_t *)widget)->img != NULL){
@@ -103,39 +113,48 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
             case ei_anc_northwest:
                 break;
             case ei_anc_north:
-                get_rect->top_left.x -= get_rect->size.width / 2;
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
                 break;
             case ei_anc_northeast:
-                get_rect->top_left.x -= get_rect->size.width;
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
                 break;
             case ei_anc_west:
-                get_rect->top_left.y -= get_rect->size.height / 2;
+                get_rect->top_left.y -= (widget->content_rect->size.height - get_rect->size.height) / 2;
                 break;
             case ei_anc_center:
-                get_rect->top_left.x += get_rect->size.width / 2;
-                get_rect->top_left.y += get_rect->size.height / 2;
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
+                get_rect->top_left.y -= (widget->content_rect->size.height - get_rect->size.height / 2);
                 break;
             case ei_anc_east:
-                get_rect->top_left.x -= get_rect->size.width;
-                get_rect->top_left.y -= get_rect->size.height/ 2;
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height/ 2;
                 break;
             case ei_anc_southwest:
-                get_rect->top_left.y -= get_rect->size.height;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
                 break;
             case ei_anc_south:
-                get_rect->top_left.x -= get_rect->size.width / 2;
-                get_rect->top_left.y -= get_rect->size.height;
+                get_rect->top_left.x -= (widget->content_rect->size.width - get_rect->size.width) / 2;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
                 break;
             case ei_anc_southeast:
-                get_rect->top_left.x -= get_rect->size.width;
-                get_rect->top_left.y -= get_rect->size.height;
+                get_rect->top_left.x -= widget->content_rect->size.width - get_rect->size.width;
+                get_rect->top_left.y -= widget->content_rect->size.height - get_rect->size.height;
                 break;
             }
         }
         ei_copy_surface(surface, widget->content_rect, ((ei_frame_t *)widget)->img, get_rect, EI_FALSE);
+        printf("fuck virgile\n");
     }
+    if (frame->img != NULL && frame->text == NULL)
+    {
+        if (*frame->relief != ei_relief_none && *frame->border_width != 0)
+            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
+        else
+            ei_copy_surface(surface, clipper, frame->img, frame->img_rect, EI_FALSE);
+    }
+
     /* Dessin de la surface offscreen de picking */
-    ei_fill(pick_surface, widget->pick_color, widget->content_rect);
+    ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
@@ -165,7 +184,10 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
         widget->requested_size = default_frame_size;
         widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
     }
-    widget->content_rect = &widget->screen_location;
+
+    ei_rect_t *content_rect_frame = calloc(1, sizeof(ei_rect_t));
+    *content_rect_frame = widget->screen_location;
+    widget->content_rect = content_rect_frame;
 }
 
 void frame_geomnotifyfunc(struct ei_widget_t *widget)

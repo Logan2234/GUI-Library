@@ -20,6 +20,11 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
+    free(widget->content_rect);
+    free(((ei_toplevel_t *)widget)->border_width);
+    free(((ei_toplevel_t *)widget)->closable);
+    free(((ei_toplevel_t *)widget)->color);
+    free(((ei_toplevel_t *)widget)->resizable);
     free((ei_toplevel_t *)widget);
 }
 
@@ -187,7 +192,10 @@ void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 
     widget->requested_size = default_toplevel_size;
     widget->screen_location = (ei_rect_t){0, 0, default_toplevel_size};
-    widget->content_rect = &widget->screen_location;
+
+    ei_rect_t *content_rect_toplevel = calloc(1, sizeof(ei_rect_t));
+    *content_rect_toplevel = widget->screen_location;
+    widget->content_rect = content_rect_toplevel;
 }
 
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)

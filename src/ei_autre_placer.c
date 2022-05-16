@@ -1,5 +1,6 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_placer.h"
+#include "ei_autre_struct.h"
 
 void placer_runfunc(ei_widget_t *widget)
 {
@@ -75,9 +76,24 @@ void placer_runfunc(ei_widget_t *widget)
     }
 
     /* Maintenant on remplace dans les données de widgets */
-    widget->content_rect->size.width = placer->width;
-    widget->content_rect->size.height = placer->height;
-    widget->content_rect->top_left = *top_left;
+    widget->screen_location.size.width = placer->width;
+    widget->screen_location.size.height = placer->height;
+    widget->screen_location.top_left = *top_left;
+
+    if (!strcmp(widget->wclass->name, "frame"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_frame_t *)widget)->border_width;
+        widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_frame_t *)widget)->border_width;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_frame_t *)widget)->border_width;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
+    }
+    else if (!strcmp(widget->wclass->name, "button"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_button_t *)widget)->border_width;
+        widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_button_t *)widget)->border_width;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_button_t *)widget)->border_width;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
+    }
     free(top_left);
 }
 
