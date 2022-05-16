@@ -91,8 +91,10 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
         //dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
         dest.size.height = (clipper!=NULL) ? (hw_surface_get_size(surface_source).height > clipper->size.height) ? clipper->size.height : hw_surface_get_size(surface_source).height : hw_surface_get_size(surface_source).height;
         dest.size.width = (clipper!=NULL) ? (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width : hw_surface_get_size(surface_source).width;
-        dest.top_left.x = where->x + (source.size.width - dest.size.width)/2;
-        dest.top_left.y = where->y + (source.size.height - dest.size.height)/2;
+        dest.top_left.x = where->x;
+        dest.top_left.x += (source.size.width - dest.size.width)/2;
+        dest.top_left.y = where->y;
+        dest.top_left.y += (source.size.height - dest.size.height)/2;
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
         hw_surface_free(surface_source);
     }
@@ -103,6 +105,11 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
 { // FIXME Le cas ou dst_rect est null créé une seg fault Nils
     ei_size_t main_window_size_dest = hw_surface_get_size(destination);
     ei_size_t main_window_size_src = hw_surface_get_size(source);
+
+    uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
+    uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
+
+    origine_dest += dst_rect->top_left.x + dst_rect->top_left.y * main_window_size_dest.width;
 
     int ir;
     int ig;
@@ -115,20 +122,14 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
     int ib_;
     int ia_;
     hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
-
     ei_rect_t *src_rect2 = calloc(1, sizeof(ei_rect_t));
-    src_rect2->size = (src_rect == NULL) ? hw_surface_get_rect(source).size: src_rect->size;
+    src_rect2->size.width = (src_rect == NULL) ? hw_surface_get_rect(source).size.width : src_rect->size.width;
+    src_rect2->size.height = (src_rect == NULL) ? hw_surface_get_rect(source).size.height : src_rect->size.height;
     src_rect2->top_left = (src_rect == NULL) ? hw_surface_get_rect(source).top_left : src_rect->top_left;
-
     ei_rect_t *dst_rect2 = calloc(1, sizeof(ei_rect_t));
-    dst_rect2->size = (dst_rect == NULL) ? hw_surface_get_rect(destination).size : dst_rect->size;
+    dst_rect2->size.width = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.width : dst_rect->size.width;
+    dst_rect2->size.height = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.height : dst_rect->size.height;
     dst_rect2->top_left = (dst_rect == NULL) ? hw_surface_get_rect(destination).top_left : dst_rect->top_left;
-
-    uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
-    uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
-    origine_dest += dst_rect2->top_left.x + dst_rect2->top_left.y * main_window_size_dest.width;
-    origine_src += src_rect2->top_left.x + src_rect2->top_left.y * main_window_size_src.width;
-
     if (dst_rect != NULL)
     {
         uint32_t *pixel_ptr_dest = origine_dest;
@@ -179,7 +180,7 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
               //  pixel_ptr_dest += dst_rect2->size.width - last_value_of_j;
 
             //else
-            pixel_ptr_dest += (dst_rect2->size.width < src_rect2->size.width) ? main_window_size_dest.width - dst_rect2->size.width : main_window_size_dest.width - src_rect2->size.width;
+                pixel_ptr_dest += (dst_rect2->size.width < src_rect2->size.width) ? main_window_size_dest.width - dst_rect2->size.width : main_window_size_dest.width - src_rect2->size.width;
             //pixel_ptr_dest += main_window_size_dest.width - src_rect2->size.width;
             //last_pixel_of_current_line_dest += dst_rect2->size.width;
         }

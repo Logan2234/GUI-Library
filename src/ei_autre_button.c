@@ -66,7 +66,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_draw_polygon(surface, partie_milieu, color3, clipper);
 
     /* Dessin du texte si nécessaire */
-    if (bouton->text != NULL)
+    if (bouton->text != NULL && strcmp(*bouton->text, " "))
     {
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);
@@ -107,8 +107,8 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
         // hw_surface_set_origin(bouton->img, (ei_point_t){0, 200});
-        (bouton->img_rect != NULL) ? ei_copy_surface(surface, clipper, *bouton->img, *bouton->img_rect, EI_FALSE)
-                                   : ei_copy_surface(surface, clipper, *bouton->img, NULL, EI_FALSE);
+        (bouton->img_rect != NULL) ? ei_copy_surface(surface, clipper, bouton->img, *bouton->img_rect, EI_FALSE)
+                                   : ei_copy_surface(surface, clipper, bouton->img, NULL, EI_FALSE);
     }
 
     free_linked_point_pointeur(partie_haute);
