@@ -51,7 +51,7 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
 
-    update_surface(rect_to_update);
+    //update_surface(rect_to_update);
     
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
@@ -72,9 +72,7 @@ void ei_app_run()
                 update_surface(rect_to_update);
             }
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                update_surface(rect_to_update);
-            }
+            update_surface(rect_to_update);
         }
 
             /* Cas où on relache le clic gauche */
@@ -93,7 +91,11 @@ void ei_app_run()
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            update_surface(rect_to_update);
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                update_surface(rect_to_update);
+                free(surface_a_update->next);
+                free(surface_a_update);
+            }
         }
 
             /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
