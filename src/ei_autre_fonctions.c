@@ -217,7 +217,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                 sent->wclass->geomnotifyfunc(sent);
                 sent = sent->next_sibling;
             }
-            widget->content_rect = &widget->screen_location;
+            // widget->content_rect = &widget->screen_location;
             deplacement = EI_FALSE;
             return EI_FALSE;
         }
