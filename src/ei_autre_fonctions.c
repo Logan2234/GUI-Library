@@ -93,21 +93,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
     if (res != NULL)
         return res;
     return NULL;
-
-    // if (current_widget->pick_id == id)
-    // {
-    //     return current_widget;
-    // }
-    // if (current_widget->children_head != NULL)
-    //     res = search_widget_by_id(current_widget->children_head, id);
-    // while (current_widget->next_sibling != NULL)
-    // {
-    //     res = search_widget_by_id(current_widget->next_sibling, id);
-    //     if (res == NULL)
-    //         current_widget = current_widget->next_sibling;
-    //     else
-    //         return res;
-    // }
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)

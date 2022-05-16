@@ -98,7 +98,7 @@ set(LIB_EI_SOURCES
 	  ${SRC}/ei_event.c 
 	  ${SRC}/ei_autre_event.c 
 	  ${SRC}/ei_autre_radiobutton.c
-	  ${SRC}/ei_autre_fonctions.c include/ei_autre_placer.h)
+	  ${SRC}/ei_autre_fonctions.c)
 
 add_library(ei STATIC			${LIB_EI_SOURCES})
 
@@ -146,11 +146,6 @@ target_link_libraries(parsing		ei ${PLATFORM_LIB_FLAGS})
 
 add_executable(nos_tests 			${TESTS_SRC}/nos_tests.c)
 target_link_libraries(nos_tests		ei ${PLATFORM_LIB_FLAGS})
-
-# target test_button
-
-add_executable(test_buton 			${TESTS_SRC}/test_buton.c)
-target_link_libraries(test_buton		ei ${PLATFORM_LIB_FLAGS})
 
 # target to build the documentation
 
