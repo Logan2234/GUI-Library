@@ -110,13 +110,13 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
+        widget->screen_location.top_left.y <= event->param.mouse.where.y &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
     {
         deplacement = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;
         id_deplacement = widget->pick_id;
-        return EI_FALSE;
     }
 
     if (!strcmp(widget->wclass->name, "toplevel") && *toplevel->resizable != ei_axis_none &&
@@ -146,52 +146,34 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->content_rect->top_left.y += delta_y;
             ((ei_placer_t *)widget->geom_params)->x += delta_x;
             ((ei_placer_t *)widget->geom_params)->y += delta_y;
-
-            ei_widget_t *sent = widget->children_head;
-            while (sent != NULL)
-            {
-                sent->wclass->geomnotifyfunc(sent);
-                sent = sent->next_sibling;
-            }
-            return EI_FALSE;
         }
-        else
+        else if (re_size == EI_TRUE)
         {
-            if (re_size == EI_TRUE)
+            ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+            ei_size_t minimo = **(toplevel->min_size);
+            if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
-                ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-                ei_size_t minimo = **(toplevel->min_size);
-                if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
+                if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
                 {
-                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
-                    {
-                        widget->screen_location.size.width =
-                            event->param.mouse.where.x - widget->screen_location.top_left.x;
-                        ((ei_placer_t *)widget->geom_params)->width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-                        widget->content_rect->size.width =
-                            event->param.mouse.where.x - widget->content_rect->top_left.x;
-                    }
+                    widget->screen_location.size.width =
+                        event->param.mouse.where.x - widget->screen_location.top_left.x;
+                    ((ei_placer_t *)widget->geom_params)->width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                    widget->content_rect->size.width =
+                        event->param.mouse.where.x - widget->content_rect->top_left.x;
                 }
+            }
 
-                if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
+            if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
+            {
+                if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
                 {
-                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
-                    {
-                        ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
-                        widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
-                        widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
-                    }
-                }
-                // widget->wclass->geomnotifyfunc(widget);
-
-                ei_widget_t *sent = widget->children_head;
-                while (sent != NULL)
-                {
-                    sent->wclass->geomnotifyfunc(sent);
-                    sent = sent->next_sibling;
+                    ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
+                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
+                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
         }
+        widget->wclass->geomnotifyfunc(widget);
         return EI_FALSE;
     }
 }
@@ -216,14 +198,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             ((ei_placer_t *)widget->geom_params)->x += delta_x;
             ((ei_placer_t *)widget->geom_params)->y += delta_y;
 
-            ei_widget_t *sent = widget->children_head;
-            while (sent != NULL)
-            {
-                sent->wclass->geomnotifyfunc(sent);
-                sent = sent->next_sibling;
-            }
             deplacement = EI_FALSE;
-            return EI_FALSE;
         }
         else if (re_size == EI_TRUE)
         {
@@ -237,7 +212,6 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                     widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
                 }
             }
-
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
@@ -246,15 +220,8 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                     widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
-
             re_size = EI_FALSE;
             widget->requested_size = widget->screen_location.size;
-            ei_widget_t *sent = widget->children_head;
-            while (sent != NULL)
-            {
-                sent->wclass->geomnotifyfunc(sent);
-                sent = sent->next_sibling;
-            }
         }
         return EI_FALSE;
     }
