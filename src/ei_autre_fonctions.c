@@ -261,7 +261,7 @@ void init_toplevel(ei_widget_t *widget)
         {
             ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
             ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
-            ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+            ei_place(button, &close_button_anchor, &close_button_x  , &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
         }
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
