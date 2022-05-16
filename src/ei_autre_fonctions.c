@@ -182,6 +182,12 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
             }
             widget->content_rect = &widget->screen_location;
+            ei_widget_t *sent = widget->children_head;
+            while (sent != NULL)
+            {
+                sent->wclass->geomnotifyfunc(sent);
+                sent = sent->next_sibling;
+            }
             return EI_FALSE;
         }
     }
@@ -229,6 +235,14 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             re_size = EI_FALSE;
             widget->content_rect = &widget->screen_location;
             widget->requested_size = widget->screen_location.size;
+            ei_widget_t *sent = widget->children_head;
+            while (sent != NULL)
+            {
+                if (sent->pick_id - widget->pick_id == 5) // on ne bouge pas le bouton rouge
+                    sent = sent->next_sibling;
+                sent->wclass->geomnotifyfunc(sent);
+                sent = sent->next_sibling;
+            }
         }
         return EI_FALSE;
     }
@@ -244,9 +258,11 @@ void init_toplevel(ei_widget_t *widget)
     {
         if (*((ei_toplevel_t *)widget)->closable == EI_TRUE)
         {
+            int x_button = 10;
+            int y_button = 10;
             ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
             ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
-            ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+            ei_place(button, &close_button_anchor, &x_button, &y_button, &close_button_width, &close_button_height, NULL, NULL, NULL, NULL);
         }
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
