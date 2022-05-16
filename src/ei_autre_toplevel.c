@@ -35,7 +35,7 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-    printf("%d, %d, %d, %d\n", widget->screen_location.top_left.y, widget->screen_location.size.height, clipper->top_left.y, clipper->size.height);
+    // printf("%d, %d, %d, %d\n", widget->screen_location.top_left.y, widget->screen_location.size.height, clipper->top_left.y, clipper->size.height);
     
     /* On trace le fond */
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));
@@ -112,11 +112,15 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau_contour7->point.y = widget->screen_location.top_left.y + 35;
     sent->next = nouveau_contour7;
 
+
     ei_rect_t new_clipper_toplevel = *clipper;
-    new_clipper_toplevel.top_left.x -= *toplevel->border_width;
-    new_clipper_toplevel.top_left.y -= 35;
-    new_clipper_toplevel.size.width += 2 * *toplevel->border_width;
-    new_clipper_toplevel.size.height += *toplevel->border_width + 35;
+
+    if (widget->parent->pick_id == 1){
+        new_clipper_toplevel.top_left.x -= *toplevel->border_width;
+        new_clipper_toplevel.top_left.y -= 35;
+        new_clipper_toplevel.size.width += 2 * *toplevel->border_width;
+        new_clipper_toplevel.size.height += *toplevel->border_width + 35;
+    }
 
     ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
 
@@ -183,8 +187,9 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     titre_pos.x += 35;
     titre_pos.y += 4;
     ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, &new_clipper_toplevel);
-
-    ei_fill(pick_surface, widget->pick_color, &new_clipper_toplevel);
+    
+    ei_rect_t new_clipper_including_header = {(ei_point_t){widget->screen_location.top_left.x - *toplevel->border_width, widget->screen_location.top_left.y}, (ei_size_t){widget->requested_size.width + *toplevel->border_width * 2, widget->requested_size.height + *toplevel->border_width + 35}};
+    ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);
 }
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
