@@ -50,8 +50,8 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
 
-    //update_surface(rect_to_update);
-    
+    update_surface(rect_to_update);
+
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
@@ -68,9 +68,8 @@ void ei_app_run()
             if (!strcmp(pressed_widget->wclass->name, "button"))
             {
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
-                update_surface(rect_to_update);
             }
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
             update_surface(rect_to_update);
         }
 
@@ -87,14 +86,10 @@ void ei_app_run()
                                                       ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL)
                                                       : 0
                                                     : 0;
-                update_surface(rect_to_update);
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                update_surface(rect_to_update);
-
-            }
+            update_surface(rect_to_update);
         }
 
             /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
@@ -105,15 +100,14 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
-                update_surface(rect_to_update);
             }
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                update_surface(rect_to_update);
-            }
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            update_surface(rect_to_update);
         }
+
     }
     free(event);
+
 }
 
 void ei_app_free()
