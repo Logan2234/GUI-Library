@@ -8,6 +8,7 @@ extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
 extern ei_bool_t re_size;
 uint32_t id_deplacement;
+extern ei_linked_rect_t *surface_a_update;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
@@ -151,6 +152,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     {
         if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
         { // On aura jamais deplacement et re_size en true
+            surface_a_update = calloc(1, sizeof(ei_linked_rect_t));
+            surface_a_update->rect = widget->screen_location;
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
             widget->screen_location.top_left.x += delta_x;
@@ -161,6 +164,11 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->content_rect->top_left.y += delta_y;
             ((ei_placer_t *)widget->geom_params)->x += delta_x;
             ((ei_placer_t *)widget->geom_params)->y += delta_y;
+            ei_linked_rect_t *surface_a_update_2 = calloc(1, sizeof(ei_linked_rect_t));
+            surface_a_update_2->rect = widget->screen_location;
+            surface_a_update->next = surface_a_update_2;
+
+
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
