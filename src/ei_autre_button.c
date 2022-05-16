@@ -21,10 +21,15 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(((ei_button_t *)widget)->border_width);
     free(((ei_button_t *)widget)->corner_radius);
     free(((ei_button_t *)widget)->relief);
+    // free(*((ei_button_t *)widget)->text);
+    free(((ei_button_t *)widget)->text);
     free(((ei_button_t *)widget)->text_font);
     free(((ei_button_t *)widget)->text_color);
     free(((ei_button_t *)widget)->text_anchor);
+    // free(*((ei_button_t *)widget)->img_rect);
+    free(((ei_button_t *)widget)->img_rect);
     free(((ei_button_t *)widget)->img_anchor);
+    // free(*((ei_button_t *)widget)->user_param);
     free(((ei_button_t *)widget)->user_param);
     free(((ei_button_t *)widget));
 }
@@ -62,11 +67,13 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     rectangle.size.width -= 2 * *bouton->border_width;
     rectangle.size.height -= 2 * *bouton->border_width;
     ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
-
-    ei_draw_polygon(surface, partie_milieu, color3, clipper);
+    if (*bouton->text != NULL && strcmp(*bouton->text, " "))
+        ei_draw_polygon(surface, partie_milieu, color3, clipper)    ;
+    else
+        ei_draw_polygon(surface, partie_milieu, color3, NULL);
 
     /* Dessin du texte si nécessaire */
-    if (bouton->text != NULL && strcmp(*bouton->text, " "))
+    if (*bouton->text != NULL && strcmp(*bouton->text, " "))
     {
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);

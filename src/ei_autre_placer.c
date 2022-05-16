@@ -101,7 +101,7 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->size.width = widget->screen_location.size.width;
         widget->content_rect->size.height = widget->screen_location.size.height;
         widget->content_rect->top_left.x = widget->screen_location.top_left.x;
-        widget->content_rect->top_left.y = widget->screen_location.top_left.y;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y + 35;
     }
 
     else
