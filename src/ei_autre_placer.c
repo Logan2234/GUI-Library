@@ -17,6 +17,7 @@ void placer_runfunc(ei_widget_t *widget)
         top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : 0);
         top_left->y = ((placer->rel_y != -1) ? widget->parent->content_rect->top_left.y : 0);
         width_parent = widget->parent->content_rect->size.width;
+        printf("%d\n", width_parent);
         height_parent = widget->parent->content_rect->size.height;
     }
     placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
@@ -79,7 +80,7 @@ void placer_runfunc(ei_widget_t *widget)
     widget->screen_location.size.width = placer->width;
     widget->screen_location.size.height = placer->height;
     widget->screen_location.top_left = *top_left;
-
+    
     if (!strcmp(widget->wclass->name, "frame"))
     {
         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_frame_t *)widget)->border_width;
@@ -87,6 +88,7 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_frame_t *)widget)->border_width;
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
     }
+    
     else if (!strcmp(widget->wclass->name, "button"))
     {
         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_button_t *)widget)->border_width;
@@ -94,6 +96,18 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_button_t *)widget)->border_width;
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
     }
+    
+    else if (!strcmp(widget->wclass->name, "toplevel"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width;
+        widget->content_rect->size.height = widget->screen_location.size.height;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y;
+    }
+
+    else
+        widget->content_rect = &widget->screen_location;
+    
     free(top_left);
 }
 

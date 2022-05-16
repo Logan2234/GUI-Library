@@ -147,7 +147,7 @@ int test_3()
 
     ei_app_create(screen_size, EI_FALSE);
     
-    ei_surface_t *image = hw_image_load("misc/bomb.png", ei_app_root_surface());
+    ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
     char * text = "Coucou Nils surtout ferme bien ta gueule";
     ei_widget_t *root = ei_app_root_widget();
     

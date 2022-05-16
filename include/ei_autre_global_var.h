@@ -26,11 +26,11 @@ static char *close_button_text = " ";
 // static ei_callback_t close_button_callback = ;
 
 static ei_anchor_t close_button_anchor = ei_anc_northwest;
-// static int close_button_x;
-// static int close_button_y;
 static int close_button_width = 17;
 static int close_button_height = 17;
-static float close_button_rel_x = 0.02;
-static float close_button_rel_y = 0.025;
+static float close_button_rel_x = 0;
+static float close_button_rel_y = 0;
+static int close_button_x = 10;
+static int close_button_y = 10;
 // static float close_button_rel_width;
 // static float close_button_rel_height;

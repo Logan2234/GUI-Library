@@ -174,15 +174,21 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
+                {
                     widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                    widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
+                }
             }
 
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
+                {
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
+                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
+                }
             }
-            widget->content_rect = &widget->screen_location;
+
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
             {
@@ -217,7 +223,6 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                 sent->wclass->geomnotifyfunc(sent);
                 sent = sent->next_sibling;
             }
-            widget->content_rect = &widget->screen_location;
             deplacement = EI_FALSE;
             return EI_FALSE;
         }
@@ -227,16 +232,22 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
-                    widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                    {
+                        widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                        widget->content_rect->size.width =  event->param.mouse.where.x - widget->content_rect->top_left.x;
+                    }
             }
 
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
             {
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
+                {
                     widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
+                    widget->content_rect->size.height =  event->param.mouse.where.y - widget->content_rect->top_left.y;
+                }
             }
+
             re_size = EI_FALSE;
-            widget->content_rect = &widget->screen_location;
             widget->requested_size = widget->screen_location.size;
             ei_widget_t *sent = widget->children_head;
             while (sent != NULL)
@@ -261,7 +272,7 @@ void init_toplevel(ei_widget_t *widget)
         {
             ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
             ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
-            ei_place(button, &close_button_anchor, NULL, NULL, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+            ei_place(button, &close_button_anchor, &close_button_x  , &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
         }
         ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
         ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
