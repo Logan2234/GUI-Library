@@ -59,7 +59,6 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35;
     sentinel->next = nouveau2;
 
-
     ei_draw_polygon(surface, premier_point, *toplevel->color, clipper);
 
     free_linked_point_pointeur(premier_point);
@@ -182,10 +181,9 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_point_t titre_pos = widget->screen_location.top_left;
     titre_pos.x += 35;
     titre_pos.y += 4;
-    ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, clipper);
+    ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, &new_clipper_toplevel);
 
-    ei_rect_t new_clipper_including_header = {(ei_point_t){widget->screen_location.top_left.x - *toplevel->border_width, widget->screen_location.top_left.y}, (ei_size_t){widget->requested_size.width + *toplevel->border_width * 2, widget->requested_size.height + *toplevel->border_width + 35}};
-    ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);
+    ei_fill(pick_surface, widget->pick_color, &new_clipper_toplevel);
 }
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
