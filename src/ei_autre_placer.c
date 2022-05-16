@@ -11,7 +11,6 @@ void placer_runfunc(ei_widget_t *widget)
     /* Initialisation des variables pour contrer les NULL */
     ei_point_t *top_left = calloc(1, sizeof(ei_point_t));
     ei_placer_t *placer = (ei_placer_t *)widget->geom_params;
-
     if (widget->parent != NULL)
     {
         top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : 0);
@@ -22,12 +21,13 @@ void placer_runfunc(ei_widget_t *widget)
     placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
     placer->rel_y = ((placer->rel_y == -1) ? 0 : placer->rel_y);
 
+    int taille_width = (placer->rel_width == 0) ? placer->width : placer->rel_width * width_parent;
+    int taille_height = (placer->rel_height == 0 ) ?placer->height : placer->rel_height * height_parent;
     if (placer->anchor == NULL)
     {
         top_left->x += placer->x + placer->rel_x * width_parent;
         top_left->y += placer->y + placer->rel_y * height_parent;
     }
-
     else
     {
         switch (*placer->anchor)
@@ -37,27 +37,27 @@ void placer_runfunc(ei_widget_t *widget)
             top_left->y += placer->y + placer->rel_y * height_parent;
             break;
         case ei_anc_center:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width) / 2;
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width / 2;
             top_left->y += placer->y + placer->rel_y * height_parent - placer->height / 2;
             break;
         case ei_anc_north:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width) / 2;
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width / 2;
             top_left->y += placer->y + placer->rel_y * height_parent;
             break;
         case ei_anc_south:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width) / 2;
-            top_left->y += placer->y + placer->rel_y * height_parent - (placer->height + placer->rel_height);
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width / 2;
+            top_left->y += placer->y + placer->rel_y * height_parent - taille_height;
             break;
         case ei_anc_east:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width);
-            top_left->y += placer->y + placer->rel_y * height_parent - (placer->height + placer->rel_height) / 2;
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width;
+            top_left->y += placer->y + placer->rel_y * height_parent - taille_height / 2;
             break;
         case ei_anc_west:
             top_left->x += placer->x + placer->rel_x * width_parent;
-            top_left->y += placer->y + placer->rel_y * height_parent - (placer->height + placer->rel_height) / 2;
+            top_left->y += placer->y + placer->rel_y * height_parent - taille_height / 2;
             break;
         case ei_anc_northeast:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width);
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width;
             top_left->y += placer->y + placer->rel_y * height_parent;
             break;
         case ei_anc_northwest:
@@ -65,19 +65,19 @@ void placer_runfunc(ei_widget_t *widget)
             top_left->y += placer->y + placer->rel_y * height_parent;
             break;
         case ei_anc_southeast:
-            top_left->x += placer->x + placer->rel_x * width_parent - (placer->width + placer->rel_width);
-            top_left->y += placer->y + placer->rel_y * height_parent - (placer->height + placer->rel_height);
+            top_left->x += placer->x + placer->rel_x * width_parent - taille_width;
+            top_left->y += placer->y + placer->rel_y * height_parent - taille_height;
             break;
         case ei_anc_southwest:
             top_left->x += placer->x + placer->rel_x * width_parent;
-            top_left->y += placer->y + placer->rel_y * height_parent - (placer->height + placer->rel_height);
+            top_left->y += placer->y + placer->rel_y * height_parent - taille_height;
             break;
         }
     }
 
     /* Maintenant on remplace dans les données de widgets */
-    widget->screen_location.size.width = placer->width;
-    widget->screen_location.size.height = placer->height;
+    widget->screen_location.size.width = taille_width;
+    widget->screen_location.size.height = taille_height;
     widget->screen_location.top_left = *top_left;
     
     if (!strcmp(widget->wclass->name, "frame"))
