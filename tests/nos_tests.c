@@ -326,7 +326,7 @@ int test_7()
     ei_color_t window_color = {0xA0, 0xA0, 0xA0, 0xff};
     int window_border_width = 2;
     ei_bool_t closable = EI_TRUE;
-    ei_axis_set_t window_resizable = ei_axis_none;
+    ei_axis_set_t window_resizable = ei_axis_both;
     ei_point_t window_position = {30, 10};
 
     ei_size_t window_size2 = {200, 200};
@@ -334,7 +334,7 @@ int test_7()
     ei_color_t window_color2 = {0xA0, 0x50, 0x50, 0xaa};
     int window_border_width2 = 4;
     ei_bool_t closable2 = EI_TRUE;
-    ei_axis_set_t window_resizable2 = ei_anc_none;
+    ei_axis_set_t window_resizable2 = ei_axis_both;
     float window_position2_x = 0.2;
 
     ei_widget_t *toplevel, *toplevel2;
