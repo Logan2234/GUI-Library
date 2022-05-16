@@ -50,4 +50,4 @@ void darken_color(ei_color_t *couleur);
 /*
  * Donne un widget et renvoie là où le texte est censé s'afficher 
  */
-ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre);
+ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t about_text);

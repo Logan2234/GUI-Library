@@ -75,7 +75,6 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
     ei_font_t *text_font_frame = calloc(1, sizeof(ei_font_t));
     ei_color_t *text_color_frame = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *text_anchor_frame = calloc(1, sizeof(ei_anchor_t));
-    ei_surface_t *img_frame = calloc(1, sizeof(ei_surface_t));
     ei_anchor_t *img_anchor_frame = calloc(1, sizeof(ei_anchor_t));
 
     *color_frame = (color != NULL) ? *color : (frame->color == NULL) ? ei_default_background_color : *frame->color;
@@ -85,7 +84,7 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
     *text_font_frame = (text_font != NULL) ? *text_font : (frame->text_font == NULL) ? ei_default_font : *frame->text_font;
     *text_color_frame = (text_color != NULL) ? *text_color : (frame->text_color == NULL) ? (ei_color_t)ei_font_default_color : *frame->text_color;
     *text_anchor_frame = (text_anchor != NULL) ? *text_anchor : (frame->text_anchor == NULL) ? default_anchor_frame : *frame->text_anchor;
-    img_frame = (img != NULL) ? img : NULL;
+    ei_surface_t *img_frame = (img != NULL) ? img : NULL;
     ei_rect_t ** img_rect_frame = (img_rect != NULL) ? img_rect : NULL;
     *img_anchor_frame = (img_anchor != NULL) ? *img_anchor : (frame->img_anchor == NULL) ? default_anchor_frame : *frame->img_anchor;
 
@@ -118,7 +117,6 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     ei_font_t *text_font_button = calloc(1, sizeof(ei_font_t));
     ei_color_t *text_color_button = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *text_anchor_button = calloc(1, sizeof(ei_anchor_t));
-    ei_surface_t *img_button = calloc(1, sizeof(ei_surface_t));
     ei_anchor_t *img_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_callback_t *callback_button = calloc(1, sizeof(ei_callback_t));
 
@@ -130,7 +128,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     *text_font_button = (text_font != NULL) ? *text_font : (bouton->text_font == NULL) ? ei_default_font : *bouton->text_font;
     *text_color_button = (text_color != NULL) ? *text_color : (bouton->text_color == NULL) ? (ei_color_t)ei_font_default_color : *bouton->text_color;
     *text_anchor_button = (text_anchor != NULL) ? *text_anchor : (bouton->text_anchor == NULL) ? default_anchor_button : *bouton->text_anchor;
-    img_button = (img != NULL) ? img : NULL;
+    ei_surface_t *img_button = (img != NULL) ? img : NULL;
     ei_rect_t ** img_rect_button = (img_rect != NULL) ? img_rect : NULL;
     *img_anchor_button = (img_anchor != NULL) ? *img_anchor : (bouton->img_anchor == NULL) ? default_anchor_button : *bouton->img_anchor;
     callback_button = (callback != NULL) ? callback : (bouton->callback != NULL) ? bouton->callback : NULL;
