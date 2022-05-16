@@ -87,6 +87,7 @@ void ei_app_run()
                                                       ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, NULL)
                                                       : 0
                                                     : 0;
+                update_surface(rect_to_update);
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
