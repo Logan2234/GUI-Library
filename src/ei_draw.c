@@ -83,16 +83,52 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
 void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *text,
                   ei_font_t font, ei_color_t color, const ei_rect_t *clipper)
 {
-    if (text != NULL && *text != 0)
+    if (text != NULL)
     {
         ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
         ei_rect_t source = hw_surface_get_rect(surface_source);
         ei_rect_t dest;
-        //dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
-        dest.size.height = (clipper!=NULL) ? (hw_surface_get_size(surface_source).height > clipper->size.height) ? clipper->size.height : hw_surface_get_size(surface_source).height : hw_surface_get_size(surface_source).height;
-        dest.size.width = (clipper!=NULL) ? (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width : hw_surface_get_size(surface_source).width;
-        dest.top_left.x = where->x + (source.size.width - dest.size.width)/2;
-        dest.top_left.y = where->y + (source.size.height - dest.size.height)/2;
+        dest.top_left.x = (clipper == NULL) ? where->x: (clipper->top_left.x > source.top_left.x + where->x) ? clipper->top_left.x : where->x;
+        dest.top_left.y = (clipper == NULL) ? where->y : (clipper->top_left.y > source.top_left.y + where->y) ? clipper->top_left.y : where->y;
+        //dest.top_left.x -= (source.size.width - source.size.width)/2;
+        //dest.top_left.y -= (source.size.height - source.size.height)/2;
+        // if (clipper == NULL)
+        // {
+        //     if (clipper->top_left.x > dest.top_left.x)
+        //     {
+        //         dest.size.width = (hw_surface_get_size(surface_source).width - dest.top_left.x > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width - dest.top_left.x;
+        //     }
+        //     else if (clipper->top_left.x < dest.top_left.x)
+        //     {
+        //         dest.size.width = (clipper->size.width - source.top_left.x > 0) ? clipper->size.width - source.top_left.x : 0;
+        //     }
+        //     else
+        //     {
+        //         dest.size.width = (source.size.width > clipper->size.width) ? clipper->size.width : source.size.width;
+        //     }
+        //     if (clipper->top_left.y > dest.top_left.y)
+        //     {
+        //         dest.size.height = (source.size.height - dest.top_left.y > clipper->size.height) ?  clipper->size.height : source.size.height - dest.top_left.y;
+        //     }
+        //     else if (clipper->top_left.y < dest.top_left.y)
+        //     {
+        //         dest.size.height = (clipper->size.height - source.top_left.y > 0) ? clipper->size.height - source.top_left.y : 0;
+        //     }
+        //     else
+        //     {
+        //         dest.size.height = (source.size.height > clipper->size.height) ? clipper->size.height : source.size.height;
+        //         dest.size.height = (source.size.height - dest.top_left.y > clipper->size.height) ?  clipper->size.height : source.size.height - dest.top_left.y;
+        //     }
+        // }
+        // else
+        // {
+        //     dest.size.width = source.size.width;
+        //     dest.size.height = source.size.height;
+        // }
+        dest.size.width = (clipper==NULL) ? hw_surface_get_size(surface_source).width : (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width;
+        dest.size.height = (clipper==NULL) ? hw_surface_get_size(surface_source).height : (hw_surface_get_size(surface_source).height > clipper->size.height) ?  clipper->size.height : hw_surface_get_size(surface_source).height;
+        //dest.size.width -= where->x;
+        //dest.size.height -= where->y;
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
         hw_surface_free(surface_source);
     }
