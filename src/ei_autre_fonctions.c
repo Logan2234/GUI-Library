@@ -139,7 +139,6 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         widget->screen_location.top_left.y + widget->screen_location.size.height - 12 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width)
         re_size = EI_TRUE;
 
-
     return EI_FALSE;
 }
 
@@ -169,34 +168,36 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             return EI_FALSE;
         }
         else
-        {
-            ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-            if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
-            {
-                if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30)
-                {
-                    widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-                    widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
+        { if (re_size == EI_TRUE) {
+
+                printf("HOLAAA \n");
+                ei_toplevel_t *toplevel = (ei_toplevel_t *) widget;
+                if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both) {
+                    if (event->param.mouse.where.x - widget->screen_location.top_left.x > 30) {
+                        widget->screen_location.size.width =
+                                event->param.mouse.where.x - widget->screen_location.top_left.x;
+                        widget->content_rect->size.width =
+                                event->param.mouse.where.x - widget->content_rect->top_left.x;
+                    }
+                }
+
+                if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both) {
+                    if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35) {
+                        widget->screen_location.size.height =
+                                event->param.mouse.where.y - widget->screen_location.top_left.y;
+                        widget->content_rect->size.height =
+                                event->param.mouse.where.y - widget->content_rect->top_left.y;
+                    }
+                }
+
+                ei_widget_t *sent = widget->children_head;
+                while (sent != NULL) {
+                    sent->wclass->geomnotifyfunc(sent);
+                    sent = sent->next_sibling;
                 }
             }
-
-            if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
-            {
-                if (event->param.mouse.where.y - widget->screen_location.top_left.y > 35)
-                {
-                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y;
-                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
-                }
-            }
-
-            ei_widget_t *sent = widget->children_head;
-            while (sent != NULL)
-            {
-                sent->wclass->geomnotifyfunc(sent);
-                sent = sent->next_sibling;
-            }
-            return EI_FALSE;
         }
+        return EI_FALSE;
     }
 }
 
