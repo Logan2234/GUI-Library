@@ -17,7 +17,6 @@ void placer_runfunc(ei_widget_t *widget)
         top_left->x = ((placer->rel_x != -1) ? widget->parent->content_rect->top_left.x : 0);
         top_left->y = ((placer->rel_y != -1) ? widget->parent->content_rect->top_left.y : 0);
         width_parent = widget->parent->content_rect->size.width;
-        printf("%d\n", width_parent);
         height_parent = widget->parent->content_rect->size.height;
     }
     placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
