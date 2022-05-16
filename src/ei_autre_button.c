@@ -69,6 +69,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     if (bouton->text != NULL) 
     {
         ei_point_t where = compute_location(widget, bouton->text_anchor);
+        //ei_point_t where = widget->content_rect->top_left;
         if (*bouton->relief != ei_relief_none && *bouton->border_width != 0)
             ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, widget->content_rect);
         else
