@@ -35,6 +35,7 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+    printf("%d, %d, %d, %d\n", widget->screen_location.top_left.y, widget->screen_location.size.height, clipper->top_left.y, clipper->size.height);
     
     /* On trace le fond */
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));
@@ -172,7 +173,7 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
         resize_indicator4->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35 - 15;
         sentinel3->next = resize_indicator4;
 
-        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, NULL);
+        ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
 
         free_linked_point_pointeur(resize_indicator);
     }
