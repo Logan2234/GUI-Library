@@ -125,10 +125,10 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
         //     dest.size.width = source.size.width;
         //     dest.size.height = source.size.height;
         // }
-        dest.size.width = (clipper==NULL) ? hw_surface_get_size(surface_source).width : (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width : hw_surface_get_size(surface_source).width;
-        dest.size.height = (clipper==NULL) ? hw_surface_get_size(surface_source).height : (hw_surface_get_size(surface_source).height > clipper->size.height) ?  clipper->size.height : hw_surface_get_size(surface_source).height;
-        //dest.size.width -= where->x;
-        //dest.size.height -= where->y;
+        dest.size.width = (clipper==NULL) ? hw_surface_get_size(surface_source).width : (hw_surface_get_size(surface_source).width > clipper->size.width) ?  clipper->size.width - where->x: hw_surface_get_size(surface_source).width;
+        dest.size.height = (clipper==NULL) ? hw_surface_get_size(surface_source).height : (hw_surface_get_size(surface_source).height > clipper->size.height) ?  clipper->size.height - where->y : hw_surface_get_size(surface_source).height;
+        // dest.size.width -= where->x;
+        // dest.size.height -= where->y;
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
         hw_surface_free(surface_source);
     }
