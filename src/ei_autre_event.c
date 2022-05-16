@@ -2,9 +2,10 @@
 
 extern ei_bool_t arret;
 
-void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
+uint8_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
 {
     ei_eventtype_t a_chercher = event->type;
+    uint8_t sortie = 0;
     struct liste_eventtypes_t *sentinel = liste;
     while (sentinel != NULL && sentinel->eventtype != a_chercher)
         sentinel = sentinel->next;
@@ -18,6 +19,7 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
             {
                 if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id)))
                 {
+                    sortie = 1;
                     arret = courant->callback(courant->widget, event, courant->user_param);
                     if (arret == EI_TRUE)
                         break;
@@ -26,6 +28,7 @@ void recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *eve
             courant = courant->next;
         }
     }
+    return sortie;
 }
 
 void free_liste_event_widget(struct liste_events_widgets *liste)
