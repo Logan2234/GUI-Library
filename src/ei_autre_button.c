@@ -95,7 +95,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
-    /* Dessin de l'image si nécessaire */
+    /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres) 
     else if (bouton->img != NULL && bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image si celle-ci est plus grande */
@@ -105,13 +105,14 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
             ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
             widget->requested_size.height = taille_bouton.height;
         }
+
         if (widget->screen_location.size.width <= taille_bouton.width)
         {
             ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width;
             widget->requested_size.width = taille_bouton.width;
         }
-        widget->geom_params->manager->runfunc(widget);
 
+        widget->geom_params->manager->runfunc(widget);
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
         // hw_surface_set_origin(bouton->img, (ei_point_t){0, 200});
         (bouton->img_rect != NULL) ? ei_copy_surface(surface, clipper, bouton->img, *bouton->img_rect, EI_FALSE)

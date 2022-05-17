@@ -213,15 +213,15 @@ void update_board(game_t* g)
 				if (tile_w == NULL) {
 				
 					// The board has a value here, but the widget does not exist: create it.
-
+					printf("Coucou\n");
 					tile_w		= ei_widget_create("frame", g->toplevel, NULL, NULL);
-					*tile_w_ptr	= tile_w;
-					ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
+					// *tile_w_ptr	= tile_w;
+					// ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
 				}
 
 				sprintf(label, "%d", 1 << tile_value);
-				ei_frame_configure(tile_w, &tile_size, &g_tile_colors[tile_value], &tile_border, &tile_relief,
-							&label_ptr, &g->tile_font, NULL, NULL, NULL, NULL, NULL);
+				// ei_frame_configure(tile_w, &tile_size, &g_tile_colors[tile_value], &tile_border, &tile_relief,
+				// 			&label_ptr, &g->tile_font, NULL, NULL, NULL, NULL, NULL);
 			}
 
 			tile_pos.x	+= g->tile_size + 2 * g->tile_bd;
@@ -516,7 +516,7 @@ int main(int argc, char* argv[])
 	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	new_game(4, 4, 80, 4);
-	new_game(4, 4, 100, 4);
+	// new_game(4, 4, 100, 4);
 
 	ei_bind(ei_ev_keydown, NULL, "all", global_event_handler, NULL);
 

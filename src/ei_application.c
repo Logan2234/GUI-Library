@@ -61,7 +61,7 @@ void ei_app_run()
             update_surface(rect_to_update);
         }
 
-            /* Cas où on appuie avec le clic gauche */
+        /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
@@ -73,7 +73,7 @@ void ei_app_run()
             update_surface(rect_to_update);
         }
 
-            /* Cas où on relache le clic gauche */
+        /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
             /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
@@ -82,20 +82,21 @@ void ei_app_run()
             {
                 /* Si c'est le même on appelle le callback et on redessine le relief*/
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_raised;
-                (pressed_widget == released_widget) ? (((ei_button_t *)released_widget)->callback != NULL)
-                                                      ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, *((ei_button_t *)released_widget)->user_param)
-                                                      : 0
+                (pressed_widget == released_widget) ? (*((ei_button_t *)released_widget)->callback != NULL)
+                                                          ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, *((ei_button_t *)released_widget)->user_param)
+                                                          : 0
                                                     : 0;
                 update_surface(rect_to_update);
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+            if (deplacement == EI_TRUE || re_size == EI_TRUE)
+            {
                 update_surface(rect_to_update);
             }
         }
 
-            /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
+        /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (event->type == ei_ev_mouse_move)
         {
             if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
@@ -105,15 +106,14 @@ void ei_app_run()
                                                                                               : ei_relief_sunken;
                 update_surface(rect_to_update);
             }
-            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+            if (deplacement == EI_TRUE || re_size == EI_TRUE)
+            {
                 recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
                 update_surface(rect_to_update);
             }
         }
-
     }
     free(event);
-
 }
 
 void ei_app_free()
