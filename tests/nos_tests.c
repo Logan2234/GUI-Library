@@ -11,8 +11,8 @@
 
 /* Variables globales à ces tests */
 
-extern struct liste_widgetclass *liste_widgetclass;
-extern struct liste_geometrymanager *liste_geometrymanager;
+extern liste_widgetclass_t *liste_widgetclass;
+extern liste_geometrymanager_t *liste_geometrymanager;
 static ei_size_t screen_size;
 static ei_color_t root_bgcol;
 
@@ -434,6 +434,7 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
+    argv[1] = "test4";
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))

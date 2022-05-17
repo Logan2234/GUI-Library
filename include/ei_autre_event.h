@@ -24,7 +24,7 @@
  * @return Un booleen indiquant si la fonction a trouvé un callback associé à cet événement.
  * 
  */
-ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag);
+ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag);
 
 /**
  * @brief Fonction de libération de la mémoire associée à une liste_eventtypes_t (cf. ei_autre_struct.h).
@@ -32,7 +32,7 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
  * @param liste Correspond à la liste qu'il faut libérer en mémoire.
  * 
  */
-void free_liste_eventtypes(struct liste_eventtypes_t *liste);
+void free_liste_eventtypes(liste_eventtypes_t *liste);
 
 /**
  * @brief Fonction générale utilisée comme callback lors de l'intéraction avec des boutons.

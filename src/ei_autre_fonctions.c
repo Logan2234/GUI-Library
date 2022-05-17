@@ -1,26 +1,25 @@
-#include "ei_autre_fonctions.h"
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
-#include "ei_autre_placer.h"
 #include "ei_autre_event.h"
-
-extern ei_surface_t racine_surface;
+ 
 extern ei_surface_t pick_surface;
-extern ei_bool_t is_resizing;
-extern ei_bool_t is_moving;
-extern ei_point_t origine_deplacement;
-extern double last_update;
+
+static double last_update;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
+    ei_surface_t racine_surface = ei_app_root_surface();
+    
     if (widget->parent == NULL)
         widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL);
+
     else if (widget->geom_params != NULL)
     {
         (widget->parent->pick_id == 1)
             ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
             : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect);
     }
+
     else
         return;
 
@@ -58,7 +57,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
     }
 }
 
-ei_color_t int_to_color(uint32_t entier)
+ei_color_t int_to_color(uint32_t entier) // TODO faut il prendre en compte le channel indices ?
 {
     uint8_t red, green, blue, alpha;
     red = entier / (256 * 256);
@@ -116,17 +115,17 @@ void init_toplevel(ei_widget_t *widget)
 
 void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
-    if (hw_now() - last_update > (double)1/fps || ponctuel)
+    printf("%d\n", hw_now() - last_update > (double)1 / fps);
+    if (hw_now() - last_update > (double)1 / fps || ponctuel)
     {
         hw_surface_lock(ei_app_root_surface());
         draw_widgets_and_family(ei_app_root_widget());
-        
+
         last_update = hw_now();
 
         hw_surface_unlock(ei_app_root_surface());
         hw_surface_update_rects(ei_app_root_surface(), NULL);
     }
-
 }
 
 void lighten_color(ei_color_t *couleur)
@@ -152,14 +151,13 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t a
     if (about_text == EI_TRUE)
     {
         ei_surface_t text_surface;
+
         if (!strcmp(widget->wclass->name, "frame") == 1)
-        {
             text_surface = hw_text_create_surface(*((ei_frame_t *)widget)->text, *((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color);
-        }
+
         else
-        {
             text_surface = hw_text_create_surface(*((ei_button_t *)widget)->text, *((ei_button_t *)widget)->text_font, *((ei_button_t *)widget)->text_color);
-        }
+
         largeur_contenu = hw_surface_get_size(text_surface).width;
         hauteur_contenu = hw_surface_get_size(text_surface).height;
         hw_surface_free(text_surface);

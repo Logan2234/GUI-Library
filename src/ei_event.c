@@ -1,15 +1,15 @@
-#include "ei_event.h"
-#include "ei_autre_event.h"
 #include <string.h>
 
-extern struct liste_eventtypes_t *liste_events_widgets;
+#include "ei_autre_event.h"
+
+extern liste_eventtypes_t *liste_events_widgets;
 
 /* ON PEUT OPTIMISER AVEC UN DICTIONNAIRE. VOIR APRÈS SI ÇA FONCTIONNE */
 
 void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_callback_t callback, void *user_param)
 {
-    struct liste_eventtypes_t *precedant = liste_events_widgets;
-    struct liste_eventtypes_t *sentinel = liste_events_widgets;
+    liste_eventtypes_t *precedant = liste_events_widgets;
+    liste_eventtypes_t *sentinel = liste_events_widgets;
 
     while (sentinel != NULL && sentinel->eventtype != eventtype)
     {
@@ -19,8 +19,8 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
 
     if (sentinel == NULL)
     {
-        struct liste_eventtypes_t *nouveau_eventtype = calloc(1, sizeof(liste_eventtypes_t));
-        struct liste_events_widgets *nouveau_widget = calloc(1, sizeof(struct liste_events_widgets));
+        liste_eventtypes_t *nouveau_eventtype = calloc(1, sizeof(liste_eventtypes_t));
+        liste_events *nouveau_widget = calloc(1, sizeof(liste_events));
 
         nouveau_eventtype->eventtype = eventtype;
         nouveau_widget->widget = widget;
@@ -36,7 +36,7 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
     }
     else
     {
-        struct liste_events_widgets *suivant = sentinel->liste;
+        liste_events *suivant = sentinel->liste;
         while (suivant->next != NULL)
         {
             if ((suivant->widget == NULL && widget == NULL && !strcmp((char *)tag, (char *)(suivant->tag))) || (suivant->widget->pick_id == widget->pick_id))
@@ -55,7 +55,7 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
         }
         else
         {
-            struct liste_events_widgets *nouveau = calloc(1, sizeof(struct liste_events_widgets));
+            liste_events *nouveau = calloc(1, sizeof(liste_events));
             nouveau->widget = widget;
             nouveau->eventtype = eventtype;
             nouveau->user_param = user_param;
@@ -69,17 +69,17 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
 // Pas serein pour les free
 void ei_unbind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_callback_t callback, void *user_param)
 {
-    struct liste_eventtypes_t *sentinel = liste_events_widgets;
+    liste_eventtypes_t *sentinel = liste_events_widgets;
     while (sentinel != NULL && sentinel->eventtype != eventtype)
         sentinel = sentinel->next;
 
     if (sentinel != NULL)
     {
-        struct liste_events_widgets *liste_widget = sentinel->liste;
+        liste_events *liste_widget = sentinel->liste;
         if (liste_widget != NULL)
         {
-            struct liste_events_widgets *suivant = liste_widget;
-            struct liste_events_widgets *ancien = liste_widget;
+            liste_events *suivant = liste_widget;
+            liste_events *ancien = liste_widget;
             if (((suivant->widget == NULL && widget == NULL && !strcmp((char *)tag, (char *)(suivant->tag))) || suivant->widget->pick_id == widget->pick_id) && suivant->callback == callback &&
                 suivant->user_param == user_param && suivant->eventtype == eventtype)
             {

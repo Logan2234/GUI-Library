@@ -1,19 +1,17 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
-#include "ei_autre_placer.h"
 #include "ei_autre_event.h"
 
 extern int widget_id;
-extern ei_linked_rect_t *rect_to_update;
 
-struct ei_widget_t *button_allocfunc(void)
+ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
     return (ei_widget_t *)widget_button;
 }
 
-void button_releasefunc(struct ei_widget_t *widget)
+void button_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
@@ -35,7 +33,7 @@ void button_releasefunc(struct ei_widget_t *widget)
     free(((ei_button_t *)widget));
 }
 
-void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
+void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
 
@@ -156,14 +154,14 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         widget->screen_location.top_left.y <= new_clipper.top_left.y + new_clipper.size.height &&
         widget->screen_location.top_left.y + widget->screen_location.size.height >= new_clipper.top_left.y)
         ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
-}
+} 
 
-void button_geomnotifyfunc(struct ei_widget_t *widget)
+void button_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
 }
 
-void button_setdefaultsfunc(struct ei_widget_t *widget)
+void button_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;

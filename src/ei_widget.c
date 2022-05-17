@@ -3,8 +3,8 @@
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
 
-extern struct liste_widgetclass *liste_widgetclass;
-extern struct liste_geometrymanager *liste_geometrymanager;
+extern liste_widgetclass_t *liste_widgetclass;
+extern liste_geometrymanager_t *liste_geometrymanager;
 extern ei_surface_t pick_surface;
 extern int widget_id;
 

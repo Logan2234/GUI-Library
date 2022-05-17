@@ -2,8 +2,6 @@
 #include <stdlib.h>
 
 #include "ei_autre_fonctions.h"
-#include "ei_autre_draw.h"
-#include "ei_autre_struct.h"
 
 ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_debut, float angle_fin)
 {

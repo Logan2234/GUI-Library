@@ -1,9 +1,9 @@
 #include "ei_autre_struct.h"
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
-#include "ei_autre_placer.h"
+#include "ei_autre_fonctions.h"
 
-extern struct liste_geometrymanager *liste_geometrymanager;
+extern liste_geometrymanager_t *liste_geometrymanager;
 
 void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
 {
@@ -12,11 +12,11 @@ void ei_geometrymanager_register(ei_geometrymanager_t *geometrymanager)
 
     else
     {
-        struct liste_geometrymanager *sent = liste_geometrymanager;
+        liste_geometrymanager_t *sent = liste_geometrymanager;
         while (sent->next != NULL)
             sent = sent->next;
 
-        struct liste_geometrymanager *new_cell = calloc(1, sizeof(struct liste_geometrymanager));
+        liste_geometrymanager_t *new_cell = calloc(1, sizeof(liste_geometrymanager_t));
         new_cell->geometrymanager_cell = geometrymanager;
         sent->next = new_cell;
     }
@@ -34,7 +34,7 @@ void ei_geometrymanager_unmap(ei_widget_t *widget)
 
 ei_geometrymanager_t *ei_geometrymanager_from_name(ei_geometrymanager_name_t name)
 {
-    struct liste_geometrymanager *sent = liste_geometrymanager;
+    liste_geometrymanager_t *sent = liste_geometrymanager;
     while (strcmp(sent->geometrymanager_cell->name, name) && sent->next != NULL)
         sent = sent->next;
 
@@ -58,7 +58,7 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
         width_parent = widget->parent->screen_location.size.width;
         height_parent = widget->parent->screen_location.size.height;
     }
-    ei_geometry_param_t *placer = (ei_geometry_param_t *)calloc(1, sizeof(struct ei_placer_t));
+    ei_geometry_param_t *placer = (ei_geometry_param_t *)calloc(1, sizeof(ei_placer_t));
 
     placer->manager = ei_geometrymanager_from_name("placer\0\0\0\0\0\0\0\0\0\0\0\0\0");
 
@@ -75,5 +75,5 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
 
     widget->geom_params = placer;
 
-    placer_runfunc(widget);
+    widget->geom_params->manager->runfunc(widget);
 }

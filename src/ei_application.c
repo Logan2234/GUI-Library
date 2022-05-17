@@ -1,27 +1,23 @@
-#include "ei_application.h"
-#include "ei_event.h"
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
 
 /*********** Paramètres généraux de l'appli ****************/
 
-struct liste_widgetclass *liste_widgetclass;
-struct liste_geometrymanager *liste_geometrymanager;
-struct liste_eventtypes_t *liste_events_widgets;
+liste_widgetclass_t *liste_widgetclass;
+liste_geometrymanager_t *liste_geometrymanager;
+liste_eventtypes_t *liste_events_widgets;
 
-ei_widget_t *widget_racine;
-ei_surface_t racine_surface;
+static ei_widget_t *widget_racine;
+static ei_surface_t racine_surface;
 ei_surface_t pick_surface;
 
 int widget_id = 0;
-double last_update;
 
 ei_bool_t is_moving = EI_FALSE;
 ei_bool_t is_resizing = EI_FALSE;
 ei_bool_t arret_final = EI_FALSE;
 
-ei_point_t origine_deplacement;
-ei_linked_rect_t *rect_to_update;
+static ei_linked_rect_t *rect_to_update;
 
 /************************************************************/
 
@@ -29,9 +25,9 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
     hw_init();
 
-    liste_widgetclass = calloc(1, sizeof(struct liste_widgetclass));
-    liste_geometrymanager = calloc(1, sizeof(struct liste_geometrymanager));
-    liste_events_widgets = calloc(1, sizeof(struct liste_eventtypes_t));
+    liste_widgetclass = calloc(1, sizeof(liste_widgetclass_t));
+    liste_geometrymanager = calloc(1, sizeof(liste_geometrymanager_t));
+    liste_events_widgets = calloc(1, sizeof(liste_eventtypes_t));
     rect_to_update = calloc(1, sizeof(ei_linked_rect_t));
 
     /* Enregistrement des différentes classes de widget */
@@ -55,7 +51,7 @@ void ei_app_run()
     update_surface(rect_to_update, EI_TRUE);
     update_surface(rect_to_update, EI_TRUE);
 
-    struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
+    ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     ei_bool_t retour = EI_FALSE;
@@ -64,9 +60,7 @@ void ei_app_run()
 
         hw_event_wait_next(event);
         if (event->type < 5)
-        {
             retour = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-        }
 
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown)
@@ -118,7 +112,7 @@ void ei_app_free()
     /* On libère la liste chaînée des widget class */
     while (liste_widgetclass != NULL)
     {
-        struct liste_widgetclass *next = liste_widgetclass->next;
+        liste_widgetclass_t *next = liste_widgetclass->next;
         free(liste_widgetclass->first_widgetclass);
         free(liste_widgetclass);
         liste_widgetclass = next;
@@ -127,7 +121,7 @@ void ei_app_free()
     /* On libère la liste chaînée des geometry manager */
     while (liste_geometrymanager != NULL)
     {
-        struct liste_geometrymanager *next = liste_geometrymanager->next;
+        liste_geometrymanager_t *next = liste_geometrymanager->next;
         free(liste_geometrymanager->geometrymanager_cell);
         free(liste_geometrymanager);
         liste_geometrymanager = next;
