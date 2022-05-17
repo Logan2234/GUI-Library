@@ -5,7 +5,7 @@
 #include "ei_autre_placer.h"
 
 extern int widget_id;
-
+extern rect_to_update;
 struct ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
@@ -181,6 +181,9 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
         last_clicked_widget = NULL;
     }
+
+    update_surface(rect_to_update);
+
     return EI_FALSE;
 }
 
