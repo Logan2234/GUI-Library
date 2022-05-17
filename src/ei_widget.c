@@ -192,7 +192,7 @@ void ei_toplevel_configure(ei_widget_t *widget, ei_size_t *requested_size, ei_co
     *titre_toplevel = titre_toplevel_in;
     *min_size_toplevel = min_size_toplevel_in;
     
-    widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? (ei_size_t){320, 240} : widget->requested_size;
+    widget->requested_size = (requested_size != NULL) ? (*requested_size) : (&widget->requested_size == NULL) ? default_toplevel_size : widget->requested_size;
     toplevel->color = color_toplevel;
     toplevel->border_width = border_width_toplevel;
     toplevel->title = titre_toplevel;

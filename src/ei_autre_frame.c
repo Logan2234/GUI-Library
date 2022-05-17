@@ -35,11 +35,11 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
 
-    int h = widget->requested_size.height / 2;
-
     if (*frame->relief != ei_relief_none && *frame->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
+        int h = widget->requested_size.height / 2;
+        
         zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next->next = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next->next->next = calloc(1, sizeof(ei_linked_point_t));
@@ -115,7 +115,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     /* Dessin de l'image si nécessaire */
     else if (frame->img != NULL && *frame->text == NULL)
     {
-        // La frame prend la taille de l'image si celle-ci est plus grande */
+        /* La frame prend la taille de l'image si celle-ci est plus grande */
         ei_size_t taille_frame = hw_surface_get_size(frame->img);
         if (widget->screen_location.size.height <= taille_frame.height)
         {
@@ -191,35 +191,26 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
 
 void frame_setdefaultsfunc(struct ei_widget_t *widget)
 {
+    /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
 
-    widget->user_data = NULL;
-    widget->destructor = NULL;
-    widget->parent = NULL;
-    widget->children_head = NULL;
-    widget->children_tail = NULL;
-    widget->next_sibling = NULL;
-    widget->geom_params = NULL;
-
-    /* Si c'est la racine */
+    /* Si c'est la racine dans ce cas la requested size, le screen location deviennent l'écran tout entier */
     if (widget_id == 1)
     {
         widget->requested_size = hw_surface_get_size(racine_surface);
         widget->screen_location = hw_surface_get_rect(racine_surface);
     }
 
-    else
-    {
-        widget->requested_size = default_frame_size;
-        widget->screen_location = (ei_rect_t){0, 0, default_frame_size};
-    }
+    /* Gestion du content_rect, si ce n'est pas la racine, prend la valeur widget->screen_location = {0, 0, 0, 0} */
+    ei_rect_t *content_rect = calloc(1, sizeof(ei_rect_t));
+    *content_rect = widget->screen_location;
+    widget->content_rect = content_rect;
 
-    ei_rect_t *content_rect_frame = calloc(1, sizeof(ei_rect_t));
-    *content_rect_frame = widget->screen_location;
-    widget->content_rect = content_rect_frame;
+    /* Et enfin, on lui donne une configuration de base */
+    ei_frame_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 void frame_geomnotifyfunc(struct ei_widget_t *widget)
