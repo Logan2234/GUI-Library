@@ -28,6 +28,11 @@ void draw_widgets_and_family(ei_widget_t *widget);
 void free_linked_point_pointeur(ei_linked_point_t *liste);
 
 /*
+ * Permet de free tout les rects d'une liste chaînée de rectangles sauf le premier si entier = EI_TRUE
+ */
+void free_linked_rects(ei_linked_rect_t *liste_rect);
+
+/*
  * Permet d'ajouter tout les liens de parentés nécessaires
  * entre le père et le fils.
  */
@@ -55,7 +60,7 @@ void init_toplevel(ei_widget_t *widget);
  * Si ponctuel est à 1, alors la mise à jour est forcée, sinon la mise à jour
  * ne peut se faire au maximum que fps fois par seconde.
  */
-void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel);
+ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel);
 
 /*
  * Permet d'éclaircir une couleur

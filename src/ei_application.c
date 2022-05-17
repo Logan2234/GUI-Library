@@ -48,8 +48,9 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 void ei_app_run()
 {
     init_toplevel(widget_racine);
-    update_surface(rect_to_update, EI_TRUE);
-    update_surface(rect_to_update, EI_TRUE);
+
+    rect_to_update = update_surface(rect_to_update, EI_TRUE);
+    rect_to_update = update_surface(rect_to_update, EI_TRUE);
 
     ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
@@ -57,7 +58,6 @@ void ei_app_run()
     ei_bool_t retour = EI_FALSE;
     while (arret_final == EI_FALSE)
     {
-
         hw_event_wait_next(event);
         if (event->type < 5)
             retour = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
@@ -84,22 +84,23 @@ void ei_app_run()
             if (is_moving || is_resizing)
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                update_surface(rect_to_update, EI_FALSE);
+                rect_to_update = update_surface(rect_to_update, EI_FALSE);
             }
             else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
             {
-                recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                update_surface(rect_to_update, EI_FALSE);
+                if (recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL))
+                    rect_to_update = update_surface(rect_to_update, EI_FALSE);
             }
         }
         if (retour)
         {
-            update_surface(rect_to_update, EI_TRUE); 
+            rect_to_update = update_surface(rect_to_update, EI_TRUE); 
             retour = EI_FALSE;
         } 
     }
     free(event);
 }
+
 int compte = 0;
 void ei_app_free()
 {
@@ -130,12 +131,8 @@ void ei_app_free()
     /* On libère la liste chaînée des event types */
     free_liste_eventtypes(liste_events_widgets);
 
-    while (rect_to_update != NULL)
-    {
-        ei_linked_rect_t *next = rect_to_update->next;
-        free(rect_to_update);
-        rect_to_update = next;
-    }
+    /* On libère la liste des rectangles à mettre à jour */
+    free_linked_rects(rect_to_update);
 
     /* On libère les ressources créées par hw_init */
     hw_quit();

@@ -43,6 +43,21 @@ void free_linked_point_pointeur(ei_linked_point_t *liste)
     free(courant);
 }
 
+void free_linked_rects(ei_linked_rect_t *liste_rect)
+{   
+    ei_linked_rect_t *sent = liste_rect;
+    ei_linked_rect_t *next = liste_rect->next;
+    
+    while (next != NULL)
+    {
+        free(sent);
+        sent = next;
+        next = sent->next;
+    }
+    
+    free(sent);
+}
+
 void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 {
     if (pere->children_head == NULL)
@@ -114,9 +129,8 @@ void init_toplevel(ei_widget_t *widget)
         return init_toplevel(widget->children_head);
 }
 
-void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
+ei_linked_rect_t* update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
-    printf("%d\n", hw_now() - last_update > (double)1 / fps);
     if (hw_now() - last_update > (double)1 / fps || ponctuel)
     {
         hw_surface_lock(ei_app_root_surface());
@@ -125,7 +139,16 @@ void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
         last_update = hw_now();
 
         hw_surface_unlock(ei_app_root_surface());
-        hw_surface_update_rects(ei_app_root_surface(), NULL);
+
+        if (rectangles_list->next != NULL)
+            hw_surface_update_rects(ei_app_root_surface(), rectangles_list);
+        else
+            hw_surface_update_rects(ei_app_root_surface(), NULL);
+
+        free_linked_rects(rectangles_list);
+        
+        rectangles_list = calloc(1, sizeof(ei_linked_rect_t));
+        return rectangles_list;
     }
 }
 

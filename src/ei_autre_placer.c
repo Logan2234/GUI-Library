@@ -21,7 +21,7 @@ void placer_runfunc(ei_widget_t *widget)
     placer->rel_y = ((placer->rel_y == -1) ? 0 : placer->rel_y);
 
     int taille_width = (placer->rel_width == 0) ? placer->width : placer->rel_width * width_parent;
-    int taille_height = (placer->rel_height == 0 ) ?placer->height : placer->rel_height * height_parent;
+    int taille_height = (placer->rel_height == 0) ? placer->height : placer->rel_height * height_parent;
     if (placer->anchor == NULL)
     {
         top_left->x += placer->x + placer->rel_x * width_parent;
@@ -79,19 +79,6 @@ void placer_runfunc(ei_widget_t *widget)
     widget->screen_location.size.height = taille_height;
     widget->screen_location.top_left = *top_left;
 
-    // if (!strcmp(widget->wclass->name, "frame"))
-    // {
-    //     printf("%i %i\n", widget->screen_location.size.width, *((ei_frame_t *)widget)->border_width);
-    //     ei_frame_t *frame_aux =  (ei_frame_t *)widget;
-    //     int *borderazo = frame_aux->border_width;
-    //     printf("%i \n", *borderazo);
-    //     // TODO Le problème vient de *((ei_frame_t *)widget)->border_width
-    //     widget->content_rect->size.width = widget->screen_location.size.width ;//- 2 * *((ei_frame_t *)widget)->border_width;
-    //     /*widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_frame_t *)widget)->border_width;
-    //     widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_frame_t *)widget)->border_width;
-    //     widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
-    //  }
-
     if (!strcmp(widget->wclass->name, "frame"))
     {
         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_frame_t *)widget)->border_width;
@@ -100,26 +87,26 @@ void placer_runfunc(ei_widget_t *widget)
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
     }
 
-     else if (!strcmp(widget->wclass->name, "button"))
-     {
-         widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_button_t *)widget)->border_width;
-         widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_button_t *)widget)->border_width;
-         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_button_t *)widget)->border_width;
-         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
-     }
+    else if (!strcmp(widget->wclass->name, "button"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_button_t *)widget)->border_width;
+        widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_button_t *)widget)->border_width;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_button_t *)widget)->border_width;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_button_t *)widget)->border_width;
+    }
 
-     else if (!strcmp(widget->wclass->name, "toplevel"))
-     {
-         widget->content_rect->size.width = widget->screen_location.size.width;
-         widget->content_rect->size.height = widget->screen_location.size.height;
-         widget->content_rect->top_left.x = widget->screen_location.top_left.x;
-         widget->content_rect->top_left.y = widget->screen_location.top_left.y + taille_header;
-     }
+    else if (!strcmp(widget->wclass->name, "toplevel"))
+    {
+        widget->content_rect->size.width = widget->screen_location.size.width;
+        widget->content_rect->size.height = widget->screen_location.size.height;
+        widget->content_rect->top_left.x = widget->screen_location.top_left.x;
+        widget->content_rect->top_left.y = widget->screen_location.top_left.y + taille_header;
+    }
 
-     else
-         widget->content_rect = &widget->screen_location;
+    else
+        widget->content_rect = &widget->screen_location;
 
-     free(top_left);
+    free(top_left);
 }
 
 void placer_releasefunc(ei_widget_t *widget)

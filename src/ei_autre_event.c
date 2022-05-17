@@ -1,6 +1,6 @@
 #include "ei_autre_event.h"
-#include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
+#include "ei_application.h"
 
 extern ei_bool_t is_moving;
 extern ei_bool_t is_resizing;
@@ -66,14 +66,21 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 
 ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
+    ei_bool_t retour = EI_FALSE;
+
     if (event->param.mouse.button == ei_mouse_button_left)
     {
         ei_button_t *bouton = ((ei_button_t *)widget);
         ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
-
+        
         /* S'il s'agit d'un mouvement du clic gauche, dans ce cas on cherche à savoir si on est ou pas sur le même bouton */
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
+        {
+            ei_relief_t old_relief = *((ei_button_t *)last_clicked_widget)->relief;
             *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
+            if (old_relief != *((ei_button_t *)last_clicked_widget)->relief)
+                retour = EI_TRUE;
+        }
 
         /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
         else if (event->type == ei_ev_mouse_buttondown || event->type == ei_ev_mouse_buttonup)
@@ -82,6 +89,8 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
 
             if (event->type == ei_ev_mouse_buttondown)
                 last_clicked_widget = widget;
+            
+            retour = EI_TRUE;
         }
 
         /* Si on relâche le bouton, on appelle le callback */
@@ -89,14 +98,26 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         {
             (*bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
             last_clicked_widget = NULL;
+            retour = EI_TRUE;
         }
     }
-    return EI_TRUE;
+
+    if (retour)
+        ei_app_invalidate_rect(&widget->screen_location);
+
+    return retour;
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
+    ei_rect_t old_rect = widget->parent->screen_location;
+    old_rect.size.height += taille_header + *((ei_toplevel_t *)widget->parent)->border_width;
+    old_rect.size.width += 2 * *((ei_toplevel_t *)widget->parent)->border_width;
+    old_rect.top_left.x -= *((ei_toplevel_t *)widget->parent)->border_width;
+
+    ei_app_invalidate_rect(&old_rect);
     ei_widget_destroy(widget->parent);
+
     return EI_TRUE;
 }
 
