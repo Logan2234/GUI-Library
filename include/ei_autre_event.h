@@ -24,3 +24,15 @@ void free_liste_eventtypes(struct liste_eventtypes_t *liste);
  * et l'appel de la fonction callback associée au bouton après le clic. 
  */
 ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param);
+
+/* 
+ * Fonction callback appelée lors du relachement d'un close_button des toplevel
+ * Elle a pour effet de détruire tout les éléments s'y trouvant à l'intérieur.
+ */
+ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param);
+
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param);
+
+ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param);
+
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param);
