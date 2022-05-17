@@ -160,11 +160,11 @@ int test_3()
     printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
 
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    frame = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
     ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, &text, NULL, NULL, NULL, NULL, NULL, NULL);
     ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    frame2 = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    frame2 = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
     ei_frame_configure(frame2, &frame_size2, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, image, NULL, &ancre);
     ei_place(frame2, NULL, &frame_x2, &frame_y2, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -201,16 +201,16 @@ int test_4()
     /* Create the application and change the color of the background. */
     ei_app_create(screen_size, EI_FALSE);
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    ei_surface_t image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
+    ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
 
     /* Create, configure and place the button on screen. */
-    button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    button = ei_widget_create("button", ei_app_root_widget(), NULL, NULL);
     ei_button_configure(button, &button_size, &button_color,
                         &button_border_width, &button_corner_radius, &button_relief, &button_title, NULL, &button_text_color, NULL,
                         NULL, NULL, NULL, NULL, NULL);
     ei_place(button, NULL, &button_x, &button_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    button2 = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    button2 = ei_widget_create("button", ei_app_root_widget(), NULL, NULL);
     ei_button_configure(button2, &button_size2, &button_color,
                         &button_border_width, &button_corner_radius, &button_relief, NULL, NULL, NULL, NULL,
                         &image, NULL, NULL, NULL, NULL);
@@ -264,21 +264,21 @@ int test_5()
     printf("Press RETURN to continue create widgets\n");
     getchar();
 
-    ei_widget_t *frame_root = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", root, NULL, NULL);
-    ei_widget_t *button_root = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", root, NULL, NULL);
+    ei_widget_t *frame_root = ei_widget_create("frame", root, NULL, NULL);
+    ei_widget_t *button_root = ei_widget_create("button", root, NULL, NULL);
 
-    ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", frame_root, NULL, NULL);
-    ei_widget_t *frame = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", frame_root, NULL, NULL);
-    ei_widget_t *toplevel = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", button, NULL, NULL);
+    ei_widget_t *button = ei_widget_create("button", frame_root, NULL, NULL);
+    ei_widget_t *frame = ei_widget_create("frame", frame_root, NULL, NULL);
+    ei_widget_t *toplevel = ei_widget_create("toplevel", button, NULL, NULL);
 
-    ei_widget_t *frame2 = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", button_root, NULL, NULL);
-    ei_widget_t *button2 = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", button_root, NULL, NULL);
-    ei_widget_t *toplevel2 = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", button2, NULL, NULL);
+    ei_widget_t *frame2 = ei_widget_create("frame", button_root, NULL, NULL);
+    ei_widget_t *button2 = ei_widget_create("button", button_root, NULL, NULL);
+    ei_widget_t *toplevel2 = ei_widget_create("toplevel", button2, NULL, NULL);
 
-    ei_widget_t *toplevel_root = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", root, NULL, NULL);
-    ei_widget_t *button3 = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", toplevel_root, NULL, NULL);
-    ei_widget_t *frame3 = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", toplevel_root, NULL, NULL);
-    ei_widget_t *button4 = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", toplevel_root, NULL, NULL);
+    ei_widget_t *toplevel_root = ei_widget_create("toplevel", root, NULL, NULL);
+    ei_widget_t *button3 = ei_widget_create("button", toplevel_root, NULL, NULL);
+    ei_widget_t *frame3 = ei_widget_create("frame", toplevel_root, NULL, NULL);
+    ei_widget_t *button4 = ei_widget_create("button", toplevel_root, NULL, NULL);
 
     print_widget_and_family(root);
 
@@ -310,13 +310,13 @@ int test_6()
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     /* Create, configure and place the frame on screen. */
-    frame = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
     ei_frame_configure(frame, &frame_size, &frame_color,
                        &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
                        NULL, NULL, NULL);
     ei_place(frame, NULL, &frame_x, &frame_y, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    frame2 = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0", frame, NULL, NULL);
+    frame2 = ei_widget_create("frame", frame, NULL, NULL);
     ei_frame_configure(frame2, &frame_size2, &root_bgcol2,
                        &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
                        NULL, NULL, NULL);
@@ -355,11 +355,11 @@ int test_7()
     ei_app_create(screen_size, EI_FALSE);
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    toplevel = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
+    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
     int border_width = 0;
     ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
     ei_size_t toplevel_size = {300, 300};
-    char *title = "Test 6";
+    char *title = "Test 7";
 
     ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, &title, NULL, NULL, NULL);
     ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -403,8 +403,8 @@ int test_8()
     ei_app_create(screen_size, EI_FALSE);
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    toplevel = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", ei_app_root_widget(), NULL, NULL);
-    toplevel2 = ei_widget_create("toplevel\0\0\0\0\0\0\0\0\0\0\0\0", toplevel, NULL, NULL);
+    toplevel = ei_widget_create("toplevel", ei_app_root_widget(), NULL, NULL);
+    toplevel2 = ei_widget_create("toplevel", toplevel, NULL, NULL);
 
     ei_toplevel_configure(toplevel, &window_size, &window_color, &window_border_width, &window_title, &closable, &window_resizable, NULL);
     ei_toplevel_configure(toplevel2, &window_size2, &window_color2, &window_border_width2, &window_title2, &closable2, &window_resizable2, NULL);

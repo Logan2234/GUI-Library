@@ -75,7 +75,6 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 ei_color_t int_to_color(uint32_t entier) // TODO faut il prendre en compte le channel indices ?
 {
     uint8_t red, green, blue, alpha;
-
     red = entier / (256 * 256);
     green = (entier - red * 256 * 256) / 256;
     blue = (entier - red * 256 * 256 - green * 256);

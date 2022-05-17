@@ -64,7 +64,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 
 /************ FONCTIONS DE CALLBACK DÉJÀ CRÉÉES ************/
 
-ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
 {
     ei_bool_t retour = EI_FALSE;
 
@@ -108,7 +108,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
     return retour;
 }
 
-ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t close_toplevel(ei_widget_t *widget)
 {
     ei_rect_t old_rect = widget->parent->screen_location;
     old_rect.size.height += taille_header + *((ei_toplevel_t *)widget->parent)->border_width;
@@ -121,7 +121,7 @@ ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_para
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
@@ -142,7 +142,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *use
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event)
 {
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
@@ -204,7 +204,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_p
     }
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
 {
 
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
