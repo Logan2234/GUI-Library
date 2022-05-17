@@ -131,6 +131,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
 
+    /* La pick_color n'est dessinée que si l'on reste dans le clipper bien sûr */
     if (widget->screen_location.top_left.x <= new_clipper.top_left.x + new_clipper.size.width &&
         widget->screen_location.top_left.x + widget->screen_location.size.width >= new_clipper.top_left.x &&
         widget->screen_location.top_left.y <= new_clipper.top_left.y + new_clipper.size.height &&
