@@ -6,6 +6,7 @@
 
 extern int widget_id;
 extern rect_to_update;
+
 struct ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
@@ -173,10 +174,12 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
 
     if (event->param.mouse.button == ei_mouse_button_left)
     {
-        *bouton->relief = (*bouton->relief == ei_relief_raised) ? ei_relief_sunken : ei_relief_raised;
-        last_clicked_widget = widget;
+        *bouton->relief = (*bouton->relief == ei_relief_raised && event->type != ei_ev_mouse_buttonup) ? ei_relief_sunken : ei_relief_raised;
+    
+        if (event->type == ei_ev_mouse_buttondown)
+            last_clicked_widget = widget;
     }
-    if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_buttonup)
+    if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
     {
         (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
         last_clicked_widget = NULL;
