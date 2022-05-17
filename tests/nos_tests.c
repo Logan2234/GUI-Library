@@ -359,7 +359,7 @@ int test_7()
     int border_width = 0;
     ei_color_t toplevel_bg = {0xff, 0xff, 0xff, 0x60};
     ei_size_t toplevel_size = {300, 300};
-    char *title = "Test 6";
+    char *title = "Test 7";
 
     ei_toplevel_configure(toplevel, &toplevel_size, &toplevel_bg, &border_width, &title, NULL, NULL, NULL);
     ei_place(toplevel, NULL, &toplevel_x, &toplevel_y, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -434,7 +434,6 @@ int main(int argc, char **argv)
 {
     screen_size = (ei_size_t){1000, 1000};
     int retour;
-
     if (!strcmp(argv[1], "test1"))
         retour = test_1();
     else if (!strcmp(argv[1], "test2"))
