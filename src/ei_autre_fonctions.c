@@ -9,7 +9,6 @@ extern ei_surface_t pick_surface;
 extern ei_bool_t re_size;
 extern ei_bool_t deplacement;
 extern ei_point_t origine_deplacement;
-uint32_t id_deplacement;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
@@ -124,7 +123,6 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         deplacement = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;
-        id_deplacement = widget->pick_id;
     }
 
     if (!strcmp(widget->wclass->name, "toplevel") && *toplevel->resizable != ei_axis_none &&
@@ -142,8 +140,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 
     else
     {
-        if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
-        { // On aura jamais deplacement et re_size en true
+        if (deplacement == EI_TRUE)
+        { 
             // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
@@ -204,8 +202,8 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         return EI_FALSE;
 
     else
-    {
-        if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
+    {   
+        if (deplacement == EI_TRUE)
         {
             deplacement = EI_FALSE;
         }
