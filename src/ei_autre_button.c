@@ -57,8 +57,18 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_linked_point_t *partie_haute = ei_rounded_frame(&widget->screen_location, *bouton->corner_radius, 1);
     ei_linked_point_t *partie_basse = ei_rounded_frame(&widget->screen_location, *bouton->corner_radius, 2);
 
-    ei_draw_polygon(surface, partie_haute, color2, &widget->screen_location);
-    ei_draw_polygon(surface, partie_basse, color, &widget->screen_location);
+    ei_rect_t new_clipper = *clipper;
+    if (*bouton->text != NULL && !strcmp(*bouton->text, " "))
+    {
+        new_clipper = *widget->parent->parent->content_rect;
+        ei_draw_polygon(surface, partie_haute, color2, &new_clipper);
+        ei_draw_polygon(surface, partie_basse, color, &new_clipper);
+    }
+    else
+    {
+        ei_draw_polygon(surface, partie_haute, color2, &widget->screen_location);
+        ei_draw_polygon(surface, partie_basse, color, &widget->screen_location);
+    }
 
     /* Puis on dessine un plus petit rounded rectangle par dessus */
     ei_rect_t rectangle = widget->screen_location;
@@ -68,11 +78,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     rectangle.size.height -= 2 * *bouton->border_width;
     ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
 
-    /* Si c'est le close button on a besoin de le faire apparaître dans son entiereté sans prendre en compte le clipper du toplevel */
-    if (*bouton->text != NULL && strcmp(*bouton->text, " "))
-        ei_draw_polygon(surface, partie_milieu, color3, clipper);
-    else
-        ei_draw_polygon(surface, partie_milieu, color3, NULL);
+    ei_draw_polygon(surface, partie_milieu, color3, &new_clipper);
 
     /* Dessin du texte si nécessaire */
     if (*bouton->text != NULL && strcmp(*bouton->text, " "))
@@ -117,15 +123,20 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         widget->geom_params->manager->runfunc(widget);
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
         // hw_surface_set_origin(bouton->img, (ei_point_t){0, 200});
-        (bouton->img_rect != NULL) ? ei_copy_surface(surface, clipper, bouton->img, *bouton->img_rect, EI_FALSE)
-                                   : ei_copy_surface(surface, clipper, bouton->img, NULL, EI_FALSE);
+        (bouton->img_rect != NULL) ? ei_copy_surface(surface, &new_clipper, bouton->img, *bouton->img_rect, EI_FALSE)
+                                   : ei_copy_surface(surface, &new_clipper, bouton->img, NULL, EI_FALSE);
     }
 
     free_linked_point_pointeur(partie_haute);
     free_linked_point_pointeur(partie_basse);
     free_linked_point_pointeur(partie_milieu);
 
+    if (widget->screen_location.top_left.x <= new_clipper.top_left.x + new_clipper.size.width &&
+        widget->screen_location.top_left.x + widget->screen_location.size.width >= new_clipper.top_left.x &&
+        widget->screen_location.top_left.y <= new_clipper.top_left.y + new_clipper.size.height &&
+        widget->screen_location.top_left.y + widget->screen_location.size.height >= new_clipper.top_left.y)
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
+
 }
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)
