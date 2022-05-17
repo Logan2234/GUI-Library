@@ -50,15 +50,18 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     update_surface(rect_to_update);
+    //double avant = hw_now();
 
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
-
         if (event->type < 5)
         {
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+            //    continue;
             update_surface(rect_to_update);
+            //avant = hw_now();
         }
 
         /* Cas où on appuie avec le clic gauche */
@@ -70,7 +73,10 @@ void ei_app_run()
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
             recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+            //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+            //    continue;
             update_surface(rect_to_update);
+            //avant = hw_now();
         }
 
         /* Cas où on relache le clic gauche */
@@ -86,13 +92,24 @@ void ei_app_run()
                                                           ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, *((ei_button_t *)released_widget)->user_param)
                                                           : 0
                                                     : 0;
+                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                //    continue;
                 update_surface(rect_to_update);
+                //avant = hw_now();
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+<<<<<<< HEAD
             if (deplacement == EI_TRUE || re_size == EI_TRUE)
             {
+=======
+            if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                //    continue;
+>>>>>>> c92cc6cfbdf702ab2a44aa4d283cacb95b70ef75
                 update_surface(rect_to_update);
+                //avant = hw_now();
             }
         }
 
@@ -104,12 +121,19 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
+                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                //    continue;
                 update_surface(rect_to_update);
+                //avant = hw_now();
             }
             if (deplacement == EI_TRUE || re_size == EI_TRUE)
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                //while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                //    continue;
                 update_surface(rect_to_update);
+                //avant = hw_now();
             }
         }
     }

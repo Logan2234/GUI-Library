@@ -86,6 +86,7 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
 {
     if (text != NULL)
     {
+
         ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
         ei_rect_t source = hw_surface_get_rect(surface_source);
         ei_rect_t dest;
