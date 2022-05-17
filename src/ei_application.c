@@ -54,10 +54,12 @@ void ei_app_run()
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         hw_event_wait_next(event);
-
+        double avant = hw_now();
         if (event->type < 5)
         {
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                continue;
             update_surface(rect_to_update);
         }
 
@@ -70,6 +72,8 @@ void ei_app_run()
                 *((ei_button_t *)pressed_widget)->relief = ei_relief_sunken;
             }
             recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+            while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                continue;
             update_surface(rect_to_update);
         }
 
@@ -86,11 +90,15 @@ void ei_app_run()
                                                       ? (*((ei_button_t *)released_widget)->callback)(released_widget, event, *((ei_button_t *)released_widget)->user_param)
                                                       : 0
                                                     : 0;
+                while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                    continue;
                 update_surface(rect_to_update);
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             if (deplacement == EI_TRUE || re_size == EI_TRUE) {
+                while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                    continue;
                 update_surface(rect_to_update);
             }
         }
@@ -103,10 +111,14 @@ void ei_app_run()
                 pointed_widget = ei_widget_pick(&event->param.mouse.where);
                 *((ei_button_t *)pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
                                                                                               : ei_relief_sunken;
+                while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                    continue;
                 update_surface(rect_to_update);
             }
             if (deplacement == EI_TRUE || re_size == EI_TRUE) {
                 recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+                while (hw_now() - avant > (double) ((float) 1 / 60 ))
+                    continue;
                 update_surface(rect_to_update);
             }
         }
