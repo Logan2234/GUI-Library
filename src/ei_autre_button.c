@@ -1,12 +1,11 @@
-#include "ei_autre_struct.h"
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
 #include "ei_autre_placer.h"
+#include "ei_autre_event.h"
 
 extern int widget_id;
 extern ei_linked_rect_t *rect_to_update;
-static ei_widget_t *last_clicked_widget = NULL;
 
 struct ei_widget_t *button_allocfunc(void)
 {
@@ -164,42 +163,6 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
     widget->geom_params->manager->runfunc(widget);
 }
 
-ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
-{
-    if (event->param.mouse.button == ei_mouse_button_left)
-    {
-        ei_button_t *bouton = ((ei_button_t *)widget);
-        ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
-
-        /* S'il s'agit d'un mouvement du clic gauche, dans ce cas on cherche à savoir si on est ou pas sur le même bouton */
-        if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
-        {
-            *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-            update_surface(rect_to_update, EI_TRUE);
-        }
-
-        /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
-        else if (event->type == ei_ev_mouse_buttondown || event->type == ei_ev_mouse_buttonup)
-        {
-            *bouton->relief = (*bouton->relief == ei_relief_raised && event->type != ei_ev_mouse_buttonup) ? ei_relief_sunken : ei_relief_raised;
-
-            if (event->type == ei_ev_mouse_buttondown)
-                last_clicked_widget = widget;
-
-            update_surface(rect_to_update, EI_TRUE);
-        }
-
-        /* Si on relâche le bouton, on appelle le callback */
-        if (event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
-        {
-            (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
-            last_clicked_widget = NULL;
-        }
-    }
-
-    return EI_FALSE;
-}
-
 void button_setdefaultsfunc(struct ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
@@ -216,10 +179,10 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
     /* Et enfin, on lui donne une configuration de base */
     ei_button_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
-    ei_callback_t shrink = relief_toggle;
-    ei_bind(ei_ev_mouse_buttondown, widget, NULL, shrink, NULL);
-    ei_bind(ei_ev_mouse_buttonup, widget, NULL, shrink, NULL);
-    ei_bind(ei_ev_mouse_move, widget, NULL, shrink, NULL);
+    ei_callback_t button_interact_callback = relief_toggle;
+    ei_bind(ei_ev_mouse_buttondown, widget, NULL, button_interact_callback, NULL);
+    ei_bind(ei_ev_mouse_buttonup, widget, NULL, button_interact_callback, NULL);
+    ei_bind(ei_ev_mouse_move, widget, NULL, button_interact_callback, NULL);
 }
 
 ei_widgetclass_t *return_class_button(void)

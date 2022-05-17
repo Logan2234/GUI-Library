@@ -1,6 +1,7 @@
 #include "ei_geometrymanager.h"
 #include "ei_autre_placer.h"
 #include "ei_autre_struct.h"
+#include "ei_autre_global_var.h"
 
 void placer_runfunc(ei_widget_t *widget)
 {

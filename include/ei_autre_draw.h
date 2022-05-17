@@ -1,3 +1,4 @@
+#include "ei_types.h"
 
 /* 
  * Fonction qui crée un arc à partir d'un centre, un rayon et des angles de début et fin

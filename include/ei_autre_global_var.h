@@ -9,7 +9,7 @@ static ei_relief_t default_relief_button = ei_relief_raised;
 static ei_size_t default_button_size = {60, 40};
 
 /* Paramètres par défaut des toplevel */
-static int taille_header = taille_header;
+static int taille_header = 35;
 static ei_size_t default_toplevel_size = {320, 240};
 static ei_size_t size_divided = {160, 120};
 static ei_size_t *default_toplevel_min_size = &size_divided;
