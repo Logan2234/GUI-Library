@@ -60,23 +60,7 @@ void ajout_relation_parent(ei_widget_t *pere, ei_widget_t *fils)
 
 ei_color_t int_to_color(uint32_t entier)
 {
-    // int ir;
-    // int ig;
-    // int ib;
-    // int ia;
-    // hw_surface_get_channel_indices(surface, &ir, &ig, &ib, &ia);
     uint8_t red, green, blue, alpha;
-    // if (ir == 0){
-    //     red = entier / (256 * 256);
-    //     if (ig == 1){
-    //         green = (entier - red) / 256;
-    //         blue = (entier - blue - green);
-    //     }
-    //     else if (ib == 0){
-    //         blue = (entier - red) / 256;
-    //         green = (entier - blue - red);
-    //     }
-    // }
     red = entier / (256 * 256);
     green = (entier - red * 256 * 256) / 256;
     blue = (entier - red * 256 * 256 - green * 256);

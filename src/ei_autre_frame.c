@@ -142,8 +142,8 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     //         switch (*((ei_frame_t *)widget)->img_anchor)
     //         {
     //         case ei_anc_none:
-    //             //point.x += (largeur_boutton - largeur_texte) / 2;
-    //             //point.y += (hauteur_boutton - hauteur_texte) / 2;
+    //             //point.x += (largeur_button - largeur_texte) / 2;
+    //             //point.y += (hauteur_button - hauteur_texte) / 2;
     //             break;
     //         case ei_anc_northwest:
     //             break;

@@ -1,6 +1,12 @@
 #include "ei_widget.h"
 #include "ei_event.h"
 #include "ei_geometrymanager.h"
+/**
+ * @file ei_autre_struct.h
+ * @brief Définit les extensions des types des widgets pour ensuite faire du polymorphisme.
+ * 
+ *
+ */
 
 /* Everything about frame */
 typedef struct ei_frame_t

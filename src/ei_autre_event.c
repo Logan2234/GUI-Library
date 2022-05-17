@@ -65,7 +65,7 @@ void free_liste_eventtypes(struct liste_eventtypes_t *liste)
 
 /************ FONCTIONS DE CALLBACK DÉJÀ CRÉÉES ************/
 
-ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
+ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
 {
     if (event->param.mouse.button == ei_mouse_button_left)
     {
@@ -97,14 +97,14 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
     return EI_TRUE;
 }
 
-ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t close_toplevel(ei_widget_t *widget)
 {
     ei_widget_destroy(widget->parent);
     printf("Quit\n");
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
@@ -125,7 +125,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event)
 {
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
@@ -189,7 +189,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     }
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
 {
 
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
