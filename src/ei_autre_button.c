@@ -165,27 +165,36 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
 
 ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
-    ei_button_t *bouton = ((ei_button_t *)widget);
-
-    ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
-
-    if (event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
-        *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget == pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-
     if (event->param.mouse.button == ei_mouse_button_left)
     {
-        *bouton->relief = (*bouton->relief == ei_relief_raised && event->type != ei_ev_mouse_buttonup) ? ei_relief_sunken : ei_relief_raised;
-    
-        if (event->type == ei_ev_mouse_buttondown)
-            last_clicked_widget = widget;
-    }
-    if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
-    {
-        (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
-        last_clicked_widget = NULL;
-    }
+        ei_button_t *bouton = ((ei_button_t *)widget);
+        ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
 
-    update_surface(rect_to_update);
+        /* S'il s'agit d'un mouvement du clic gauche, dans ce cas on cherche à savoir si on est ou pas sur le même bouton */
+        if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
+        {
+            *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
+            update_surface(rect_to_update);
+        }
+
+        /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
+        else if (event->type == ei_ev_mouse_buttondown || event->type == ei_ev_mouse_buttonup)
+        {
+            *bouton->relief = (*bouton->relief == ei_relief_raised && event->type != ei_ev_mouse_buttonup) ? ei_relief_sunken : ei_relief_raised;
+
+            if (event->type == ei_ev_mouse_buttondown)
+                last_clicked_widget = widget;
+
+            update_surface(rect_to_update);
+        }
+
+        /* Si on relâche le bouton, on appelle le callback */
+        else if (event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
+        {
+            (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
+            last_clicked_widget = NULL;
+        }
+    }
 
     return EI_FALSE;
 }
