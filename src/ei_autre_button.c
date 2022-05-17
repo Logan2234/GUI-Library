@@ -106,18 +106,36 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres)
     else if (bouton->img != NULL && *bouton->text == NULL)
     {
-        /* Le bouton prend la taille de l'image si celle-ci est plus grande */
-        ei_size_t taille_bouton = hw_surface_get_size(*bouton->img);
-        if (widget->screen_location.size.height <= taille_bouton.height)
+        /* Le bouton prend la taille de l'image rect si celui-ci existe et est plus grand */
+        if (*bouton->img_rect != NULL)
         {
-            ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
-            widget->requested_size.height = taille_bouton.height;
-        }
+            if (widget->screen_location.size.height <= (*bouton->img_rect)->size.height)
+            {
+                ((ei_placer_t *)widget->geom_params)->height = (*bouton->img_rect)->size.height;
+                widget->requested_size.height = (*bouton->img_rect)->size.height;
+            }
 
-        if (widget->screen_location.size.width <= taille_bouton.width)
+            if (widget->screen_location.size.width <= (*bouton->img_rect)->size.width)
+            {
+                ((ei_placer_t *)widget->geom_params)->width = (*bouton->img_rect)->size.width;
+                widget->requested_size.width = (*bouton->img_rect)->size.width;
+            }
+        }
+        /* Sinon on considère simplement la taille de l'image */
+        else 
         {
-            ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width;
-            widget->requested_size.width = taille_bouton.width;
+            ei_size_t taille_bouton = hw_surface_get_size(*bouton->img);
+            if (widget->screen_location.size.height <= taille_bouton.height)
+            {
+                ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
+                widget->requested_size.height = taille_bouton.height;
+            }
+
+            if (widget->screen_location.size.width <= taille_bouton.width)
+            {
+                ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width;
+                widget->requested_size.width = taille_bouton.width;
+            }
         }
 
         widget->geom_params->manager->runfunc(widget);
