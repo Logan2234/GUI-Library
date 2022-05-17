@@ -50,20 +50,20 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     update_surface(rect_to_update);
-    double frame_rate = (double) 1 / 128;
+    //double frame_rate = (double) 1 / 128;
     //double avant = hw_now();
 
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         // update_surface(rect_to_update);
-        double avant = hw_now();
+        //double avant = hw_now();
         // while (hw_now() - avant <= frame_rate) {
             hw_event_wait_next(event);
             if (event->type < 5) {
                 recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
                 // while (hw_now() - avant > (double) ((float) 1 / 60 ))
                 //    continue;
-
+                update_surface(rect_to_update);
                 // avant = hw_now();
             }
 
