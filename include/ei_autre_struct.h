@@ -41,7 +41,7 @@ typedef struct ei_button_t
 
 ei_widgetclass_t *return_class_button(); /* Fonction de retour de la class button */
 
-/* Liste chainée liant widgets, events et callback */
+/* Liste chainée liant widgets, tags, events et callback */
 typedef struct liste_events_widgets
 {
     ei_widget_t *widget;
@@ -110,6 +110,8 @@ struct liste_geometrymanager
 
 ei_geometrymanager_t *return_geometry_manager_placer();
 
+
+/* Liste chainée de textes */
 struct liste_textes
 {
     char **text;
