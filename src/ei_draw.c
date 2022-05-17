@@ -3,6 +3,7 @@
 
 uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
 {
+    // On travaille sur 32 bits, ainsi on ajoute le rouge, bleu, vert selon la position qu'ont les indices dans la surface.
     uint32_t couleur = 0;
     uint32_t red = color.red - '\0';
     uint32_t blue = (color.blue - '\0');
@@ -84,11 +85,13 @@ void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *cli
 void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *text,
                   ei_font_t font, ei_color_t color, const ei_rect_t *clipper)
 {
+    // On n'écrit le texte que s'il y en a.
     if (text != NULL)
     {
         ei_surface_t *surface_source = hw_text_create_surface(text, font, color);
         ei_rect_t source = hw_surface_get_rect(surface_source);
 
+        //On calcule la surface destinataire avec le clipper. La destination est donc l'intersection entre la surface donnée et le clipper.
         ei_rect_t dest;
         dest.top_left.x = (clipper == NULL) ? where->x: (clipper->top_left.x > source.top_left.x + where->x) ? clipper->top_left.x : where->x;
         dest.top_left.y = (clipper == NULL) ? where->y : (clipper->top_left.y > source.top_left.y + where->y) ? clipper->top_left.y : where->y;
@@ -103,69 +106,83 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
 {
-    ei_size_t main_window_size_dest = hw_surface_get_size(destination);
-    ei_size_t main_window_size_src = hw_surface_get_size(source);
+    /* Tout d'abord, on ne copie l'image que si la taille de la surface et la desrination sont les memes ou qu'on ait des instructions sur où appliquer la fonction */
+    if (src_rect == NULL && dst_rect == NULL && ((hw_surface_get_size(source).width != hw_surface_get_size(destination).width) || (hw_surface_get_size(source).height != hw_surface_get_size(destination).height))) return EXIT_FAILURE;
+    else {
+        ei_size_t main_window_size_dest = hw_surface_get_size(destination);
+        ei_size_t main_window_size_src = hw_surface_get_size(source);
 
-    uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
-    uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
+        uint32_t *origine_dest = (uint32_t *)hw_surface_get_buffer(destination);
+        uint32_t *origine_src = (uint32_t *)hw_surface_get_buffer(source);
+        // On prend le premier point de remplissage sur la surface de destination en allant sur le pixel qui correspond au where.
+        origine_dest += dst_rect->top_left.x + dst_rect->top_left.y * main_window_size_dest.width;
 
-    origine_dest += dst_rect->top_left.x + dst_rect->top_left.y * main_window_size_dest.width;
+        //On récupère les indices des RGB qui peuvent être différente entre la source et la destination
+        int ir;
+        int ig;
+        int ib;
+        int ia;
+        hw_surface_get_channel_indices(source, &ir, &ig, &ib, &ia);
+        int ir_;
+        int ig_;
+        int ib_;
+        int ia_;
+        hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
 
-    int ir;
-    int ig;
-    int ib;
-    int ia;
-    hw_surface_get_channel_indices(source, &ir, &ig, &ib, &ia);
+        /*
+        On gère le cas où dst_rect ou src_rect est nul, on créé deux nouveaux rectangle qu'on initialise soit avec src_rect et dest_rect si non nul,
+        soit avec les rectangles associés à la surface source et la surface destination.
+        */
+        ei_rect_t *src_rect2 = calloc(1, sizeof(ei_rect_t));
+        src_rect2->size.width = (src_rect == NULL) ? hw_surface_get_rect(source).size.width : src_rect->size.width;
+        src_rect2->size.height = (src_rect == NULL) ? hw_surface_get_rect(source).size.height : src_rect->size.height;
+        src_rect2->top_left = (src_rect == NULL) ? hw_surface_get_rect(source).top_left : src_rect->top_left;
+        ei_rect_t *dst_rect2 = calloc(1, sizeof(ei_rect_t));
+        dst_rect2->size.width = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.width : dst_rect->size.width;
+        dst_rect2->size.height = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.height : dst_rect->size.height;
+        dst_rect2->top_left = (dst_rect == NULL) ? hw_surface_get_rect(destination).top_left : dst_rect->top_left;
 
-    int ir_;
-    int ig_;
-    int ib_;
-    int ia_;
-    hw_surface_get_channel_indices(destination, &ir_, &ig_, &ib_, &ia_);
-    ei_rect_t *src_rect2 = calloc(1, sizeof(ei_rect_t));
-    src_rect2->size.width = (src_rect == NULL) ? hw_surface_get_rect(source).size.width : src_rect->size.width;
-    src_rect2->size.height = (src_rect == NULL) ? hw_surface_get_rect(source).size.height : src_rect->size.height;
-    src_rect2->top_left = (src_rect == NULL) ? hw_surface_get_rect(source).top_left : src_rect->top_left;
-    ei_rect_t *dst_rect2 = calloc(1, sizeof(ei_rect_t));
-    dst_rect2->size.width = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.width : dst_rect->size.width;
-    dst_rect2->size.height = (dst_rect == NULL) ? hw_surface_get_rect(destination).size.height : dst_rect->size.height;
-    dst_rect2->top_left = (dst_rect == NULL) ? hw_surface_get_rect(destination).top_left : dst_rect->top_left;
+        uint32_t *pixel_ptr_dest = origine_dest;
+        uint32_t *pixel_ptr_src = origine_src;
 
-    uint32_t *pixel_ptr_dest = origine_dest;
-    uint32_t *pixel_ptr_src = origine_src;
-    for (uint32_t i = 0; i < (uint32_t)src_rect2->size.height; i++)
-    {
-        /* On dessine toutes la partie rectangulaire */
-        if (i >= dst_rect2->size.height){
-            pixel_ptr_src += main_window_size_src.width;
-            continue;
-        }
-        for (uint32_t j = 0; j < (uint32_t)src_rect2->size.width; j++)
+        for (uint32_t i = 0; i < (uint32_t)src_rect2->size.height; i++)
         {
-            if (j>=dst_rect2->size.width){
-                *pixel_ptr_src++;
+            // Si la source est plus grande que la destination, ou coupe ce qui dépasse.
+            if (i >= dst_rect2->size.height){
+                pixel_ptr_src += main_window_size_src.width;
                 continue;
             }
-            if (alpha == EI_TRUE)
-            {
-                uint8_t *dest = (uint8_t *)pixel_ptr_dest;
-                uint8_t *src = (uint8_t *)pixel_ptr_src;
-                *(dest + ig_) = (*(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_)) / 255;
-                *(dest + ir_) = (*(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_)) / 255;
-                *(dest + ib_) = (*(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_)) / 255;
-                *pixel_ptr_dest++;
-                *pixel_ptr_src++;
+            for (uint32_t j = 0; j < (uint32_t)src_rect2->size.width; j++)
+            {   
+                //Pareil ici
+                if (j>=dst_rect2->size.width){
+                    *pixel_ptr_src++;
+                    continue;
+                }
+                // Soit on écrit un texte, et on applique la formule pour la transparence.
+                if (alpha == EI_TRUE)
+                {
+                    uint8_t *dest = (uint8_t *)pixel_ptr_dest;
+                    uint8_t *src = (uint8_t *)pixel_ptr_src;
+                    *(dest + ig_) = (*(src + ia) * *(src + ig) + (255 - *(src + ia)) * *(dest + ig_)) / 255;
+                    *(dest + ir_) = (*(src + ia) * *(src + ir) + (255 - *(src + ia)) * *(dest + ir_)) / 255;
+                    *(dest + ib_) = (*(src + ia) * *(src + ib) + (255 - *(src + ia)) * *(dest + ib_)) / 255;
+                    *pixel_ptr_dest++;
+                    *pixel_ptr_src++;
+                }
+                // Soit on se contente de juste recopier les pixels (le cas pour une image).
+                else
+                    *pixel_ptr_dest++ = *pixel_ptr_src++;
             }
-            else
-                *pixel_ptr_dest++ = *pixel_ptr_src++;
-        }
+            // On retourne à la ligne pour faire la ligne d'après.
             pixel_ptr_dest += (dst_rect2->size.width < src_rect2->size.width) ? main_window_size_dest.width - dst_rect2->size.width : main_window_size_dest.width - src_rect2->size.width;
+        } 
+        hw_surface_unlock(destination);
+        ei_linked_rect_t *liste_rects = calloc(1, sizeof(ei_linked_rect_t));
+        liste_rects->rect = *dst_rect2;
+        hw_surface_update_rects(destination, liste_rects);
+        free(liste_rects);
+        free(src_rect2);
+        free(dst_rect2);
     }
-    hw_surface_unlock(destination);
-    ei_linked_rect_t *liste_rects = calloc(1, sizeof(ei_linked_rect_t));
-    liste_rects->rect = *dst_rect2;
-    hw_surface_update_rects(destination, liste_rects);
-    free(liste_rects);
-    free(src_rect2);
-    free(dst_rect2);
 }
