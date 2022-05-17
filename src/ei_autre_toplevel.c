@@ -38,23 +38,23 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));
     ei_linked_point_t *sentinel = premier_point;
     premier_point->point.x = widget->screen_location.top_left.x;
-    premier_point->point.y = widget->screen_location.top_left.y + 35;
+    premier_point->point.y = widget->screen_location.top_left.y + taille_header;
 
     ei_linked_point_t *nouveau = calloc(1, sizeof(ei_linked_point_t));
     nouveau->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
-    nouveau->point.y = widget->screen_location.top_left.y + 35;
+    nouveau->point.y = widget->screen_location.top_left.y + taille_header;
     sentinel->next = nouveau;
     sentinel = sentinel->next;
 
     ei_linked_point_t *nouveau1 = calloc(1, sizeof(ei_linked_point_t));
     nouveau1->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
-    nouveau1->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35;
+    nouveau1->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + taille_header;
     sentinel->next = nouveau1;
     sentinel = sentinel->next;
 
     ei_linked_point_t *nouveau2 = calloc(1, sizeof(ei_linked_point_t));
     nouveau2->point.x = widget->screen_location.top_left.x;
-    nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35;
+    nouveau2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + taille_header;
     sentinel->next = nouveau2;
 
     ei_draw_polygon(surface, premier_point, *toplevel->color, clipper);
@@ -66,47 +66,47 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_linked_point_t *sent = contour;
 
     contour->point.x = widget->screen_location.top_left.x - *toplevel->border_width;
-    contour->point.y = widget->screen_location.top_left.y + 35;
+    contour->point.y = widget->screen_location.top_left.y + taille_header;
 
     ei_linked_point_t *nouveau_contour = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour->point.x = widget->screen_location.top_left.x - *toplevel->border_width;
-    nouveau_contour->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + 35;
+    nouveau_contour->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + taille_header;
     sent->next = nouveau_contour;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour2 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour2->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width;
-    nouveau_contour2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + 35;
+    nouveau_contour2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + taille_header;
     sent->next = nouveau_contour2;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour3 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour3->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width;
-    nouveau_contour3->point.y = widget->screen_location.top_left.y + 35;
+    nouveau_contour3->point.y = widget->screen_location.top_left.y + taille_header;
     sent->next = nouveau_contour3;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour4 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour4->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
-    nouveau_contour4->point.y = widget->screen_location.top_left.y + 35;
+    nouveau_contour4->point.y = widget->screen_location.top_left.y + taille_header;
     sent->next = nouveau_contour4;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour5 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour5->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width;
-    nouveau_contour5->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35;
+    nouveau_contour5->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + taille_header;
     sent->next = nouveau_contour5;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour6 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour6->point.x = widget->screen_location.top_left.x;
-    nouveau_contour6->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35;
+    nouveau_contour6->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + taille_header;
     sent->next = nouveau_contour6;
     sent = sent->next;
 
     ei_linked_point_t *nouveau_contour7 = calloc(1, sizeof(ei_linked_point_t));
     nouveau_contour7->point.x = widget->screen_location.top_left.x;
-    nouveau_contour7->point.y = widget->screen_location.top_left.y + 35;
+    nouveau_contour7->point.y = widget->screen_location.top_left.y + taille_header;
     sent->next = nouveau_contour7;
 
     ei_rect_t new_clipper_toplevel = *clipper;
@@ -114,9 +114,9 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     if (widget->parent->pick_id == 1)
     {
         new_clipper_toplevel.top_left.x -= *toplevel->border_width;
-        new_clipper_toplevel.top_left.y -= 35;
+        new_clipper_toplevel.top_left.y -= taille_header;
         new_clipper_toplevel.size.width += 2 * *toplevel->border_width;
-        new_clipper_toplevel.size.height += *toplevel->border_width + 35;
+        new_clipper_toplevel.size.height += *toplevel->border_width + taille_header;
     }
 
     ei_draw_polygon(surface, contour, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
@@ -127,11 +127,11 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
     ei_linked_point_t *header = calloc(1, sizeof(ei_linked_point_t));
     ei_linked_point_t *sentinel2 = header;
     header->point.x = widget->screen_location.top_left.x - *toplevel->border_width;
-    header->point.y = widget->screen_location.top_left.y + 35;
+    header->point.y = widget->screen_location.top_left.y + taille_header;
 
     ei_linked_point_t *nouveau_header = calloc(1, sizeof(ei_linked_point_t));
     nouveau_header->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width;
-    nouveau_header->point.y = widget->screen_location.top_left.y + 35;
+    nouveau_header->point.y = widget->screen_location.top_left.y + taille_header;
     sentinel2->next = nouveau_header;
     sentinel2 = sentinel2->next;
 
@@ -155,23 +155,23 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
         ei_linked_point_t *resize_indicator = calloc(1, sizeof(ei_linked_point_t));
         ei_linked_point_t *sentinel3 = resize_indicator;
         resize_indicator->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width - 1;
-        resize_indicator->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height - 15 + 35 - 1;
+        resize_indicator->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height - 15 + taille_header - 1;
 
         ei_linked_point_t *resize_indicator2 = calloc(1, sizeof(ei_linked_point_t));
         resize_indicator2->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width + *toplevel->border_width - 1;
-        resize_indicator2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + 35 - 1;
+        resize_indicator2->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + taille_header - 1;
         sentinel3->next = resize_indicator2;
         sentinel3 = sentinel3->next;
 
         ei_linked_point_t *resize_indicator3 = calloc(1, sizeof(ei_linked_point_t));
         resize_indicator3->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width - 15 + *toplevel->border_width - 1;
-        resize_indicator3->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + 35 - 1;
+        resize_indicator3->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + *toplevel->border_width + taille_header - 1;
         sentinel3->next = resize_indicator3;
         sentinel3 = sentinel3->next;
 
         ei_linked_point_t *resize_indicator4 = calloc(1, sizeof(ei_linked_point_t));
         resize_indicator4->point.x = widget->screen_location.top_left.x + widget->screen_location.size.width - 15 + *toplevel->border_width - 1;
-        resize_indicator4->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + 35 - 15;
+        resize_indicator4->point.y = widget->screen_location.top_left.y + widget->screen_location.size.height + taille_header - 15;
         sentinel3->next = resize_indicator4;
 
         ei_draw_polygon(surface, resize_indicator, (ei_color_t){0x63, 0x69, 0x70, 0xff}, &new_clipper_toplevel);
@@ -181,12 +181,11 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
     /* Et enfin, on trace le titre */
     ei_point_t titre_pos = widget->screen_location.top_left;
-    titre_pos.x += 35;
+    titre_pos.x += taille_header;
     titre_pos.y += 4;
     ei_draw_text(surface, &titre_pos, *toplevel->title, ei_default_font, (ei_color_t){0xFF, 0xFF, 0xFF, 0xFF}, &new_clipper_toplevel);
 
     /* La pick_color n'est dessinée que si l'on reste dans le clipper bien sûr */
-    // ei_rect_t new_clipper_including_header = {(ei_point_t){widget->screen_location.top_left.x - *toplevel->border_width, widget->screen_location.top_left.y}, (ei_size_t){widget->requested_size.width + *toplevel->border_width * 2, widget->requested_size.height + *toplevel->border_width + 35}};
     ei_rect_t new_clipper_including_header = *widget->parent->content_rect;
     if (widget->screen_location.top_left.x <= new_clipper_including_header.top_left.x + new_clipper_including_header.size.width &&
         widget->screen_location.top_left.x + widget->screen_location.size.width >= new_clipper_including_header.top_left.x &&

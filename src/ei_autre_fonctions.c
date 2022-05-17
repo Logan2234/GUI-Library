@@ -118,7 +118,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     if (!strcmp(widget->wclass->name, "toplevel") &&
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
         widget->screen_location.top_left.y <= event->param.mouse.where.y &&
-        event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
+        event->param.mouse.where.y <= widget->screen_location.top_left.y + taille_header)
     {
         is_moving = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
@@ -156,7 +156,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             }
             if (strcmp(widget->parent->wclass->name, "toplevel") ||
                 (widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height &&
-                 widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + 35))
+                 widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + taille_header))
             {
                 widget->screen_location.top_left.y += delta_y;
                 widget->content_rect->top_left.y += delta_y;
@@ -184,8 +184,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             {
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
                 {
-                    ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
-                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
+                    ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
+                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
                     widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
@@ -223,7 +223,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             {
                 if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
                 {
-                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - 35;
+                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
                     widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
