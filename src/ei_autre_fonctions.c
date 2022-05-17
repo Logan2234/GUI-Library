@@ -1,7 +1,7 @@
 #include "ei_application.h"
 #include "ei_autre_global_var.h"
 #include "ei_autre_event.h"
- 
+
 extern ei_surface_t pick_surface;
 
 static double last_update;
@@ -9,7 +9,7 @@ static double last_update;
 void draw_widgets_and_family(ei_widget_t *widget)
 {
     ei_surface_t racine_surface = ei_app_root_surface();
-    
+
     if (widget->parent == NULL)
         widget->wclass->drawfunc(widget, racine_surface, pick_surface, NULL);
 
@@ -44,17 +44,17 @@ void free_linked_point_pointeur(ei_linked_point_t *liste)
 }
 
 void free_linked_rects(ei_linked_rect_t *liste_rect)
-{   
+{
     ei_linked_rect_t *sent = liste_rect;
     ei_linked_rect_t *next = liste_rect->next;
-    
+
     while (next != NULL)
     {
         free(sent);
         sent = next;
         next = sent->next;
     }
-    
+
     free(sent);
 }
 
@@ -112,7 +112,7 @@ void init_toplevel(ei_widget_t *widget)
 
     if (!strcmp(widget->wclass->name, "toplevel"))
     {
-        if (*((ei_toplevel_t *)widget)->closable == EI_TRUE)
+        if (*((ei_toplevel_t *)widget)->closable)
         {
             ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
             ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
@@ -128,7 +128,7 @@ void init_toplevel(ei_widget_t *widget)
         return init_toplevel(widget->children_head);
 }
 
-ei_linked_rect_t* update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
+ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
     if (hw_now() - last_update > (double)1 / fps || ponctuel)
     {
@@ -139,16 +139,15 @@ ei_linked_rect_t* update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t po
 
         hw_surface_unlock(ei_app_root_surface());
 
-        if (rectangles_list->next != NULL)
+        if (rectangles_list->next != NULL && rectangles_list->rect.size.height != 0)
             hw_surface_update_rects(ei_app_root_surface(), rectangles_list);
         else
             hw_surface_update_rects(ei_app_root_surface(), NULL);
-
-        free_linked_rects(rectangles_list);
-        
-        rectangles_list = calloc(1, sizeof(ei_linked_rect_t));
-        return rectangles_list;
     }
+
+    free_linked_rects(rectangles_list);
+    rectangles_list = calloc(1, sizeof(ei_linked_rect_t));
+    return rectangles_list;
 }
 
 void lighten_color(ei_color_t *couleur)
@@ -167,7 +166,6 @@ void darken_color(ei_color_t *couleur)
 
 ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t about_text)
 {
-
     int largeur_contenu;
     int hauteur_contenu;
 
@@ -175,7 +173,7 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t a
     {
         ei_surface_t text_surface;
 
-        if (!strcmp(widget->wclass->name, "frame") == 1)
+        if (!strcmp(widget->wclass->name, "frame"))
             text_surface = hw_text_create_surface(*((ei_frame_t *)widget)->text, *((ei_frame_t *)widget)->text_font, *((ei_frame_t *)widget)->text_color);
 
         else
@@ -187,7 +185,7 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t a
     }
     else
     {
-        if (!strcmp(widget->wclass->name, "frame") == 1)
+        if (!strcmp(widget->wclass->name, "frame"))
         {
             largeur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).width;
             hauteur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).height;

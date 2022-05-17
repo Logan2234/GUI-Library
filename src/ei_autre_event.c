@@ -64,7 +64,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 
 /************ FONCTIONS DE CALLBACK DÉJÀ CRÉÉES ************/
 
-ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
+ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     ei_bool_t retour = EI_FALSE;
 
@@ -72,7 +72,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
     {
         ei_button_t *bouton = ((ei_button_t *)widget);
         ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
-        
+
         /* S'il s'agit d'un mouvement du clic gauche, dans ce cas on cherche à savoir si on est ou pas sur le même bouton */
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
         {
@@ -89,7 +89,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
 
             if (event->type == ei_ev_mouse_buttondown)
                 last_clicked_widget = widget;
-            
+
             retour = EI_TRUE;
         }
 
@@ -108,7 +108,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event)
     return retour;
 }
 
-ei_bool_t close_toplevel(ei_widget_t *widget)
+ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     ei_rect_t old_rect = widget->parent->screen_location;
     old_rect.size.height += taille_header + *((ei_toplevel_t *)widget->parent)->border_width;
@@ -121,7 +121,7 @@ ei_bool_t close_toplevel(ei_widget_t *widget)
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
@@ -139,16 +139,22 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
         widget->content_rect->top_left.y + widget->content_rect->size.height - 15 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->content_rect->top_left.y + widget->content_rect->size.height + *toplevel->border_width)
         is_resizing = EI_TRUE;
 
-    return EI_TRUE;
+    return EI_FALSE;
 }
 
-ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event)
+ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
 
     else
     {
+        /* On sauvegarde l'ancien espace occupé par le toplevel afin de mettre à jour seulement ce rect */
+        ei_rect_t old_rect = widget->screen_location;
+        old_rect.size.height += taille_header + *((ei_toplevel_t *)widget)->border_width;
+        old_rect.size.width += 2 * *((ei_toplevel_t *)widget)->border_width;
+        old_rect.top_left.x -= *((ei_toplevel_t *)widget)->border_width;
+
         if (is_moving == EI_TRUE)
         {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
@@ -173,6 +179,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event)
                 origine_deplacement.y = event->param.mouse.where.y;
             }
         }
+
         else if (is_resizing == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
@@ -200,13 +207,22 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event)
             }
         }
         widget->wclass->geomnotifyfunc(widget);
+
+        /* La nouvelle position du rect global du toplevel permettant d'update selon cette partie de l'écran */
+        ei_rect_t new_rect = widget->screen_location;
+        new_rect.size.height += taille_header + *((ei_toplevel_t *)widget)->border_width;
+        new_rect.size.width += 2 * *((ei_toplevel_t *)widget)->border_width;
+        new_rect.top_left.x -= *((ei_toplevel_t *)widget)->border_width;
+
+        ei_app_invalidate_rect(&old_rect);
+        ei_app_invalidate_rect(&new_rect);
+
         return EI_TRUE;
     }
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event)
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
-
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
 
@@ -238,6 +254,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             is_resizing = EI_FALSE;
             widget->requested_size = widget->screen_location.size;
         }
+
         return EI_TRUE;
     }
 }

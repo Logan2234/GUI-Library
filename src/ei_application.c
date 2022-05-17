@@ -49,13 +49,14 @@ void ei_app_run()
 {
     init_toplevel(widget_racine);
 
-    rect_to_update = update_surface(rect_to_update, EI_TRUE);
-    rect_to_update = update_surface(rect_to_update, EI_TRUE);
+    update_surface(rect_to_update, EI_TRUE);
+    update_surface(rect_to_update, EI_TRUE);
 
     ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     ei_bool_t retour = EI_FALSE;
+
     while (arret_final == EI_FALSE)
     {
         hw_event_wait_next(event);
@@ -94,9 +95,9 @@ void ei_app_run()
         }
         if (retour)
         {
-            rect_to_update = update_surface(rect_to_update, EI_TRUE); 
+            rect_to_update = update_surface(rect_to_update, EI_TRUE);
             retour = EI_FALSE;
-        } 
+        }
     }
     free(event);
 }

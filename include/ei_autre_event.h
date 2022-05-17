@@ -45,7 +45,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste);
  * 
  * @return
  */
-ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event);
+ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_params);
 
 /** 
  * @brief
@@ -57,7 +57,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event);
  * @return TRUE lorsqu'il est bien fermé.
  * 
  */
-ei_bool_t close_toplevel(ei_widget_t *widget);
+ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params);
 
 /**
  * @brief Initialisation du déplacement du toplevel
@@ -69,7 +69,7 @@ ei_bool_t close_toplevel(ei_widget_t *widget);
  * @return Booléen retournant s'il y a une action à associer au widget.
  * 
  */ 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event);
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params);
 
 /**
  * @brief Permet de déplacer le widget et de l'afficher se déplaçant.
@@ -81,7 +81,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event);
  * @return Booléen retournant s'il y a une action à associer au widget.
  * 
  */ 
-ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event);
+ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_params);
 
 /**
  * @brief Déclare la fin du déplacement du toplevel.
@@ -93,4 +93,4 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event);
  * @return False s'il n'y avait pas de resize ni de mouvement, et True si le changement est finie.
  * 
  */ 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event);
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_params);

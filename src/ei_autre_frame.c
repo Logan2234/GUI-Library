@@ -32,7 +32,7 @@ void frame_releasefunc(ei_widget_t *widget)
 void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
-    printf("->");
+
     if (*frame->relief != ei_relief_none && *frame->border_width != 0)
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
