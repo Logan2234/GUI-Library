@@ -87,8 +87,8 @@ void placer_runfunc(ei_widget_t *widget)
         //int *borderazo = frame_aux->border_width;
         //printf("%i \n", *borderazo);
         // TODO Le problème vient de *((ei_frame_t *)widget)->border_width
-        widget->content_rect->size.width = widget->screen_location.size.width ;//- 2 * *((ei_frame_t *)widget)->border_width;
-        /*widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_frame_t *)widget)->border_width;
+        widget->content_rect->size.width = widget->screen_location.size.width - 2 * *((ei_frame_t *)widget)->border_width;
+        widget->content_rect->size.height = widget->screen_location.size.height - 2 * *((ei_frame_t *)widget)->border_width;
         widget->content_rect->top_left.x = widget->screen_location.top_left.x + *((ei_frame_t *)widget)->border_width;
         widget->content_rect->top_left.y = widget->screen_location.top_left.y + *((ei_frame_t *)widget)->border_width;
      }
@@ -112,8 +112,8 @@ void placer_runfunc(ei_widget_t *widget)
      else
          widget->content_rect = &widget->screen_location;
 
-     free(top_left);*/
-}}
+     free(top_left);
+}
 
 void placer_releasefunc(struct ei_widget_t *widget)
 {

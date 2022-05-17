@@ -115,7 +115,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     /* Dessin de l'image si nécessaire */
     else if (frame->img != NULL && *frame->text == NULL)
     {
-        /* La frame prend la taille de l'image si celle-ci est plus grande */
+        // La frame prend la taille de l'image si celle-ci est plus grande */
         ei_size_t taille_frame = hw_surface_get_size(frame->img);
         if (widget->screen_location.size.height <= taille_frame.height)
         {

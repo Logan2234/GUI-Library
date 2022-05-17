@@ -50,6 +50,8 @@ void ei_app_run()
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     update_surface(rect_to_update);
+    double frame_rate = (double) 1 / 60;
+    printf("%f \n", frame_rate);
     //double avant = hw_now();
 
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
