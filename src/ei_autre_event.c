@@ -10,6 +10,7 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
     while (sentinel != NULL && sentinel->eventtype != a_chercher)
         sentinel = sentinel->next;
 
+
     if (sentinel != NULL)
     {
         struct liste_events_widgets *courant = sentinel->liste;

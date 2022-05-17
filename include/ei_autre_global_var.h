@@ -34,3 +34,5 @@ static int close_button_x = 10;
 static int close_button_y = -25;
 // static float close_button_rel_width;
 // static float close_button_rel_height;
+
+static ei_widget_t *last_clicked_widget = NULL;

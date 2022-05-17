@@ -7,6 +7,8 @@
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
 extern ei_bool_t re_size;
+extern ei_bool_t deplacement;
+extern ei_point_t origine_deplacement;
 uint32_t id_deplacement;
 
 void draw_widgets_and_family(ei_widget_t *widget)
@@ -110,8 +112,6 @@ ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *us
 }
 
 ei_callback_t close_toplevel_widget = close_toplevel;
-extern ei_bool_t deplacement;
-extern ei_point_t origine_deplacement;
 
 ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {

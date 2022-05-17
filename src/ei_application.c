@@ -46,90 +46,69 @@ void ei_app_run()
     init_toplevel(widget_racine);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
-    ei_widget_t *pointed_widget;
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     update_surface(rect_to_update);
-    //double frame_rate = (double) 1 / 128;
-    //double avant = hw_now();
+    // double frame_rate = (double) 1 / 128;
+    // double avant = hw_now();
 
     while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         // update_surface(rect_to_update);
-        //double avant = hw_now();
+        // double avant = hw_now();
         // while (hw_now() - avant <= frame_rate) {
-            hw_event_wait_next(event);
-            if (event->type < 5) {
-                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                // while (hw_now() - avant > (double) ((float) 1 / 60 ))
-                //    continue;
-                update_surface(rect_to_update);
-                // avant = hw_now();
-            }
+        hw_event_wait_next(event);
+        if (event->type < 5)
+        {
+            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
+            // while (hw_now() - avant > (double) ((float) 1 / 60 ))
+            //    continue;
+            update_surface(rect_to_update);
+            // avant = hw_now();
+        }
 
-                /* Cas où on appuie avec le clic gauche */
-            else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left) {
-                pressed_widget = ei_widget_pick(&event->param.mouse.where);
-                if (!strcmp(pressed_widget->wclass->name, "button")) {
-                    *((ei_button_t *) pressed_widget)->relief = ei_relief_sunken;
-                }
+        /* Cas où on appuie avec le clic gauche */
+        else if (event->type == ei_ev_mouse_buttondown)
+        {
+            pressed_widget = ei_widget_pick(&event->param.mouse.where);
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+            // while (hw_now() - avant < (double) ((float) 1 / 60 ))
+            //    continue;
+            update_surface(rect_to_update);
+            // avant = hw_now();
+        }
+
+        /* Cas où on relache le clic gauche */
+        else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
+        {
+            released_widget = ei_widget_pick(&event->param.mouse.where);
+            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, released_widget, NULL);
+            // while (hw_now() - avant < (double) ((float) 1 / 60 ))
+            //    continue;
+            update_surface(rect_to_update);
+            // avant = hw_now();
+            // }
+            pressed_widget = NULL;
+            released_widget = NULL;
+        }
+
+        /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
+        else if (event->type == ei_ev_mouse_move)
+        {
+            if (deplacement || re_size)
+            {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
                 // while (hw_now() - avant < (double) ((float) 1 / 60 ))
                 //    continue;
                 update_surface(rect_to_update);
                 // avant = hw_now();
             }
-
-                /* Cas où on relache le clic gauche */
-            else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left) {
-                /* Maintenant on test si on relache le clic sur le même widget que sur celui que l'on vient d'appuyer */
-                released_widget = ei_widget_pick(&event->param.mouse.where);
-                if (!strcmp(released_widget->wclass->name, "button") &&
-                    !strcmp(pressed_widget->wclass->name, "button")) {
-                    /* Si c'est le même on appelle le callback et on redessine le relief*/
-                    *((ei_button_t *) pressed_widget)->relief = ei_relief_raised;
-                    (pressed_widget == released_widget) ? (*((ei_button_t *) released_widget)->callback != NULL)
-                                                          ? (*((ei_button_t *) released_widget)->callback)(
-                                    released_widget, event, *((ei_button_t *) released_widget)->user_param)
-                                                          : 0
-                                                        : 0;
-                    recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                    // while (hw_now() - avant < (double) ((float) 1 / 60 ))
-                    //    continue;
-                    update_surface(rect_to_update);
-                    // avant = hw_now();
-                }
-                pressed_widget = NULL;
-                recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                    // while (hw_now() - avant < (double) ((float) 1 / 60 ))
-                    //    continue;
-                    update_surface(rect_to_update);
-                    // avant = hw_now();
-                }
+            else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
+            {
+                recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+                update_surface(rect_to_update);
             }
-
-                /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
-            else if (event->type == ei_ev_mouse_move) {
-                if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button")) {
-                    pointed_widget = ei_widget_pick(&event->param.mouse.where);
-                    *((ei_button_t *) pressed_widget)->relief = (pointed_widget != pressed_widget) ? ei_relief_raised
-                                                                                                   : ei_relief_sunken;
-                    recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                    // while (hw_now() - avant < (double) ((float) 1 / 60 ))
-                    //    continue;
-                    update_surface(rect_to_update);
-                    // avant = hw_now();
-                }
-                if (deplacement == EI_TRUE || re_size == EI_TRUE) {
-                    recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-                    // while (hw_now() - avant < (double) ((float) 1 / 60 ))
-                    //    continue;
-                    update_surface(rect_to_update);
-                    // avant = hw_now();
-                }
-            }
-        // }
+        }
     }
     free(event);
 }

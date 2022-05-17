@@ -47,7 +47,7 @@ void ei_bind(ei_eventtype_t eventtype, ei_widget_t *widget, ei_tag_t tag, ei_cal
             }
             suivant = suivant->next;
         }
-        if ((tag == NULL && suivant->widget->pick_id == widget->pick_id) || (tag != NULL && !strcmp((char *)tag, (char *)(suivant->tag))))
+        if ((tag == NULL && suivant->widget != NULL && suivant->widget->pick_id == widget->pick_id) || (tag != NULL && !strcmp((char *)tag, (char *)(suivant->tag))))
         {
             suivant->callback = callback;
             suivant->user_param = user_param;

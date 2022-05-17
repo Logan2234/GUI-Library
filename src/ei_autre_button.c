@@ -103,7 +103,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
-    /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres)
+    /* Dessin de l'image si nécessaire */
     else if (bouton->img != NULL && *bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image rect si celui-ci existe et est plus grand */
@@ -122,7 +122,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
             }
         }
         /* Sinon on considère simplement la taille de l'image */
-        else 
+        else
         {
             ei_size_t taille_bouton = hw_surface_get_size(*bouton->img);
             if (widget->screen_location.size.height <= taille_bouton.height)
@@ -142,7 +142,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
         // hw_surface_set_origin(*bouton->img, (ei_point_t){100, 100});
         (*bouton->img_rect != NULL) ? ei_copy_surface(surface, widget->content_rect, *bouton->img, *bouton->img_rect, EI_FALSE)
-                                   : ei_copy_surface(surface, widget->content_rect, *bouton->img, NULL, EI_FALSE);
+                                    : ei_copy_surface(surface, widget->content_rect, *bouton->img, NULL, EI_FALSE);
     }
 
     free_linked_point_pointeur(partie_haute);
@@ -154,13 +154,34 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         widget->screen_location.top_left.x + widget->screen_location.size.width >= new_clipper.top_left.x &&
         widget->screen_location.top_left.y <= new_clipper.top_left.y + new_clipper.size.height &&
         widget->screen_location.top_left.y + widget->screen_location.size.height >= new_clipper.top_left.y)
-    ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
-
+        ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
 void button_geomnotifyfunc(struct ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
+}
+
+ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param)
+{
+    ei_button_t *bouton = ((ei_button_t *)widget);
+
+    ei_widget_t *pointed_widget = ei_widget_pick(&event->param.mouse.where);
+
+    if (event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
+        *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget == pointed_widget) ? ei_relief_raised : ei_relief_sunken;
+
+    if (event->param.mouse.button == ei_mouse_button_left)
+    {
+        *bouton->relief = (*bouton->relief == ei_relief_raised) ? ei_relief_sunken : ei_relief_raised;
+        last_clicked_widget = widget;
+    }
+    if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_buttonup)
+    {
+        (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
+        last_clicked_widget = NULL;
+    }
+    return EI_FALSE;
 }
 
 void button_setdefaultsfunc(struct ei_widget_t *widget)
@@ -178,6 +199,11 @@ void button_setdefaultsfunc(struct ei_widget_t *widget)
 
     /* Et enfin, on lui donne une configuration de base */
     ei_button_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    ei_callback_t shrink = relief_toggle;
+    ei_bind(ei_ev_mouse_buttondown, widget, NULL, shrink, NULL);
+    ei_bind(ei_ev_mouse_buttonup, widget, NULL, shrink, NULL);
+    ei_bind(ei_ev_mouse_move, widget, NULL, shrink, NULL);
 }
 
 ei_widgetclass_t *return_class_button(void)
