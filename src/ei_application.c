@@ -100,14 +100,9 @@ void ei_app_run()
             }
             pressed_widget = NULL;
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-<<<<<<< HEAD
-            if (deplacement == EI_TRUE || re_size == EI_TRUE)
-            {
-=======
             if (deplacement == EI_TRUE || re_size == EI_TRUE) {
                 //while (hw_now() - avant > (double) ((float) 1 / 60 ))
                 //    continue;
->>>>>>> c92cc6cfbdf702ab2a44aa4d283cacb95b70ef75
                 update_surface(rect_to_update);
                 //avant = hw_now();
             }
