@@ -1,6 +1,8 @@
 #include "ei_draw.h"
 #include "ei_autre_fonctions.h"
 
+extern ei_surface_t pick_surface;
+
 uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
 {
     // On travaille sur 32 bits, ainsi on ajoute le rouge, bleu, vert selon la position qu'ont les indices dans la surface.
@@ -21,10 +23,11 @@ uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
     return couleur;
 }
 
-extern ei_surface_t pick_surface;
+extern int compte;
 
 void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *clipper)
 {
+    printf("%d\n", compte++);
     ei_size_t main_window_size = hw_surface_get_size(surface);
     uint32_t *origine = (uint32_t *)hw_surface_get_buffer(surface);
     uint32_t couleur = ei_map_rgba(surface, *color);

@@ -6,8 +6,8 @@
 
 extern ei_surface_t racine_surface;
 extern ei_surface_t pick_surface;
-extern ei_bool_t re_size;
-extern ei_bool_t deplacement;
+extern ei_bool_t is_resizing;
+extern ei_bool_t is_moving;
 extern ei_point_t origine_deplacement;
 
 void draw_widgets_and_family(ei_widget_t *widget)
@@ -120,7 +120,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         widget->screen_location.top_left.y <= event->param.mouse.where.y &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + 35)
     {
-        deplacement = EI_TRUE;
+        is_moving = EI_TRUE;
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;
     }
@@ -128,19 +128,19 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     if (!strcmp(widget->wclass->name, "toplevel") && *toplevel->resizable != ei_axis_none &&
         widget->content_rect->top_left.x + widget->content_rect->size.width - 15 <= event->param.mouse.where.x && event->param.mouse.where.x <= widget->content_rect->top_left.x + widget->content_rect->size.width + *toplevel->border_width &&
         widget->content_rect->top_left.y + widget->content_rect->size.height - 15 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->content_rect->top_left.y + widget->content_rect->size.height + *toplevel->border_width)
-        re_size = EI_TRUE;
+        is_resizing = EI_TRUE;
 
     return EI_FALSE;
 }
 
 ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
-    if (deplacement == EI_FALSE && re_size == EI_FALSE)
+    if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
 
     else
     {
-        if (deplacement == EI_TRUE)
+        if (is_moving == EI_TRUE)
         { 
             // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
@@ -164,7 +164,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                 origine_deplacement.y = event->param.mouse.where.y;
             }
         }
-        else if (re_size == EI_TRUE)
+        else if (is_resizing == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
             ei_size_t minimo = **(toplevel->min_size);
@@ -198,16 +198,16 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
 ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
 
-    if (deplacement == EI_FALSE && re_size == EI_FALSE)
+    if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
 
     else
     {   
-        if (deplacement == EI_TRUE)
+        if (is_moving == EI_TRUE)
         {
-            deplacement = EI_FALSE;
+            is_moving = EI_FALSE;
         }
-        else if (re_size == EI_TRUE)
+        else if (is_resizing == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
             ei_size_t minimo = **(toplevel->min_size);
@@ -227,7 +227,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
                     widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
                 }
             }
-            re_size = EI_FALSE;
+            is_resizing = EI_FALSE;
             widget->requested_size = widget->screen_location.size;
         }
         return EI_FALSE;
@@ -258,8 +258,9 @@ void init_toplevel(ei_widget_t *widget)
         return init_toplevel(widget->children_head);
 }
 
-void update_surface(ei_linked_rect_t *rectangles_list)
+void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
+
     hw_surface_lock(ei_app_root_surface());
     draw_widgets_and_family(ei_app_root_widget());
     hw_surface_unlock(ei_app_root_surface());

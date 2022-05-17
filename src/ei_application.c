@@ -12,11 +12,11 @@ ei_widget_t *widget_racine;
 ei_surface_t racine_surface;
 ei_surface_t pick_surface;
 int widget_id = 0;
-ei_bool_t deplacement = EI_FALSE;
-ei_bool_t re_size = EI_FALSE;
-ei_point_t origine_deplacement;
+ei_bool_t is_moving = EI_FALSE;
+ei_bool_t is_resizing = EI_FALSE;
 ei_bool_t arret = EI_FALSE;
 ei_bool_t arret_final = EI_FALSE;
+ei_point_t origine_deplacement;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -49,7 +49,7 @@ void ei_app_run()
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-    update_surface(rect_to_update);
+    update_surface(rect_to_update, EI_TRUE);
     // double frame_rate = (double) 1 / 128;
     // double avant = hw_now();
 
@@ -64,7 +64,7 @@ void ei_app_run()
             recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
             // while (hw_now() - avant > (double) ((float) 1 / 60 ))
             //    continue;
-            update_surface(rect_to_update);
+            update_surface(rect_to_update, EI_TRUE);
             // avant = hw_now();
         }
 
@@ -87,12 +87,12 @@ void ei_app_run()
         /* Si on ressort du bouton avec le clic appuyé, on redonne la forme normale du potentiel bouton cliqué et inversement */
         else if (event->type == ei_ev_mouse_move)
         {
-            if (deplacement || re_size)
+            if (is_moving || is_resizing)
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
                 // while (hw_now() - avant < (double) ((float) 1 / 60 ))
                 //    continue;
-                update_surface(rect_to_update);
+                update_surface(rect_to_update, EI_TRUE);
                 // avant = hw_now();
             }
             else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))

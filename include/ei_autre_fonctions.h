@@ -34,8 +34,12 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id);
  */
 void init_toplevel(ei_widget_t *widget);
 
-/* Fonction simplifiant la mise à jour des surfaces pour le dessins */
-void update_surface(ei_linked_rect_t *rectangles_list);
+/* 
+ * Fonction simplifiant la mise à jour des surfaces pour le dessins
+ * Si ponctuel est à 1, alors la mise à jour est forcée, sinon la mise à jour
+ * ne peut se faire au maximum que 60 fois par seconde.
+ */
+void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel);
 
 /*
  * Permet d'éclaircir une couleur

@@ -5,7 +5,8 @@
 #include "ei_autre_placer.h"
 
 extern int widget_id;
-extern rect_to_update;
+extern ei_linked_rect_t *rect_to_update;
+static ei_widget_t *last_clicked_widget = NULL;
 
 struct ei_widget_t *button_allocfunc(void)
 {
@@ -174,7 +175,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
         {
             *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-            update_surface(rect_to_update);
+            update_surface(rect_to_update, EI_TRUE);
         }
 
         /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
@@ -185,11 +186,11 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
             if (event->type == ei_ev_mouse_buttondown)
                 last_clicked_widget = widget;
 
-            update_surface(rect_to_update);
+            update_surface(rect_to_update, EI_TRUE);
         }
 
         /* Si on relâche le bouton, on appelle le callback */
-        else if (event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
+        if (event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
         {
             (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
             last_clicked_widget = NULL;
