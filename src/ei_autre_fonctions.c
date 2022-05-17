@@ -9,6 +9,7 @@ extern ei_surface_t pick_surface;
 extern ei_bool_t is_resizing;
 extern ei_bool_t is_moving;
 extern ei_point_t origine_deplacement;
+extern double last_update;
 
 void draw_widgets_and_family(ei_widget_t *widget)
 {
@@ -131,11 +132,17 @@ void init_toplevel(ei_widget_t *widget)
 
 void update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
+    if (hw_now() - last_update > (double)1/fps || ponctuel)
+    {
+        hw_surface_lock(ei_app_root_surface());
+        draw_widgets_and_family(ei_app_root_widget());
+        
+        last_update = hw_now();
 
-    hw_surface_lock(ei_app_root_surface());
-    draw_widgets_and_family(ei_app_root_widget());
-    hw_surface_unlock(ei_app_root_surface());
-    hw_surface_update_rects(ei_app_root_surface(), NULL);
+        hw_surface_unlock(ei_app_root_surface());
+        hw_surface_update_rects(ei_app_root_surface(), NULL);
+    }
+
 }
 
 void lighten_color(ei_color_t *couleur)

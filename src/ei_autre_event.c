@@ -19,7 +19,6 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
     while (sentinel != NULL && sentinel->eventtype != a_chercher)
         sentinel = sentinel->next;
 
-
     if (sentinel != NULL)
     {
         struct liste_events_widgets *courant = sentinel->liste;
@@ -79,7 +78,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
         {
             *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-            update_surface(rect_to_update, EI_TRUE);
+            update_surface(rect_to_update, EI_FALSE);
         }
 
         /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
@@ -110,7 +109,6 @@ ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *us
     return EI_TRUE;
 }
 
-
 ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
@@ -140,7 +138,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     else
     {
         if (is_moving == EI_TRUE)
-        { 
+        {
             // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
@@ -201,7 +199,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         return EI_FALSE;
 
     else
-    {   
+    {
         if (is_moving == EI_TRUE)
         {
             is_moving = EI_FALSE;
@@ -232,4 +230,3 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
         return EI_FALSE;
     }
 }
-

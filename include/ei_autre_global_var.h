@@ -1,3 +1,5 @@
+static uint8_t fps = 60;
+
 /* Paramètres par défaut des frames */
 static ei_anchor_t default_anchor_frame = ei_anc_center;
 static ei_relief_t default_relief_frame = ei_relief_none;
