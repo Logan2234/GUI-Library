@@ -5,7 +5,6 @@
 
 extern ei_bool_t is_moving;
 extern ei_bool_t is_resizing;
-extern ei_bool_t arret;
 extern ei_bool_t arret_final;
 extern ei_point_t origine_deplacement;
 extern ei_linked_rect_t *rect_to_update;
@@ -28,9 +27,8 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
             {
                 if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id)))
                 {
-                    sortie = EI_TRUE;
-                    arret = courant->callback(courant->widget, event, courant->user_param);
-                    if (arret == EI_TRUE || arret_final == EI_TRUE)
+                    sortie = courant->callback(courant->widget, event, courant->user_param);
+                    if (sortie || arret_final)
                         break;
                 }
             }
@@ -78,7 +76,6 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
         {
             *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-            update_surface(rect_to_update, EI_FALSE);
         }
 
         /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
@@ -88,8 +85,6 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
 
             if (event->type == ei_ev_mouse_buttondown)
                 last_clicked_widget = widget;
-
-            update_surface(rect_to_update, EI_TRUE);
         }
 
         /* Si on relâche le bouton, on appelle le callback */
@@ -99,13 +94,13 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
             last_clicked_widget = NULL;
         }
     }
-
-    return EI_FALSE;
+    return EI_TRUE;
 }
 
 ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
 {
     ei_widget_destroy(widget->parent);
+    printf("Quit\n");
     return EI_TRUE;
 }
 
@@ -127,7 +122,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
         widget->content_rect->top_left.y + widget->content_rect->size.height - 15 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->content_rect->top_left.y + widget->content_rect->size.height + *toplevel->border_width)
         is_resizing = EI_TRUE;
 
-    return EI_FALSE;
+    return EI_TRUE;
 }
 
 ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
@@ -142,8 +137,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-            if (strcmp(widget->parent->wclass->name, "toplevel") ||
-                (widget->screen_location.top_left.x + delta_x + 50 < widget->parent->screen_location.top_left.x + widget->parent->content_rect->size.width &&
+            if ((widget->screen_location.top_left.x + delta_x < widget->parent->screen_location.top_left.x + widget->parent->content_rect->size.width - widget->content_rect->size.width &&
                  widget->screen_location.top_left.x + delta_x > widget->parent->screen_location.top_left.x))
             {
                 widget->screen_location.top_left.x += delta_x;
@@ -151,9 +145,12 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                 ((ei_placer_t *)widget->geom_params)->x += delta_x;
                 origine_deplacement.x = event->param.mouse.where.x;
             }
-            if (strcmp(widget->parent->wclass->name, "toplevel") ||
-                (widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height &&
-                 widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + taille_header))
+            if (
+                (
+                    (widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height - taille_header) ||
+                    (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height)) &&
+                ((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y) ||
+                 (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + taille_header)))
             {
                 widget->screen_location.top_left.y += delta_y;
                 widget->content_rect->top_left.y += delta_y;
@@ -188,7 +185,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             }
         }
         widget->wclass->geomnotifyfunc(widget);
-        return EI_FALSE;
+        return EI_TRUE;
     }
 }
 
@@ -227,6 +224,6 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
             is_resizing = EI_FALSE;
             widget->requested_size = widget->screen_location.size;
         }
-        return EI_FALSE;
+        return EI_TRUE;
     }
 }

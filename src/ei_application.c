@@ -18,7 +18,6 @@ double last_update;
 
 ei_bool_t is_moving = EI_FALSE;
 ei_bool_t is_resizing = EI_FALSE;
-ei_bool_t arret = EI_FALSE;
 ei_bool_t arret_final = EI_FALSE;
 
 ei_point_t origine_deplacement;
@@ -53,41 +52,34 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 void ei_app_run()
 {
     init_toplevel(widget_racine);
+    update_surface(rect_to_update, EI_TRUE);
+    update_surface(rect_to_update, EI_TRUE);
 
     struct ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
-    update_surface(rect_to_update, EI_TRUE);
-    // double frame_rate = (double) 1 / 128;
-    // double avant = hw_now();
-
-    while (arret_final == EI_FALSE) // Comment faire pour annoncer qu'on quit
+    ei_bool_t retour = EI_FALSE;
+    while (arret_final == EI_FALSE)
     {
-        // update_surface(rect_to_update);
-        // double avant = hw_now();
-        // while (hw_now() - avant <= frame_rate) {
+
         hw_event_wait_next(event);
         if (event->type < 5)
         {
-            recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
-            // while (hw_now() - avant > (double) ((float) 1 / fps ))
-            //    continue;
-            update_surface(rect_to_update, EI_TRUE);
-            // avant = hw_now();
+            retour = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
         }
 
         /* Cas où on appuie avec le clic gauche */
         else if (event->type == ei_ev_mouse_buttondown)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
-            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+            retour = recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
         }
 
         /* Cas où on relache le clic gauche */
         else if (event->type == ei_ev_mouse_buttonup && event->param.mouse.button == ei_mouse_button_left)
         {
             released_widget = ei_widget_pick(&event->param.mouse.where);
-            recherche_traitants_event(liste_events_widgets, event, EI_TRUE, released_widget, NULL);
+            retour = recherche_traitants_event(liste_events_widgets, event, EI_TRUE, released_widget, NULL);
             pressed_widget = NULL;
             released_widget = NULL;
         }
@@ -98,16 +90,19 @@ void ei_app_run()
             if (is_moving || is_resizing)
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                // while (hw_now() - avant < (double) ((float) 1 / fps ))
-                //    continue;
                 update_surface(rect_to_update, EI_FALSE);
-                // avant = hw_now();
             }
             else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
+                update_surface(rect_to_update, EI_FALSE);
             }
         }
+        if (retour)
+        {
+            update_surface(rect_to_update, EI_TRUE); 
+            retour = EI_FALSE;
+        } 
     }
     free(event);
 }
