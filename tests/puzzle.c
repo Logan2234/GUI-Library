@@ -171,7 +171,7 @@ void create_puzzle_window(char* image_filename)
 		}
 	}
 
-	// hw_surface_free(image);
+	// hw_surface_free(image); // TODO faudra l'enlever
 }
 
 
