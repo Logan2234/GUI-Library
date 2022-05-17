@@ -136,9 +136,10 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     {
         if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
         { // On aura jamais deplacement et re_size en true
-            //if (0 <= widget->parent->content_rect->size.width - widget->screen_location.top_left.x - 50 && event->param.mouse.where.x >= widget->screen_location.size.width - 2 * widget->screen_location.top_left.x + 5 && 0 <= widget->parent->content_rect->size.height - widget->screen_location.top_left.y - 40 && 2 * event->param.mouse.where.x >= widget->screen_location.size.width - widget->screen_location.top_left.x + 40 ) {
+            // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+            if (widget->screen_location.top_left.x + delta_x + 50 <= widget->parent->screen_location.top_left.x + widget->parent->content_rect->size.width && widget->screen_location.top_left.y + delta_y <= widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height && widget->screen_location.top_left.y + delta_y >= widget->parent->screen_location.top_left.y + 35 && widget->screen_location.top_left.x + delta_x >= widget->parent->screen_location.top_left.x) {
             widget->screen_location.top_left.x += delta_x;
             widget->screen_location.top_left.y += delta_y;
             origine_deplacement.x = event->param.mouse.where.x;
@@ -147,7 +148,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
             widget->content_rect->top_left.y += delta_y;
             ((ei_placer_t *) widget->geom_params)->x += delta_x;
             ((ei_placer_t *) widget->geom_params)->y += delta_y;
-           // }
+           }
         }
         else if (re_size == EI_TRUE)
         {
@@ -190,20 +191,7 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
     {
         if (deplacement == EI_TRUE && id_deplacement == widget->pick_id)
         {
-            //if (0 <= widget->parent->content_rect->size.width - widget->screen_location.top_left.x - 50 && 0 >= widget->screen_location.size.width - widget->screen_location.top_left.x + 5 && 0 <= widget->parent->content_rect->size.height - widget->screen_location.top_left.y - 40 && 2 * event->param.mouse.where.x >= widget->screen_location.size.width - widget->screen_location.top_left.x + 40 )
-                //{
-                    // On aura jamais deplacement et re_size en true
-                    int delta_x = event->param.mouse.where.x - origine_deplacement.x;
-                    int delta_y = event->param.mouse.where.y - origine_deplacement.y;
-                    widget->screen_location.top_left.x += delta_x;
-                    widget->screen_location.top_left.y += delta_y;
-                    widget->content_rect->top_left.x += delta_x;
-                    widget->content_rect->top_left.y += delta_y;
-                    ((ei_placer_t *) widget->geom_params)->x += delta_x;
-                    ((ei_placer_t *) widget->geom_params)->y += delta_y;
-
-                    deplacement = EI_FALSE;
-              //  }
+            deplacement = EI_FALSE;
         }
         else if (re_size == EI_TRUE)
         {
