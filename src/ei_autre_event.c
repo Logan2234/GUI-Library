@@ -87,7 +87,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
         /* Si on relâche le bouton, on appelle le callback */
         if (event->type == ei_ev_mouse_buttonup && last_clicked_widget == widget)
         {
-            (bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
+            (*bouton->callback != NULL) ? (*bouton->callback)(widget, event, *bouton->user_param) : 0;
             last_clicked_widget = NULL;
         }
     }
@@ -97,7 +97,6 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
 ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
     ei_widget_destroy(widget->parent);
-    printf("Quit\n");
     return EI_TRUE;
 }
 
