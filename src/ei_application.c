@@ -98,13 +98,12 @@ void ei_app_run()
             else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                update_surface(rect_to_update);
             }
         }
     }
     free(event);
 }
-
+int compte = 0;
 void ei_app_free()
 {
     /* On libère les surfaces */
