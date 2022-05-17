@@ -1,6 +1,7 @@
 #include "ei_autre_event.h"
 
 extern ei_bool_t arret;
+extern ei_bool_t arret_final;
 
 ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
 {
@@ -22,7 +23,7 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
                 {
                     sortie = EI_TRUE;
                     arret = courant->callback(courant->widget, event, courant->user_param);
-                    if (arret == EI_TRUE)
+                    if (arret == EI_TRUE || arret_final == EI_TRUE)
                         break;
                 }
             }
