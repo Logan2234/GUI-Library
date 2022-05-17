@@ -104,10 +104,10 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     }
 
     /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres)
-    else if (bouton->img != NULL && bouton->text == NULL)
+    else if (bouton->img != NULL && *bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image si celle-ci est plus grande */
-        ei_size_t taille_bouton = hw_surface_get_size(*(bouton->img));
+        ei_size_t taille_bouton = hw_surface_get_size(*bouton->img);
         if (widget->screen_location.size.height <= taille_bouton.height)
         {
             ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
@@ -122,9 +122,9 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
         widget->geom_params->manager->runfunc(widget);
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
-        // hw_surface_set_origin(bouton->img, (ei_point_t){0, 200});
-        (bouton->img_rect != NULL) ? ei_copy_surface(surface, &new_clipper, bouton->img, *bouton->img_rect, EI_FALSE)
-                                   : ei_copy_surface(surface, &new_clipper, bouton->img, NULL, EI_FALSE);
+        // hw_surface_set_origin(*bouton->img, (ei_point_t){100, 100});
+        (*bouton->img_rect != NULL) ? ei_copy_surface(surface, widget->content_rect, *bouton->img, *bouton->img_rect, EI_FALSE)
+                                   : ei_copy_surface(surface, widget->content_rect, *bouton->img, NULL, EI_FALSE);
     }
 
     free_linked_point_pointeur(partie_haute);

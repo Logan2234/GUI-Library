@@ -16,7 +16,7 @@
 #include "ei_utils.h"
 #include "ei_event.h"
 #include "ei_geometrymanager.h"
-
+#include "ei_autre_struct.h"
 
 static const int		k_tile_size			= 128;
 static char*			k_default_image_filename	= "misc/klimt.jpg";
@@ -157,6 +157,7 @@ void create_puzzle_window(char* image_filename)
 			tile			= tile_memory_at(puzzle, ei_point(x, y));
 			ei_button_configure(button, &tile_size, &grey, &border_width, &corner_radius, &relief, NULL, NULL, NULL,
 								NULL, &image, &img_rect_ptr, NULL, &callback, (void*)&tile);
+
 			place_coords		= place_coordinates(current_position);
 			ei_place(button, NULL, &(place_coords.x), &(place_coords.y), NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -166,10 +167,11 @@ void create_puzzle_window(char* image_filename)
 			tile->current_position	= current_position;
 
 			puzzle->current[index_at(puzzle, current_position)] = tile;
+
 		}
 	}
 
-	hw_surface_free(image);
+	// hw_surface_free(image);
 }
 
 

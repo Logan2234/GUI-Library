@@ -126,6 +126,7 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     ei_font_t *text_font_button = calloc(1, sizeof(ei_font_t));
     ei_color_t *text_color_button = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *text_anchor_button = calloc(1, sizeof(ei_anchor_t));
+    ei_surface_t *img_button = calloc(1, sizeof(ei_surface_t));
     ei_anchor_t *img_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_rect_t ** img_rect_button = calloc(1, sizeof(ei_rect_t *));
     ei_rect_t * img_rect_button_in = calloc(1, sizeof(ei_rect_t));
@@ -141,14 +142,27 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     *text_font_button = (text_font != NULL) ? *text_font : (bouton->text_font == NULL) ? ei_default_font : *bouton->text_font;
     *text_color_button = (text_color != NULL) ? *text_color : (bouton->text_color == NULL) ? (ei_color_t)ei_font_default_color : *bouton->text_color;
     *text_anchor_button = (text_anchor != NULL) ? *text_anchor : (bouton->text_anchor == NULL) ? default_anchor_button : *bouton->text_anchor;
-    ei_surface_t *img_button = (img != NULL) ? img : NULL;
-    img_rect_button_in = (img_rect != NULL) ? *img_rect : NULL;
+    
+    if (img != NULL)
+    {
+        *img_button = *img;
+    }
+    else
+        img_button = NULL;
+        
+    if (img_rect != NULL)
+    {
+        *img_rect_button_in = **img_rect;
+        *img_rect_button = img_rect_button_in;
+    }
+    else
+        *img_rect_button = NULL;
+
     *img_anchor_button = (img_anchor != NULL) ? *img_anchor : (bouton->img_anchor == NULL) ? default_anchor_button : *bouton->img_anchor;
     *callback_button = (callback != NULL) ? *callback : (bouton->callback != NULL) ? *bouton->callback : NULL;
     user_param_button_in = (user_param != NULL) ? *user_param : (bouton->user_param != NULL) ? *bouton->user_param : NULL;
-
+    
     *text_button = text_button_in;
-    *img_rect_button = img_rect_button_in;
     *user_param_button = user_param_button_in;
 
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
