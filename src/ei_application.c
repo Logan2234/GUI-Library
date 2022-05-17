@@ -16,6 +16,7 @@ ei_bool_t deplacement = EI_FALSE;
 ei_bool_t re_size = EI_FALSE;
 ei_point_t origine_deplacement;
 ei_bool_t arret = EI_FALSE;
+ei_bool_t arret_final = EI_FALSE;
 
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
@@ -52,7 +53,7 @@ void ei_app_run()
     // double frame_rate = (double) 1 / 128;
     // double avant = hw_now();
 
-    while (arret == EI_FALSE) // Comment faire pour annoncer qu'on quit
+    while (arret_final == EI_FALSE) // Comment faire pour annoncer qu'on quit
     {
         // update_surface(rect_to_update);
         // double avant = hw_now();
@@ -174,5 +175,5 @@ void ei_app_invalidate_rect(ei_rect_t *rect)
 
 void ei_app_quit_request(void)
 {
-    arret = EI_TRUE;
+    arret_final = EI_TRUE;
 }
