@@ -1,26 +1,25 @@
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
 #include "ei_autre_global_var.h"
-#include "ei_autre_placer.h"
 
 extern ei_bool_t is_moving;
 extern ei_bool_t is_resizing;
 extern ei_bool_t arret_final;
-extern ei_point_t origine_deplacement;
-extern ei_linked_rect_t *rect_to_update;
+
+static ei_point_t origine_deplacement;
 static ei_widget_t *last_clicked_widget = NULL;
 
-ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
+ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag)
 {
     ei_eventtype_t a_chercher = event->type;
     ei_bool_t sortie = EI_FALSE;
-    struct liste_eventtypes_t *sentinel = liste;
+    liste_eventtypes_t *sentinel = liste;
     while (sentinel != NULL && sentinel->eventtype != a_chercher)
         sentinel = sentinel->next;
 
     if (sentinel != NULL)
     {
-        struct liste_events_widgets *courant = sentinel->liste;
+        liste_events *courant = sentinel->liste;
         while (courant != NULL)
         {
             if (a_chercher == courant->eventtype)
@@ -38,10 +37,10 @@ ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t
     return sortie;
 }
 
-void free_liste_event_widget(struct liste_events_widgets *liste)
+void free_liste_event_widget(liste_events *liste)
 {
-    struct liste_events_widgets *courant = liste;
-    struct liste_events_widgets *suivant = liste;
+    liste_events *courant = liste;
+    liste_events *suivant = liste;
     while (suivant != NULL)
     {
         courant = suivant;
@@ -50,10 +49,10 @@ void free_liste_event_widget(struct liste_events_widgets *liste)
     }
 }
 
-void free_liste_eventtypes(struct liste_eventtypes_t *liste)
+void free_liste_eventtypes(liste_eventtypes_t *liste)
 {
-    struct liste_eventtypes_t *courant = liste;
-    struct liste_eventtypes_t *suivant = liste;
+    liste_eventtypes_t *courant = liste;
+    liste_eventtypes_t *suivant = liste;
     while (suivant != NULL)
     {
         courant = suivant;
@@ -74,9 +73,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
 
         /* S'il s'agit d'un mouvement du clic gauche, dans ce cas on cherche à savoir si on est ou pas sur le même bouton */
         if (event->param.mouse.button == ei_mouse_button_left && event->type == ei_ev_mouse_move && last_clicked_widget != NULL)
-        {
             *((ei_button_t *)last_clicked_widget)->relief = (last_clicked_widget != pointed_widget) ? ei_relief_raised : ei_relief_sunken;
-        }
 
         /* Si il s'agit d'une intéraction brève avec le bouton, on change son relief */
         else if (event->type == ei_ev_mouse_buttondown || event->type == ei_ev_mouse_buttonup)
@@ -97,14 +94,14 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
     return EI_TRUE;
 }
 
-ei_bool_t close_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
     ei_widget_destroy(widget->parent);
     printf("Quit\n");
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
@@ -125,7 +122,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, vo
     return EI_TRUE;
 }
 
-ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
         return EI_FALSE;
@@ -134,9 +131,9 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     {
         if (is_moving == EI_TRUE)
         {
-            // if (0.01 * (float) event->param.mouse.where.x <= (float) widget->parent->content_rect->size.width + (float) widget->parent->content_rect->top_left.x - (float) widget->screen_location.top_left.x - 50. && 0.01 * (float)event->param.mouse.where.x >= (float)widget->parent->screen_location.top_left.x - (float)widget->screen_location.top_left.x && 0.01 * (float) event->param.mouse.where.y <= (float) widget->parent->content_rect->size.height + (float) widget->parent->content_rect->top_left.y - (float) widget->screen_location.top_left.y - 35. && event->param.mouse.where.y >= 50 + widget->parent->screen_location.top_left.y) {
             int delta_x = event->param.mouse.where.x - origine_deplacement.x;
             int delta_y = event->param.mouse.where.y - origine_deplacement.y;
+
             if ((widget->screen_location.top_left.x + delta_x < widget->parent->screen_location.top_left.x + widget->parent->content_rect->size.width - widget->content_rect->size.width &&
                  widget->screen_location.top_left.x + delta_x > widget->parent->screen_location.top_left.x))
             {
@@ -145,10 +142,8 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
                 ((ei_placer_t *)widget->geom_params)->x += delta_x;
                 origine_deplacement.x = event->param.mouse.where.x;
             }
-            if (
-                (
-                    (widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height - taille_header) ||
-                    (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height)) &&
+            if (((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height - taille_header) ||
+                 (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height)) &&
                 ((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y) ||
                  (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + taille_header)))
             {
@@ -189,7 +184,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, struct ei_event_t *event, void 
     }
 }
 
-ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event, void *user_param)
+ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_param)
 {
 
     if (is_moving == EI_FALSE && is_resizing == EI_FALSE)
@@ -198,9 +193,8 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, struct ei_event_t *event
     else
     {
         if (is_moving == EI_TRUE)
-        {
             is_moving = EI_FALSE;
-        }
+
         else if (is_resizing == EI_TRUE)
         {
             ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;

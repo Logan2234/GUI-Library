@@ -11,12 +11,12 @@
  * Si l'événement est spécifique à un événement ou tag, la fonction prend en compte le tag et le widget pour chercher les callbacks des widgets ou tags spécifiques à un tel événement.
  * Spécifique vaut EI_TRUE
  */
-ei_bool_t recherche_traitants_event(struct liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag);
+ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event, ei_bool_t specifique, ei_widget_t *widget, ei_tag_t tag);
 
 /*
  * Fonction de libération de la mémoire associée à une liste_eventtypes_t (cf. ei_autre_struct.h)
  */
-void free_liste_eventtypes(struct liste_eventtypes_t *liste);
+void free_liste_eventtypes(liste_eventtypes_t *liste);
 
 /*
  * Fonction générale utilisée comme callback lors de l'intéraction avec des boutons.

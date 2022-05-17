@@ -205,23 +205,21 @@ void update_board(game_t* g)
 				if (tile_w != NULL) {
 
 					// Tile was removed, delete the widget.
-
 					ei_widget_destroy(tile_w);
 					*tile_w_ptr	= NULL;
 				}
 			} else {
 				if (tile_w == NULL) {
 				
-					// The board has a value here, but the widget does not exist: create it.
-					printf("Coucou\n");
+					// // The board has a value here, but the widget does not exist: create it.
 					tile_w		= ei_widget_create("frame", g->toplevel, NULL, NULL);
-					// *tile_w_ptr	= tile_w;
-					// ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
+					*tile_w_ptr	= tile_w;
+					ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
 				}
 
 				sprintf(label, "%d", 1 << tile_value);
-				// ei_frame_configure(tile_w, &tile_size, &g_tile_colors[tile_value], &tile_border, &tile_relief,
-				// 			&label_ptr, &g->tile_font, NULL, NULL, NULL, NULL, NULL);
+				ei_frame_configure(tile_w, &tile_size, &g_tile_colors[tile_value], &tile_border, &tile_relief,
+							&label_ptr, &g->tile_font, NULL, NULL, NULL, NULL, NULL);
 			}
 
 			tile_pos.x	+= g->tile_size + 2 * g->tile_bd;

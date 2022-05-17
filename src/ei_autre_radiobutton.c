@@ -1,33 +1,26 @@
 #include "ei_autre_struct.h"
 
-struct ei_widget_t *radiobutton_allocfunc(void)
+ei_widget_t *radiobutton_allocfunc(void)
 {
     return (ei_widget_t *)calloc(1, sizeof(ei_radiobutton_t));
 }
 
-void radiobutton_releasefunc(struct ei_widget_t *widget)
+void radiobutton_releasefunc(ei_widget_t *widget)
 {
     free((ei_radiobutton_t *)widget);
 }
 
-void radiobutton_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
-{
-
-    struct liste_textes *textes = ((ei_radiobutton_t *) widget)->textes;
-    while (textes != NULL)
-    {
-        //  TODO
-        textes = textes->next;
-    }
-
-}
-
-void radiobutton_geomnotifyfunc(struct ei_widget_t *widget)
+void radiobutton_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     // TODO
 }
 
-void radiobutton_setdefaultsfunc(struct ei_widget_t *widget) /* À reviser */
+void radiobutton_geomnotifyfunc(ei_widget_t *widget)
+{
+    // TODO
+}
+
+void radiobutton_setdefaultsfunc(ei_widget_t *widget) /* À reviser */
 {
     widget->pick_id = 0;
 

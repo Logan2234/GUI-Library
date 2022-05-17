@@ -1,5 +1,3 @@
-#include "ei_geometrymanager.h"
-#include "ei_autre_placer.h"
 #include "ei_autre_struct.h"
 #include "ei_autre_global_var.h"
 
@@ -124,9 +122,9 @@ void placer_runfunc(ei_widget_t *widget)
      free(top_left);
 }
 
-void placer_releasefunc(struct ei_widget_t *widget)
+void placer_releasefunc(ei_widget_t *widget)
 {
-    free((struct ei_placer_t *)widget->geom_params);
+    free((ei_placer_t *)widget->geom_params);
 }
 
 ei_geometrymanager_t *return_geometry_manager_placer()

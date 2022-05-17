@@ -1,4 +1,20 @@
 #include "ei_widget.h"
+#include "ei_geometrymanager.h"
+
+/* Fonction de retour de la widgetclass frame */
+ei_widgetclass_t *return_class_frame(); 
+
+/* Fonction de retour de la widgetclass button */
+ei_widgetclass_t *return_class_button();
+
+/* Fonction de retour de la widgetclass toplevel */
+ei_widgetclass_t *return_class_toplevel(); 
+
+/* Fonction de retour de la widgetclass radiobutton */
+ei_widgetclass_t *return_class_radiobutton(); 
+
+/* Fonction de retour du gestionnaire de géométrie placer */
+ei_geometrymanager_t *return_geometry_manager_placer();
 
 /*
  * Permet de tracer tout les widgets. La fonction est tout le temps

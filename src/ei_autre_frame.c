@@ -1,18 +1,16 @@
 #include "ei_autre_struct.h"
 #include "ei_autre_fonctions.h"
-#include "ei_autre_global_var.h"
-#include "ei_autre_placer.h"
+#include "ei_application.h"
 
 extern int widget_id;
-extern ei_surface_t racine_surface;
 
-struct ei_widget_t *frame_allocfunc(void)
+ei_widget_t *frame_allocfunc(void)
 {
     ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
     return (ei_widget_t *)widget_frame;
 }
 
-void frame_releasefunc(struct ei_widget_t *widget)
+void frame_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->content_rect);
@@ -31,7 +29,7 @@ void frame_releasefunc(struct ei_widget_t *widget)
     free((ei_frame_t *)widget);
 }
 
-void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
+void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
 
@@ -189,7 +187,7 @@ void frame_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
-void frame_setdefaultsfunc(struct ei_widget_t *widget)
+void frame_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
@@ -200,6 +198,7 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     /* Si c'est la racine dans ce cas la requested size, le screen location deviennent l'écran tout entier */
     if (widget_id == 1)
     {
+        ei_surface_t racine_surface = ei_app_root_surface();
         widget->requested_size = hw_surface_get_size(racine_surface);
         widget->screen_location = hw_surface_get_rect(racine_surface);
     }
@@ -213,7 +212,7 @@ void frame_setdefaultsfunc(struct ei_widget_t *widget)
     ei_frame_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-void frame_geomnotifyfunc(struct ei_widget_t *widget)
+void frame_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
 }

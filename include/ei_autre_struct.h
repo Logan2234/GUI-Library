@@ -1,8 +1,7 @@
-#include "ei_widget.h"
 #include "ei_event.h"
 #include "ei_geometrymanager.h"
 
-/* Everything about frame */
+/****** Struct des frames ******/
 typedef struct ei_frame_t
 {
     ei_widget_t widget;
@@ -18,9 +17,7 @@ typedef struct ei_frame_t
     ei_anchor_t *img_anchor;
 } ei_frame_t;
 
-ei_widgetclass_t *return_class_frame(); /* Fonction de retour de la class frame */
-
-/* Everything about button */
+/****** Struct des boutons ******/
 typedef struct ei_button_t
 {
     ei_widget_t widget;
@@ -39,24 +36,63 @@ typedef struct ei_button_t
     void **user_param;
 } ei_button_t;
 
-ei_widgetclass_t *return_class_button(); /* Fonction de retour de la class button */
+/****** Struct des toplevels ******/
+typedef struct ei_toplevel_t
+{
+    ei_widget_t widget;
+    ei_color_t *color;
+    int *border_width;
+    char **title;
+    ei_bool_t *closable;
+    ei_axis_set_t *resizable;
+    ei_size_t **min_size;
+} ei_toplevel_t;
+
+/****** Liste chaînée des widgetclass enregistrées ******/
+typedef struct liste_widgetclass
+{
+    ei_widgetclass_t *first_widgetclass;
+    struct liste_widgetclass *next;
+} liste_widgetclass_t;
+
+/****** Liste chaînée des gestionaires de géométrie enregistrés ******/
+typedef struct liste_geometrymanager
+{
+    ei_geometrymanager_t *geometrymanager_cell;
+    struct liste_geometrymanager *next;
+} liste_geometrymanager_t;
+
+/****** Struct du placer ******/
+typedef struct ei_placer_t
+{
+    ei_geometry_param_t manager;
+    ei_anchor_t *anchor;
+    int x;
+    int y;
+    float rel_x;
+    float rel_y;
+    int width;
+    int height;
+    float rel_width;
+    float rel_height;
+} ei_placer_t;
 
 /* Liste chainée liant widgets, tags, events et callback */
-typedef struct liste_events_widgets
+typedef struct liste_events_widgets_t
 {
     ei_widget_t *widget;
     ei_eventtype_t eventtype;
     ei_callback_t callback;
     void *user_param;
     ei_tag_t tag;
-    struct liste_events_widgets *next;
+    struct liste_events_widgets_t *next;
 } liste_events;
 
-/* Liste chainée de eventype menant vers de liste_events_widgets */
+/****** Liste chainée des eventype menant vers une liste_events ******/
 typedef struct liste_eventtypes_t
 {
     ei_eventtype_t eventtype;
-    struct liste_events_widgets *liste;
+    struct liste_events_widgets_t *liste;
     struct liste_eventtypes_t *next;
 } liste_eventtypes_t;
 
@@ -74,46 +110,6 @@ typedef struct ei_radiobutton_t
     ei_surface_t *img;
     ei_rect_t **img_rect;
     ei_anchor_t *img_anchor;
-    ei_callback_t *callback; // Il faudrait faire une liste de callbacks ?
+    ei_callback_t *callback;
     void **user_param;
 } ei_radiobutton_t;
-
-ei_widgetclass_t *return_class_radiobutton(); /* Fonction de retour de la class radiobutton */
-
-/* Everything about toplevel */
-typedef struct ei_toplevel_t
-{
-    ei_widget_t widget;
-    ei_color_t *color;
-    int *border_width;
-    char **title;
-    ei_bool_t *closable;
-    ei_axis_set_t *resizable;
-    ei_size_t **min_size;
-} ei_toplevel_t;
-
-ei_widgetclass_t *return_class_toplevel(); /* Fonction de retour de la class toplevel */
-
-/* Everything about widget in general */
-struct liste_widgetclass
-{
-    ei_widgetclass_t *first_widgetclass;
-    struct liste_widgetclass *next;
-};
-
-/* Everything about geometry manager in general */
-struct liste_geometrymanager
-{
-    ei_geometrymanager_t *geometrymanager_cell;
-    struct liste_geometrymanager *next;
-};
-
-ei_geometrymanager_t *return_geometry_manager_placer();
-
-
-/* Liste chainée de textes */
-struct liste_textes
-{
-    char **text;
-    struct liste_textes *next;
-};

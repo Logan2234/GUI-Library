@@ -1,8 +1,6 @@
 #include "ei_draw.h"
 #include "ei_autre_fonctions.h"
 
-extern ei_surface_t pick_surface;
-
 uint32_t ei_map_rgba(ei_surface_t surface, ei_color_t color)
 {
     // On travaille sur 32 bits, ainsi on ajoute le rouge, bleu, vert selon la position qu'ont les indices dans la surface.
@@ -106,17 +104,13 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
     }
 }
 
-void affiche_rect(ei_rect_t rect)
-{
-    printf("%d, %d, %d, %d\n", rect.top_left.x, rect.top_left.y, rect.size.width, rect.size.height);
-}
-
 int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
 {
     /* Tout d'abord, on ne copie l'image que si la taille de la surface et la desrination sont les memes ou qu'on ait des instructions sur où appliquer la fonction */
     if (src_rect == NULL && dst_rect == NULL && ((hw_surface_get_size(source).width != hw_surface_get_size(destination).width) || (hw_surface_get_size(source).height != hw_surface_get_size(destination).height)))
         return EXIT_FAILURE;
+    
     else
     {
         ei_size_t main_window_size_dest = hw_surface_get_size(destination);
