@@ -95,8 +95,8 @@ void ei_draw_text(ei_surface_t surface, const ei_point_t *where, const char *tex
         ei_rect_t dest;
         dest.top_left.x = (clipper == NULL) ? where->x: (clipper->top_left.x > source.top_left.x + where->x) ? clipper->top_left.x : where->x;
         dest.top_left.y = (clipper == NULL) ? where->y : (clipper->top_left.y > source.top_left.y + where->y) ? clipper->top_left.y : where->y;
-        dest.size.width = (clipper==NULL) ? hw_surface_get_size(surface_source).width : (hw_surface_get_size(surface_source).width > clipper->size.width - where->x) ?  (clipper->size.width - where-> x< 0) ? 0 : clipper->size.width - where->x : hw_surface_get_size(surface_source).width;
-        dest.size.height = (clipper==NULL) ? hw_surface_get_size(surface_source).height : (hw_surface_get_size(surface_source).height > clipper->size.height) ?  (clipper->size.height - where->y < 0) ? 0 : clipper->size.height - where->y : hw_surface_get_size(surface_source).height;
+        dest.size.width = (clipper == NULL) ? hw_surface_get_size(surface_source).width : (hw_surface_get_size(surface_source).width > clipper->size.width - where->x) ?  (clipper->top_left.x + clipper->size.width - where->x < 0) ? 0 : clipper->top_left.x + clipper->size.width - where->x : hw_surface_get_size(surface_source).width;
+        dest.size.height = (clipper == NULL) ? hw_surface_get_size(surface_source).height : (hw_surface_get_size(surface_source).height > clipper->size.height - where->y) ?  (clipper->top_left.y + clipper->size.height - where->y < 0) ? 0 : clipper->top_left.y + clipper->size.height - where->y : hw_surface_get_size(surface_source).height;
 
         ei_copy_surface(surface, &dest, surface_source, &source, EI_TRUE);
         hw_surface_free(surface_source);
