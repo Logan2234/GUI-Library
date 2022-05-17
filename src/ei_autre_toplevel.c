@@ -35,7 +35,6 @@ void toplevel_releasefunc(struct ei_widget_t *widget)
 void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-    // printf("%d, %d, %d, %d\n", widget->screen_location.top_left.y, widget->screen_location.size.height, clipper->top_left.y, clipper->size.height);
     
     /* On trace le fond */
     ei_linked_point_t *premier_point = calloc(1, sizeof(ei_linked_point_t));
@@ -194,25 +193,19 @@ void toplevel_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surf
 
 void toplevel_setdefaultsfunc(struct ei_widget_t *widget)
 {
+    /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
 
-    widget->user_data = NULL;
-    widget->destructor = NULL; /* Il faut créer la fonction */
-    widget->parent = NULL;
-    widget->children_head = NULL;
-    widget->children_tail = NULL;
-    widget->next_sibling = NULL;
-    widget->geom_params = NULL;
+    /* Nécessité d'avoir un calloc pour le content_rect ? */
+    ei_rect_t *content_rect = calloc(1, sizeof(ei_rect_t));
+    *content_rect = widget->screen_location;
+    widget->content_rect = content_rect;
 
-    widget->requested_size = default_toplevel_size;
-    widget->screen_location = (ei_rect_t){0, 0, default_toplevel_size};
-
-    ei_rect_t *content_rect_toplevel = calloc(1, sizeof(ei_rect_t));
-    *content_rect_toplevel = widget->screen_location;
-    widget->content_rect = content_rect_toplevel;
+    /* Et enfin, on lui donne une configuration de base */
+    ei_toplevel_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 void toplevel_geomnotifyfunc(struct ei_widget_t *widget)

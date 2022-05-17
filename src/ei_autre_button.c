@@ -37,7 +37,6 @@ void button_releasefunc(struct ei_widget_t *widget)
 void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
-    ei_rect_t rectangle = widget->screen_location;
 
     ei_color_t color = *bouton->color;
     ei_color_t color2 = *bouton->color;
@@ -55,20 +54,23 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
     }
 
     /* On dessine d'abord les parties hautes et basses */
-    ei_linked_point_t *partie_haute = ei_rounded_frame(&rectangle, *bouton->corner_radius, 1);
-    ei_linked_point_t *partie_basse = ei_rounded_frame(&rectangle, *bouton->corner_radius, 2);
+    ei_linked_point_t *partie_haute = ei_rounded_frame(&widget->screen_location, *bouton->corner_radius, 1);
+    ei_linked_point_t *partie_basse = ei_rounded_frame(&widget->screen_location, *bouton->corner_radius, 2);
 
     ei_draw_polygon(surface, partie_haute, color2, &widget->screen_location);
     ei_draw_polygon(surface, partie_basse, color, &widget->screen_location);
 
     /* Puis on dessine un plus petit rounded rectangle par dessus */
+    ei_rect_t rectangle = widget->screen_location;
     rectangle.top_left.x += *bouton->border_width;
     rectangle.top_left.y += *bouton->border_width;
     rectangle.size.width -= 2 * *bouton->border_width;
     rectangle.size.height -= 2 * *bouton->border_width;
     ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
+
+    /* Si c'est le close button on a besoin de le faire apparaître dans son entiereté sans prendre en compte le clipper du toplevel */
     if (*bouton->text != NULL && strcmp(*bouton->text, " "))
-        ei_draw_polygon(surface, partie_milieu, color3, clipper)    ;
+        ei_draw_polygon(surface, partie_milieu, color3, clipper);
     else
         ei_draw_polygon(surface, partie_milieu, color3, NULL);
 
@@ -95,7 +97,7 @@ void button_drawfunc(struct ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
-    /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres) 
+    /* Dessin de l'image si nécessaire */ // FIXME Va falloir remettre une étoile devant bouton->text et debugger NILS :P (le puzzle marchera apres)
     else if (bouton->img != NULL && bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image si celle-ci est plus grande */
@@ -133,25 +135,19 @@ void button_geomnotifyfunc(struct ei_widget_t *widget)
 
 void button_setdefaultsfunc(struct ei_widget_t *widget)
 {
+    /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
     ei_color_t *pick_color = malloc(sizeof(ei_color_t));
     *pick_color = int_to_color(widget_id);
     widget->pick_color = pick_color;
 
-    widget->user_data = NULL;
-    widget->destructor = NULL;
-    widget->parent = NULL;
-    widget->children_head = NULL;
-    widget->children_tail = NULL;
-    widget->next_sibling = NULL;
-    widget->geom_params = NULL;
+    /* Nécessité d'avoir un calloc pour le content_rect ? */
+    ei_rect_t *content_rect = calloc(1, sizeof(ei_rect_t));
+    *content_rect = widget->screen_location;
+    widget->content_rect = content_rect;
 
-    widget->requested_size = default_button_size;
-    widget->screen_location = (ei_rect_t){0, 0, default_button_size};
-
-    ei_rect_t *content_rect_button = calloc(1, sizeof(ei_rect_t));
-    *content_rect_button = widget->screen_location;
-    widget->content_rect = content_rect_button;
+    /* Et enfin, on lui donne une configuration de base */
+    ei_button_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 ei_widgetclass_t *return_class_button(void)
