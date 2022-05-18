@@ -8,10 +8,10 @@ extern ei_linked_rect_t *rect_to_update;
 static double last_update;
 
 /**
- * @brief Permet de tracer tout les widgets. 
- * 
+ * @brief Permet de tracer tout les widgets.
+ *
  * @param widget Le widget appelé doit être la racine de sorte à parcourir tout les widgets
- * 
+ *
  */
 static void draw_widgets_and_family(ei_widget_t *widget)
 {
@@ -23,18 +23,19 @@ static void draw_widgets_and_family(ei_widget_t *widget)
     else if (widget->geom_params != NULL)
     {
         (widget->parent->pick_id == 1)
-            ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
-            : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect);
+        ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
+        : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect);
     }
 
     else
         return;
 
     ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
-        draw_widgets_and_family(current_widget->next_sibling);
     if (current_widget->children_head != NULL)
         draw_widgets_and_family(current_widget->children_head);
+    if (current_widget->next_sibling != NULL)
+        draw_widgets_and_family(current_widget->next_sibling);
+
 }
 
 /**
@@ -204,6 +205,29 @@ void init_toplevel(ei_widget_t *widget)
     ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
     ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
     ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
+}
+
+/**
+ * @brief Fonction qui est lancée lorsqu'on sélectionne un toplevel pour le déplacer dans l'écran et qui
+ * le met en premier plan par rapport aux autres toplevels.
+ *
+ * @param widget correspond au widget déplacé.
+ *
+ */
+void put_on_head(ei_widget_t *widget)
+{
+    ei_widget_t *papa = widget->parent;
+    if (widget->pick_id != papa->children_head->pick_id)
+    {
+        ei_widget_t *sentinel = papa->children_head;
+        while (sentinel->next_sibling->pick_id != widget->pick_id) // On peut ne pas dissocier le cas NULL car on sait que l'élément est dans la liste
+        {
+            sentinel = sentinel->next_sibling;
+        }
+        sentinel->next_sibling = widget->next_sibling;
+        widget->next_sibling = papa->children_head;
+        papa->children_head = widget;
+    }
 }
 
 /**
