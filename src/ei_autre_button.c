@@ -11,7 +11,7 @@ ei_widget_t *button_allocfunc(void)
     return (ei_widget_t *)widget_button;
 }
 
-void button_releasefunc(ei_widget_t *widget)
+static void button_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
@@ -33,7 +33,7 @@ void button_releasefunc(ei_widget_t *widget)
     free(((ei_button_t *)widget));
 }
 
-void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
+static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
 
@@ -173,7 +173,7 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
         ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
-void button_geomnotifyfunc(ei_widget_t *widget)
+static void button_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
 
@@ -185,7 +185,7 @@ void button_geomnotifyfunc(ei_widget_t *widget)
     }
 }
 
-void button_setdefaultsfunc(ei_widget_t *widget)
+static void button_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;

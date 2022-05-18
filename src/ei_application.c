@@ -19,8 +19,23 @@ ei_bool_t arret_final = EI_FALSE;
 
 ei_linked_rect_t *rect_to_update;
 
-/************************************************************/
-
+/**
+ * \brief	Creates an application.
+ *		<ul>
+ *			<li> initializes the hardware (calls \ref hw_init), </li>
+ *			<li> registers all classes of widget and all geometry managers, </li>
+ *			<li> creates the root window (either in a system window, or the entire screen), </li>
+ *			<li> creates the root widget to access the root window. </li>
+ *		</ul>
+ *
+ * @param	main_window_size	If "fullscreen is false, the size of the root window of the
+ *					application.
+ *					If "fullscreen" is true, the current monitor resolution is
+ *					used as the size of the root window. \ref hw_surface_get_size
+ *					can be used with \ref ei_app_root_surface to get the size.
+ * @param	fullScreen		If true, the root window is the entire screen. Otherwise, it
+ *					is a system window.
+ */
 void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
 {
     hw_init();
@@ -45,6 +60,52 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 ei_widget_t *ei_app_root_widget();
+
+int compte = 0;
+/**
+ * \brief	Releases all the resources of the application, and releases the hardware
+ *		(ie. calls \ref hw_quit).
+ */
+void ei_app_free()
+{
+    /* On libère les surfaces */
+    hw_surface_free(pick_surface);
+
+    /* On supprime tout les widgets */
+    ei_widget_destroy(widget_racine);
+
+    /* On libère la liste chaînée des widget class */
+    while (liste_widgetclass != NULL)
+    {
+        liste_widgetclass_t *next = liste_widgetclass->next;
+        free(liste_widgetclass->first_widgetclass);
+        free(liste_widgetclass);
+        liste_widgetclass = next;
+    }
+
+    /* On libère la liste chaînée des geometry manager */
+    while (liste_geometrymanager != NULL)
+    {
+        liste_geometrymanager_t *next = liste_geometrymanager->next;
+        free(liste_geometrymanager->geometrymanager_cell);
+        free(liste_geometrymanager);
+        liste_geometrymanager = next;
+    }
+
+    /* On libère la liste chaînée des event types */
+    free_liste_eventtypes(liste_events_widgets);
+
+    /* On libère la liste des rectangles à mettre à jour */
+    free_linked_rects(rect_to_update);
+
+    /* On libère les ressources créées par hw_init */
+    hw_quit();
+}
+
+/**
+ * \brief	Runs the application: enters the main event loop. Exits when
+ *		\ref ei_app_quit_request is called.
+ */
 void ei_app_run()
 {
     (ei_app_root_widget())->wclass->geomnotifyfunc(ei_app_root_widget());
@@ -100,53 +161,13 @@ void ei_app_run()
     free(event);
 }
 
-int compte = 0;
-void ei_app_free()
-{
-    /* On libère les surfaces */
-    hw_surface_free(pick_surface);
-
-    /* On supprime tout les widgets */
-    ei_widget_destroy(widget_racine);
-
-    /* On libère la liste chaînée des widget class */
-    while (liste_widgetclass != NULL)
-    {
-        liste_widgetclass_t *next = liste_widgetclass->next;
-        free(liste_widgetclass->first_widgetclass);
-        free(liste_widgetclass);
-        liste_widgetclass = next;
-    }
-
-    /* On libère la liste chaînée des geometry manager */
-    while (liste_geometrymanager != NULL)
-    {
-        liste_geometrymanager_t *next = liste_geometrymanager->next;
-        free(liste_geometrymanager->geometrymanager_cell);
-        free(liste_geometrymanager);
-        liste_geometrymanager = next;
-    }
-
-    /* On libère la liste chaînée des event types */
-    free_liste_eventtypes(liste_events_widgets);
-
-    /* On libère la liste des rectangles à mettre à jour */
-    free_linked_rects(rect_to_update);
-
-    /* On libère les ressources créées par hw_init */
-    hw_quit();
-}
-
-ei_widget_t *ei_app_root_widget(void)
-{
-    return widget_racine;
-}
-
-ei_surface_t ei_app_root_surface(void)
-{
-    return racine_surface;
-}
-
+/**
+ * \brief	Adds a rectangle to the list of rectangles that must be updated on screen. The real
+ *		update on the screen will be done at the right moment in the main loop.
+ *
+ * @param	rect		The rectangle to add, expressed in the root window coordinates.
+ *				A copy is made, so it is safe to release the rectangle on return.
+ */
 void ei_app_invalidate_rect(ei_rect_t *rect)
 {
     ei_linked_rect_t *sent = rect_to_update;
@@ -156,7 +177,33 @@ void ei_app_invalidate_rect(ei_rect_t *rect)
     sent->next->rect = *rect;
 }
 
+/**
+ * \brief	Tells the application to quite. Is usually called by an event handler (for example
+ *		when pressing the "Escape" key).
+ */
 void ei_app_quit_request(void)
 {
     arret_final = EI_TRUE;
+}
+
+/**
+ * \brief	Returns the "root widget" of the application: a "frame" widget that span the entire
+ *		root window.
+ *
+ * @return 			The root widget.
+ */
+ei_widget_t *ei_app_root_widget(void)
+{
+    return widget_racine;
+}
+
+/**
+ * \brief	Returns the surface of the root window. Can be used to create surfaces with similar
+ * 		r, g, b channels.
+ *
+ * @return 			The surface of the root window.
+ */
+ei_surface_t ei_app_root_surface(void)
+{
+    return racine_surface;
 }

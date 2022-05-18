@@ -13,7 +13,7 @@ ei_widget_t *toplevel_allocfunc(void)
     return (ei_widget_t *)widget_toplevel;
 }
 
-void toplevel_releasefunc(ei_widget_t *widget)
+static void toplevel_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->geom_params);
@@ -29,7 +29,7 @@ void toplevel_releasefunc(ei_widget_t *widget)
     free((ei_toplevel_t *)widget);
 }
 
-void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
+static void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
 
@@ -193,7 +193,7 @@ void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t p
         ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);
 }
 
-void toplevel_setdefaultsfunc(ei_widget_t *widget)
+static void toplevel_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
@@ -212,7 +212,7 @@ void toplevel_setdefaultsfunc(ei_widget_t *widget)
     init_toplevel(widget);
 }
 
-void toplevel_geomnotifyfunc(ei_widget_t *widget)
+static void toplevel_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
 

@@ -24,14 +24,6 @@ ei_widgetclass_t *return_class_radiobutton();
 ei_geometrymanager_t *return_geometry_manager_placer();
 
 /**
- * @brief Permet de tracer tout les widgets. 
- * 
- * @param widget Le widget appelé doit être la racine de sorte à parcourir tout les widgets
- * 
- */
-void draw_widgets_and_family(ei_widget_t *widget);
-
-/**
  * @brief Permet de free tout les points d'une liste chaînée de points.
  * 
  * @param liste Liste de points à free. Cette liste provient de draw_arc et de round_frame.

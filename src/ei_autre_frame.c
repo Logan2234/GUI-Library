@@ -10,7 +10,7 @@ ei_widget_t *frame_allocfunc(void)
     return (ei_widget_t *)widget_frame;
 }
 
-void frame_releasefunc(ei_widget_t *widget)
+static void frame_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
     free(widget->content_rect);
@@ -29,7 +29,7 @@ void frame_releasefunc(ei_widget_t *widget)
     free((ei_frame_t *)widget);
 }
 
-void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
+static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
 
@@ -140,7 +140,7 @@ void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
-void frame_setdefaultsfunc(ei_widget_t *widget)
+static void frame_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
     widget->pick_id = widget_id;
@@ -165,7 +165,7 @@ void frame_setdefaultsfunc(ei_widget_t *widget)
     ei_frame_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-void frame_geomnotifyfunc(ei_widget_t *widget)
+static void frame_geomnotifyfunc(ei_widget_t *widget)
 {
     if (widget->pick_id != 1)
         widget->geom_params->manager->runfunc(widget);

@@ -1,7 +1,13 @@
 #include "ei_autre_struct.h"
 #include "ei_autre_global_var.h"
 
-void placer_runfunc(ei_widget_t *widget)
+/**
+ * @brief Permet de placer le widget en prenant en compte ses parents.
+ * 
+ * @param widget Correspond au widget à placer.
+ * 
+ */
+static void placer_runfunc(ei_widget_t *widget)
 {
     /* Gestion du paramètre geom_params du widget */
     int width_parent = widget->requested_size.width;
@@ -109,7 +115,13 @@ void placer_runfunc(ei_widget_t *widget)
     free(top_left);
 }
 
-void placer_releasefunc(ei_widget_t *widget)
+/**
+ * @brief Permet de free le widget.
+ * 
+ * @param widget Correspond au widget à free.
+ * 
+ */
+static void placer_releasefunc(ei_widget_t *widget)
 {
     free((ei_placer_t *)widget->geom_params);
 }
