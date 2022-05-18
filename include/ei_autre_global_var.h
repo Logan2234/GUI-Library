@@ -1,8 +1,6 @@
 /**
  * @file ei_autre_global_var.h
  * @brief Regroupe toutes les variables globales du projet.
- * 
- *
  */
 
 static uint8_t fps = 60;
