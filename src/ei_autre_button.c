@@ -203,6 +203,11 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
             rect_dst.top_left.x += where.x;
             rect_dst.top_left.y += where.y;
         }
+        if (*bouton->relief == ei_relief_sunken) // Décalage du texte si enfoncement du bouton
+        {
+            rect_dst.top_left.x += 2;
+            rect_dst.top_left.y -= 2;
+        }
         if (*bouton->img_rect != NULL)
             ei_copy_surface(surface, &rect_dst, *bouton->img, *bouton->img_rect, EI_FALSE);
         else

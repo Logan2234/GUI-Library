@@ -207,6 +207,29 @@ void init_toplevel(ei_widget_t *widget)
 }
 
 /**
+ * @brief Fonction qui est lancée lorsqu'on sélectionne un toplevel pour le déplacer dans l'écran et qui
+ * le met en premier plan par rapport aux autres toplevels.
+ *
+ * @param widget correspond au widget déplacé.
+ *
+ */
+void put_on_head(ei_widget_t *widget)
+{
+    ei_widget_t *papa = widget->parent;
+    if (widget->pick_id != papa->children_head->pick_id)
+    {
+        ei_widget_t *sentinel = papa->children_head;
+        while (sentinel->next_sibling->pick_id != widget->pick_id) // On peut ne pas dissocier le cas NULL car on sait que l'élément est dans la liste
+        {
+            sentinel = sentinel->next_sibling;
+        }
+        sentinel->next_sibling = widget->next_sibling;
+        widget->next_sibling = papa->children_head;
+        papa->children_head = widget;
+    }
+}
+
+/**
  * @brief Permet d'éclaircir une couleur
  * 
  * @param couleur La couleur à eclaircir de 50 par composante de couleur dans la limite de 255.

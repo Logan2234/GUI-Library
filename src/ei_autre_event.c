@@ -1,6 +1,7 @@
 #include "ei_autre_event.h"
 #include "ei_autre_global_var.h"
 #include "ei_application.h"
+#include "ei_autre_fonctions.h"
 
 extern ei_bool_t is_moving;
 extern ei_bool_t is_resizing;
@@ -192,6 +193,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *use
         event->param.mouse.where.y <= widget->screen_location.top_left.y + taille_header)
     {
         is_moving = EI_TRUE;
+        put_on_head(widget);
         origine_deplacement.x = event->param.mouse.where.x;
         origine_deplacement.y = event->param.mouse.where.y;
     }

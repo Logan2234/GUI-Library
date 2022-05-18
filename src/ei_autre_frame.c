@@ -140,7 +140,6 @@ static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface
             widget->geom_params->manager->runfunc(widget);
             frame_drawfunc(widget, surface, pick_surface, clipper);
         }
-
         ei_point_t where = compute_location(widget, frame->text_anchor, EI_TRUE);
         ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
     }

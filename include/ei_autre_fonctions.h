@@ -8,6 +8,9 @@
 #include "ei_widget.h"
 #include "ei_geometrymanager.h"
 
+/* Fonction pour mettre un toplevel en premier plan */
+void put_on_head(ei_widget_t *widget);
+
 /* Fonction de retour de la widgetclass frame */
 ei_widgetclass_t *return_class_frame(); 
 
