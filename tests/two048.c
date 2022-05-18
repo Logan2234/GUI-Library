@@ -516,7 +516,7 @@ int main(int argc, char* argv[])
 	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	new_game(4, 4, 80, 4);
-	new_game(4, 4, 100, 4);
+	// new_game(4, 4, 100, 4);
 
 	ei_bind(ei_ev_keydown, NULL, "all", global_event_handler, NULL);
 

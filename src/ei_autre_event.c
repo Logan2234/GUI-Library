@@ -42,6 +42,9 @@ ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event
         {
             if (a_chercher == courant->eventtype)
             {
+                if (specifique == EI_TRUE && widget == NULL && tag == NULL) // Cas impossible. On sort
+                    return sortie;
+
                 if (specifique == EI_FALSE || (specifique == EI_TRUE && ((courant->widget == NULL && widget == NULL && !strcmp(courant->tag, tag)) || courant->widget->pick_id == widget->pick_id)))
                 {
                     sortie = courant->callback(courant->widget, event, courant->user_param);
@@ -188,6 +191,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *use
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
+        widget->screen_location.top_left.x <= event->param.mouse.where.x &&
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
         widget->screen_location.top_left.y <= event->param.mouse.where.y &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + taille_header)
