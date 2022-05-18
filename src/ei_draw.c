@@ -47,7 +47,6 @@ extern int compte;
  */
 void ei_fill(ei_surface_t surface, const ei_color_t *color, const ei_rect_t *clipper)
 {
-    // printf("%d\n", compte++);
     ei_size_t main_window_size = hw_surface_get_size(surface);
     uint32_t *origine = (uint32_t *)hw_surface_get_buffer(surface);
     uint32_t couleur = ei_map_rgba(surface, *color);

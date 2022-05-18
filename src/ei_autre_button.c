@@ -113,7 +113,7 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
     ei_bool_t has_been_resized = EI_FALSE;
 
     /* Dessin du texte si nécessaire */
-    if (*bouton->text != NULL && strcmp(*bouton->text, " "))
+    if (*bouton->text != NULL && strlen(*bouton->text) > 1)
     {
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);
