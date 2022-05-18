@@ -86,22 +86,23 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
         free_linked_point_pointeur(partie_milieu);
     }
 
+    ei_bool_t has_been_resized = EI_FALSE;
+
     /* Dessin du texte si nécessaire */
     if (*bouton->text != NULL && strcmp(*bouton->text, " "))
     {
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);
-        ei_bool_t has_been_resized = EI_FALSE;
 
         free(surface_text);
 
-        if (widget->screen_location.size.height <= taille_bouton.height)
+        if (widget->screen_location.size.height < taille_bouton.height)
         {
             ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height + *bouton->border_width * 2;
             widget->requested_size.height = taille_bouton.height + *bouton->border_width * 2;
             has_been_resized = EI_TRUE;
         }
-        if (widget->screen_location.size.width <= taille_bouton.width)
+        if (widget->screen_location.size.width < taille_bouton.width)
         {
             ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width + *bouton->border_width * 2;
             widget->requested_size.width = taille_bouton.width + *bouton->border_width * 2;
@@ -120,6 +121,7 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
            where.x += 2;
            where.y -= 2;
         }
+
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
@@ -129,36 +131,45 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
         /* Le bouton prend la taille de l'image rect si celui-ci existe et est plus grand */
         if (*bouton->img_rect != NULL)
         {
-            if (widget->screen_location.size.height <= (*bouton->img_rect)->size.height)
+            if (widget->screen_location.size.height < (*bouton->img_rect)->size.height)
             {
                 ((ei_placer_t *)widget->geom_params)->height = (*bouton->img_rect)->size.height;
                 widget->requested_size.height = (*bouton->img_rect)->size.height;
+                has_been_resized = EI_TRUE;
             }
 
-            if (widget->screen_location.size.width <= (*bouton->img_rect)->size.width)
+            if (widget->screen_location.size.width < (*bouton->img_rect)->size.width)
             {
                 ((ei_placer_t *)widget->geom_params)->width = (*bouton->img_rect)->size.width;
                 widget->requested_size.width = (*bouton->img_rect)->size.width;
+                has_been_resized = EI_TRUE;
             }
         }
         /* Sinon on considère simplement la taille de l'image */
         else
         {
             ei_size_t taille_bouton = hw_surface_get_size(*bouton->img);
-            if (widget->screen_location.size.height <= taille_bouton.height)
+            if (widget->screen_location.size.height < taille_bouton.height)
             {
                 ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height;
                 widget->requested_size.height = taille_bouton.height;
+                has_been_resized = EI_TRUE;
             }
 
-            if (widget->screen_location.size.width <= taille_bouton.width)
+            if (widget->screen_location.size.width < taille_bouton.width)
             {
                 ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width;
                 widget->requested_size.width = taille_bouton.width;
+                has_been_resized = EI_TRUE;
             }
         }
 
-        widget->geom_params->manager->runfunc(widget);
+        if (has_been_resized)
+        {
+            widget->geom_params->manager->runfunc(widget);
+            button_drawfunc(widget, surface, pick_surface, clipper);
+        }
+        
         // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
         // hw_surface_set_origin(*bouton->img, (ei_point_t){100, 100});
         (*bouton->img_rect != NULL) ? ei_copy_surface(surface, widget->content_rect, *bouton->img, *bouton->img_rect, EI_FALSE)
