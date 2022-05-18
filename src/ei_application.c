@@ -17,7 +17,7 @@ ei_bool_t is_moving = EI_FALSE;
 ei_bool_t is_resizing = EI_FALSE;
 ei_bool_t arret_final = EI_FALSE;
 
-static ei_linked_rect_t *rect_to_update;
+ei_linked_rect_t *rect_to_update;
 
 /************************************************************/
 
@@ -44,26 +44,25 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0 ", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
-
+ei_widget_t *ei_app_root_widget();
 void ei_app_run()
 {
-    init_toplevel(widget_racine);
-    update_surface(rect_to_update, EI_TRUE);
+    (ei_app_root_widget())->wclass->geomnotifyfunc(ei_app_root_widget());
     update_surface(rect_to_update, EI_TRUE);
 
     ei_event_t *event = calloc(1, sizeof(ei_event_t));
     ei_widget_t *pressed_widget = NULL;
     ei_widget_t *released_widget;
     ei_bool_t retour = EI_FALSE;
+
     while (arret_final == EI_FALSE)
     {
-
         hw_event_wait_next(event);
         if (event->type < 5)
             retour = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
 
         /* Cas où on appuie avec le clic gauche */
-        else if (event->type == ei_ev_mouse_buttondown)
+        else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
             retour = recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
@@ -84,22 +83,23 @@ void ei_app_run()
             if (is_moving || is_resizing)
             {
                 recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                update_surface(rect_to_update, EI_FALSE);
+                rect_to_update = update_surface(rect_to_update, EI_FALSE);
             }
             else if (pressed_widget != NULL && !strcmp(pressed_widget->wclass->name, "button"))
             {
-                recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);
-                update_surface(rect_to_update, EI_FALSE);
+                if (recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL))
+                    rect_to_update = update_surface(rect_to_update, EI_FALSE);
             }
         }
         if (retour)
         {
-            update_surface(rect_to_update, EI_TRUE); 
+            rect_to_update = update_surface(rect_to_update, EI_TRUE);
             retour = EI_FALSE;
-        } 
+        }
     }
     free(event);
 }
+
 int compte = 0;
 void ei_app_free()
 {
@@ -130,12 +130,8 @@ void ei_app_free()
     /* On libère la liste chaînée des event types */
     free_liste_eventtypes(liste_events_widgets);
 
-    while (rect_to_update != NULL)
-    {
-        ei_linked_rect_t *next = rect_to_update->next;
-        free(rect_to_update);
-        rect_to_update = next;
-    }
+    /* On libère la liste des rectangles à mettre à jour */
+    free_linked_rects(rect_to_update);
 
     /* On libère les ressources créées par hw_init */
     hw_quit();

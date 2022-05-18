@@ -208,6 +208,8 @@ void toplevel_setdefaultsfunc(ei_widget_t *widget)
 
     /* Et enfin, on lui donne une configuration de base */
     ei_toplevel_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    init_toplevel(widget);
 }
 
 void toplevel_geomnotifyfunc(ei_widget_t *widget)
