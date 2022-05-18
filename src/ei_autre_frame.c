@@ -190,11 +190,16 @@ static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface
             frame_drawfunc(widget, surface, pick_surface, clipper);
         }
 
-        // TODO Gestion de l'ancre !!!
-        // ei_point_t where = compute_location(widget, frame->img_anchor, EI_FALSE);
-        // hw_surface_set_origin(frame->img, where);
-        (*frame->img_rect != NULL) ? ei_copy_surface(surface, widget->content_rect, *frame->img, *frame->img_rect, EI_FALSE)
-                                   : ei_copy_surface(surface, widget->content_rect, *frame->img, NULL, EI_FALSE);
+        ei_point_t where = compute_location(widget, frame->img_anchor, EI_FALSE);        
+
+        ei_rect_t rect_dst = *widget->content_rect;
+        rect_dst.top_left.x += where.x;
+        rect_dst.top_left.y += where.y;
+
+        if (*frame->img_rect != NULL)
+            ei_copy_surface(surface, &rect_dst, *frame->img, *frame->img_rect, EI_FALSE);
+        else
+            ei_copy_surface(surface, &rect_dst, *frame->img, NULL, EI_FALSE);
     }
 
     /* Dessin de la surface offscreen de picking */

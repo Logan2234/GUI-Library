@@ -7,9 +7,9 @@ extern int widget_id;
 
 /**
  * @brief Alloc l'espace pour un button
- * 
+ *
  * @param widget Widget (button) que l'on doit alloc.
- * 
+ *
  */
 static ei_widget_t *button_allocfunc(void)
 {
@@ -19,14 +19,14 @@ static ei_widget_t *button_allocfunc(void)
 
 /**
  * @brief Est appelé pour release un button
- * 
+ *
  * @param widget Widget (button) que l'on doit free.
- * 
+ *
  */
 static void button_releasefunc(ei_widget_t *widget)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
-    
+
     free(widget->pick_color);
     free(widget->geom_params);
     free(widget->content_rect);
@@ -46,15 +46,15 @@ static void button_releasefunc(ei_widget_t *widget)
 
 /**
  * @brief Fonction permettant de dessiner un button
- * 
+ *
  * @param widget Widget (en l'occurance un button) à dessiner.
- * 
+ *
  * @param surface La surface sur lequel on le dessine.
- * 
+ *
  * @param pick_surface Surface permettant de savoir sur quel objet on clique.
- * 
+ *
  * @param clipper Zone délimitant le dessin par son parent.
- * 
+ *
  */
 static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
@@ -141,8 +141,8 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_point_t where = compute_location(widget, bouton->text_anchor, EI_TRUE);
         if (*bouton->relief == ei_relief_sunken) // Décalage du texte si enfoncement du bouton
         {
-           where.x += 2;
-           where.y -= 2;
+            where.x += 2;
+            where.y -= 2;
         }
 
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
@@ -152,7 +152,7 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
     else if (bouton->img != NULL && *bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image rect si celui-ci existe et est plus grand */
-        if (bouton->img_rect != NULL)
+        if (*bouton->img_rect != NULL)
         {
             if (widget->screen_location.size.height < (*bouton->img_rect)->size.height)
             {
@@ -192,11 +192,17 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
             widget->geom_params->manager->runfunc(widget);
             button_drawfunc(widget, surface, pick_surface, clipper);
         }
-        
-        // ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
-        // hw_surface_set_origin(*bouton->img, (ei_point_t){100, 100});
-        (*bouton->img_rect != NULL) ? ei_copy_surface(surface, widget->content_rect, *bouton->img, *bouton->img_rect, EI_FALSE)
-                                    : ei_copy_surface(surface, widget->content_rect, *bouton->img, NULL, EI_FALSE);
+
+        ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
+
+        ei_rect_t rect_dst = *widget->content_rect;
+        rect_dst.top_left.x += where.x;
+        rect_dst.top_left.y += where.y;
+
+        if (*bouton->img_rect != NULL)
+            ei_copy_surface(surface, &rect_dst, *bouton->img, *bouton->img_rect, EI_FALSE);
+        else
+            ei_copy_surface(surface, &rect_dst, *bouton->img, NULL, EI_FALSE);
     }
 
     /* La pick_color n'est dessinée que si l'on reste dans le clipper bien sûr */
@@ -209,9 +215,9 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
 
 /**
  * @brief Permet de prévenir les fils lorsque qu'un changement apparait sur un widget comme un resize ou un déplacement
- * 
+ *
  * @param widget Widget (button) sur lequel un event apparait.
- * 
+ *
  */
 static void button_geomnotifyfunc(ei_widget_t *widget)
 {
@@ -227,9 +233,9 @@ static void button_geomnotifyfunc(ei_widget_t *widget)
 
 /**
  * @brief Initialise un button avec les paramètres par défaut.
- * 
+ *
  * @param widget Widget (button) que l'on doit initialiser.
- * 
+ *
  */
 static void button_setdefaultsfunc(ei_widget_t *widget)
 {
@@ -255,9 +261,9 @@ static void button_setdefaultsfunc(ei_widget_t *widget)
 
 /**
  * @brief Créé un widgetclass button avec les initialisations lors de la création de la fenêtre principale pour pouvoir construire un boutton
- * 
+ *
  * @return La classe du button avec les fonctions de bases du button.
- * 
+ *
  */
 ei_widgetclass_t *return_class_button(void)
 {

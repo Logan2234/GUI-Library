@@ -139,7 +139,7 @@ int test_3()
 
     ei_widget_t *frame, *frame2;
     ei_size_t frame_size = {0, 0};
-    ei_size_t frame_size2 = {0, 0};
+    ei_size_t frame_size2 = {600, 600};
     int frame_x = 150;
     int frame_y = 200;
     int frame_x2 = 200;
@@ -166,7 +166,9 @@ int test_3()
 
     frame2 = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
     ei_frame_configure(frame2, &frame_size2, &frame_color, &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL, &image, NULL, &ancre);
+    printf("%d\n", frame2->requested_size.width);
     ei_place(frame2, NULL, &frame_x2, &frame_y2, NULL, NULL, NULL, NULL, NULL, NULL);
+    printf("%d\n", frame2->screen_location.size.width);
 
     ei_bind(ei_ev_keydown, NULL, "all", process_key, NULL);
 
@@ -185,8 +187,8 @@ int test_4()
     ei_color_t root_bgcol = {0x52, 0x7f, 0xb4, 0xff};
 
     ei_widget_t *button, *button2;
-    ei_size_t button_size = {0, 0};
-    ei_size_t button_size2 = {200, 200};
+    ei_size_t button_size = {200,200};
+    ei_size_t button_size2 = {600, 600};
     int button_x = 100;
     int button_y = 100;
     int button_x2 = 300;

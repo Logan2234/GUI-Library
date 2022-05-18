@@ -73,6 +73,7 @@ void free_linked_rects(ei_linked_rect_t *liste_rect)
         free(sent);
         sent = next;
     }
+    free(sent);
 }
 
 /**
@@ -266,17 +267,26 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t a
     {
         if (!strcmp(widget->wclass->name, "frame"))
         {
-            largeur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).width;
-            hauteur_contenu = hw_surface_get_size(((ei_frame_t *)widget)->img).height;
+            largeur_contenu = hw_surface_get_size(*((ei_frame_t *)widget)->img).width;
+            hauteur_contenu = hw_surface_get_size(*((ei_frame_t *)widget)->img).height;
         }
         else
         {
-            largeur_contenu = hw_surface_get_size(((ei_button_t *)widget)->img).width;
-            hauteur_contenu = hw_surface_get_size(((ei_button_t *)widget)->img).height;
+            largeur_contenu = hw_surface_get_size(*((ei_button_t *)widget)->img).width;
+            hauteur_contenu = hw_surface_get_size(*((ei_button_t *)widget)->img).height;
         }
     }
 
-    ei_point_t point = widget->content_rect->top_left;
+    ei_point_t point;
+
+    if (about_text)
+        point = widget->content_rect->top_left;
+    else
+        if (!strcmp(widget->wclass->name, "frame"))
+            point = (ei_point_t){0, 0};
+        else
+            point = (ei_point_t){widget->content_rect->top_left.x - widget->screen_location.top_left.x, widget->content_rect->top_left.y - widget->screen_location.top_left.y};
+            
     int largeur_parent = widget->content_rect->size.width;
     int hauteur_parent = widget->content_rect->size.height;
 
