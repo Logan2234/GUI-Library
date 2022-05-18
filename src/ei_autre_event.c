@@ -7,6 +7,7 @@ extern ei_bool_t is_resizing;
 extern ei_bool_t arret_final;
 
 static ei_point_t origine_deplacement;
+ei_size_t starting_distance_resize;
 static ei_widget_t *last_clicked_widget = NULL;
 
 /**
@@ -85,6 +86,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 }
 
 /************ FONCTIONS DE CALLBACK DÉJÀ CRÉÉES ************/
+
 /**
  * @brief Fonction générale utilisée comme callback lors de l'intéraction avec des boutons.
  * Cette fonction permet de gérer entre autres le changement de relief lors de l'intéraction
@@ -99,6 +101,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     ei_bool_t retour = EI_FALSE;
+    ei_rect_t old_rect = widget->screen_location;
 
     if (event->param.mouse.button == ei_mouse_button_left)
     {
@@ -135,7 +138,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
     }
 
     if (retour)
-        ei_app_invalidate_rect(&widget->screen_location);
+        ei_app_invalidate_rect(&old_rect);
 
     return retour;
 }
@@ -158,6 +161,7 @@ ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_para
     old_rect.top_left.x -= *((ei_toplevel_t *)widget->parent)->border_width;
 
     ei_app_invalidate_rect(&old_rect);
+    
     ei_widget_destroy(widget->parent);
 
     return EI_TRUE;
@@ -190,6 +194,8 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *use
         widget->content_rect->top_left.x + widget->content_rect->size.width - 15 <= event->param.mouse.where.x && event->param.mouse.where.x <= widget->content_rect->top_left.x + widget->content_rect->size.width + *toplevel->border_width &&
         widget->content_rect->top_left.y + widget->content_rect->size.height - 15 <= event->param.mouse.where.y && event->param.mouse.where.y <= widget->content_rect->top_left.y + widget->content_rect->size.height + *toplevel->border_width)
         is_resizing = EI_TRUE;
+        starting_distance_resize.width = widget->screen_location.top_left.x + widget->screen_location.size.width - event->param.mouse.where.x;
+        starting_distance_resize.height = widget->screen_location.top_left.y + widget->screen_location.size.height - event->param.mouse.where.y;
 
     return EI_FALSE;
 }
@@ -248,23 +254,23 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_p
             ei_size_t minimo = **(toplevel->min_size);
             if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
             {
-                if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
+                if (event->param.mouse.where.x - widget->screen_location.top_left.x + starting_distance_resize.width> minimo.width)
                 {
                     widget->screen_location.size.width =
-                        event->param.mouse.where.x - widget->screen_location.top_left.x;
-                    ((ei_placer_t *)widget->geom_params)->width = event->param.mouse.where.x - widget->screen_location.top_left.x;
+                        event->param.mouse.where.x - widget->screen_location.top_left.x + starting_distance_resize.width;
+                    ((ei_placer_t *)widget->geom_params)->width = event->param.mouse.where.x - widget->screen_location.top_left.x + starting_distance_resize.width;
                     widget->content_rect->size.width =
-                        event->param.mouse.where.x - widget->content_rect->top_left.x;
+                        event->param.mouse.where.x - widget->content_rect->top_left.x + starting_distance_resize.width;
                 }
             }
 
             if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
             {
-                if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
+                if (event->param.mouse.where.y - widget->screen_location.top_left.y  + starting_distance_resize.height > minimo.height)
                 {
-                    ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
-                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
-                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
+                    ((ei_placer_t *)widget->geom_params)->height = event->param.mouse.where.y - widget->screen_location.top_left.y + starting_distance_resize.height;
+                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y + starting_distance_resize.height;
+                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y + starting_distance_resize.height;
                 }
             }
         }
@@ -305,24 +311,6 @@ ei_bool_t fin_deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void 
 
         else if (is_resizing == EI_TRUE)
         {
-            ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
-            ei_size_t minimo = **(toplevel->min_size);
-            if (*toplevel->resizable == ei_axis_x || *toplevel->resizable == ei_axis_both)
-            {
-                if (event->param.mouse.where.x - widget->screen_location.top_left.x > minimo.width)
-                {
-                    widget->screen_location.size.width = event->param.mouse.where.x - widget->screen_location.top_left.x;
-                    widget->content_rect->size.width = event->param.mouse.where.x - widget->content_rect->top_left.x;
-                }
-            }
-            if (*toplevel->resizable == ei_axis_y || *toplevel->resizable == ei_axis_both)
-            {
-                if (event->param.mouse.where.y - widget->screen_location.top_left.y > minimo.height)
-                {
-                    widget->screen_location.size.height = event->param.mouse.where.y - widget->screen_location.top_left.y - taille_header;
-                    widget->content_rect->size.height = event->param.mouse.where.y - widget->content_rect->top_left.y;
-                }
-            }
             is_resizing = EI_FALSE;
             widget->requested_size = widget->screen_location.size;
         }

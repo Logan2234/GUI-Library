@@ -10,6 +10,8 @@ extern int widget_id;
 
 static void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
 {
+    ei_widget_t *pere = origin->parent;
+
     if (widget->children_head != NULL)
         ei_kill_widget(widget->children_head, origin);
 
@@ -18,12 +20,14 @@ static void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
     if (widget == origin && widget != ei_app_root_widget())
     {
         ei_widget_t *sent = origin->parent->children_head;
+
         (sent->pick_id == origin->pick_id) ? origin->parent->children_head = origin->parent->children_head->next_sibling : NULL;
-        while (sent->next_sibling != NULL && sent->next_sibling->pick_id != origin->parent->pick_id)
+        while (sent->next_sibling != NULL && sent->next_sibling->pick_id != origin->pick_id)
             sent = sent->next_sibling;
 
         (sent->next_sibling != NULL) ? sent->next_sibling = sent->next_sibling->next_sibling : NULL;
     }
+
     (widget->destructor != NULL) ? widget->destructor(widget) : NULL;
     widget->wclass->releasefunc(widget);
 }
@@ -226,6 +230,14 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     ei_color_t *text_color_button = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *text_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_surface_t *img_button = calloc(1, sizeof(ei_surface_t));
+    // if (img != NULL)
+    // {
+    //     ei_copy_surface(*img_button, NULL, *img, NULL, EI_FALSE);
+    // }
+    // else 
+    // {
+    //     img_button = NULL;
+    // }
     ei_anchor_t *img_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_rect_t ** img_rect_button = calloc(1, sizeof(ei_rect_t *));
     ei_rect_t * img_rect_button_in = calloc(1, sizeof(ei_rect_t));
