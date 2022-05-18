@@ -12,21 +12,21 @@ static ei_widget_t *frame_allocfunc(void)
 
 static void frame_releasefunc(ei_widget_t *widget)
 {
+    ei_frame_t *frame = (ei_frame_t *)widget;
+
     free(widget->pick_color);
     free(widget->content_rect);
     free(widget->geom_params);
-    free(((ei_frame_t *)widget)->border_width);
-    free((ei_color_t *)((ei_frame_t *)widget)->color);
-    // free(*((ei_frame_t *)widget)->img_rect);
-    free(((ei_frame_t *)widget)->img_rect);
-    free(((ei_frame_t *)widget)->img_anchor);
-    free(((ei_frame_t *)widget)->relief);
-    // free(*((ei_frame_t *)widget)->text);
-    free(((ei_frame_t *)widget)->text);
-    free(((ei_frame_t *)widget)->text_anchor);
-    free(((ei_frame_t *)widget)->text_color);
-    free(((ei_frame_t *)widget)->text_font);
-    free((ei_frame_t *)widget);
+    free(frame->border_width);
+    free((ei_color_t *)frame->color);
+    free(frame->img_rect);
+    free(frame->img_anchor);
+    free(frame->relief);
+    free(frame->text);
+    free(frame->text_anchor);
+    free(frame->text_color);
+    free(frame->text_font);
+    free(frame);
 }
 
 static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
@@ -95,7 +95,7 @@ static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface
         ei_surface_t surface_text = hw_text_create_surface(*frame->text, *frame->text_font, *frame->text_color);
         ei_size_t taille_frame = hw_surface_get_size(surface_text);
 
-        free(surface_text);
+        hw_surface_free(surface_text);
 
         if (widget->screen_location.size.height < taille_frame.height)
         {

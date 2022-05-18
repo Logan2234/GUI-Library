@@ -15,18 +15,18 @@ static ei_widget_t *toplevel_allocfunc(void)
 
 static void toplevel_releasefunc(ei_widget_t *widget)
 {
+    ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
+
     free(widget->pick_color);
     free(widget->geom_params);
     free(widget->content_rect);
-    free(((ei_toplevel_t *)widget)->border_width);
-    free(((ei_toplevel_t *)widget)->closable);
-    free(((ei_toplevel_t *)widget)->color);
-    free(((ei_toplevel_t *)widget)->resizable);
-    // free(*((ei_toplevel_t *)widget)->title);
-    free(((ei_toplevel_t *)widget)->title);
-    // free(*((ei_toplevel_t *)widget)->min_size);
-    free(((ei_toplevel_t *)widget)->min_size);
-    free((ei_toplevel_t *)widget);
+    free(toplevel->border_width);
+    free(toplevel->closable);
+    free(toplevel->color);
+    free(toplevel->resizable);
+    free(toplevel->title);
+    free(toplevel->min_size);
+    free(toplevel);
 }
 
 static void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)

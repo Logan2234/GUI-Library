@@ -13,24 +13,23 @@ static ei_widget_t *button_allocfunc(void)
 
 static void button_releasefunc(ei_widget_t *widget)
 {
+    ei_button_t *bouton = (ei_button_t *)widget;
+    
     free(widget->pick_color);
     free(widget->geom_params);
     free(widget->content_rect);
-    free((ei_color_t *)((ei_button_t *)widget)->color);
-    free(((ei_button_t *)widget)->border_width);
-    free(((ei_button_t *)widget)->corner_radius);
-    free(((ei_button_t *)widget)->relief);
-    // free(*((ei_button_t *)widget)->text);
-    free(((ei_button_t *)widget)->text);
-    free(((ei_button_t *)widget)->text_font);
-    free(((ei_button_t *)widget)->text_color);
-    free(((ei_button_t *)widget)->text_anchor);
-    // free(*((ei_button_t *)widget)->img_rect);
-    free(((ei_button_t *)widget)->img_rect);
-    free(((ei_button_t *)widget)->img_anchor);
-    // free(*((ei_button_t *)widget)->user_param);
-    free(((ei_button_t *)widget)->user_param);
-    free(((ei_button_t *)widget));
+    free((ei_color_t *)bouton->color);
+    free(bouton->border_width);
+    free(bouton->corner_radius);
+    free(bouton->relief);
+    free(bouton->text);
+    free(bouton->text_font);
+    free(bouton->text_color);
+    free(bouton->text_anchor);
+    free(bouton->img_rect);
+    free(bouton->img_anchor);
+    free(bouton->user_param);
+    free(bouton);
 }
 
 static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
@@ -94,7 +93,7 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);
 
-        free(surface_text);
+        hw_surface_free(surface_text);
 
         if (widget->screen_location.size.height < taille_bouton.height)
         {
@@ -129,7 +128,7 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
     else if (bouton->img != NULL && *bouton->text == NULL)
     {
         /* Le bouton prend la taille de l'image rect si celui-ci existe et est plus grand */
-        if (*bouton->img_rect != NULL)
+        if (bouton->img_rect != NULL)
         {
             if (widget->screen_location.size.height < (*bouton->img_rect)->size.height)
             {
