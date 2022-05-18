@@ -115,6 +115,11 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
         }
 
         ei_point_t where = compute_location(widget, bouton->text_anchor, EI_TRUE);
+        if (*bouton->relief == ei_relief_sunken)
+        {
+           where.x += 2;
+           where.y -= 2;
+        }
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
     }
 
