@@ -29,6 +29,18 @@ static void frame_releasefunc(ei_widget_t *widget)
     free((ei_frame_t *)widget);
 }
 
+/**
+ * @brief Fonction permettant de dessiner une frame
+ * 
+ * @param widget Widget (en l'occurance une frame) à dessiner.
+ * 
+ * @param surface La surface sur lequel on le dessine.
+ * 
+ * @param pick_surface Surface permettant de savoir sur quel objet on clique.
+ * 
+ * @param clipper Zone délimitant le dessin par son parent.
+ * 
+ */
 static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_frame_t *frame = (ei_frame_t *)widget;
@@ -177,6 +189,12 @@ static void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface
     ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
+/**
+ * @brief Initialise une frame avec les paramètres par défaut.
+ * 
+ * @param widget Widget (frame) que l'on doit initialiser.
+ * 
+ */
 static void frame_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
@@ -202,6 +220,12 @@ static void frame_setdefaultsfunc(ei_widget_t *widget)
     ei_frame_configure(widget, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
+/**
+ * @brief Permet de prévenir les fils lorsque qu'un changement apparait sur un widget comme un resize ou un déplacement
+ * 
+ * @param widget Widget (frame ) sur lequel un event apparait.
+ * 
+ */
 static void frame_geomnotifyfunc(ei_widget_t *widget)
 {
     if (widget->pick_id != 1)
@@ -215,6 +239,12 @@ static void frame_geomnotifyfunc(ei_widget_t *widget)
     }
 }
 
+/**
+ * @brief Créé un widgetclass frame avec les initialisations lors de la création de la fenêtre principale pour pouvoir construire une frame.
+ * 
+ * @return La classe de la frame avec les fonctions de bases de frame.
+ * 
+ */
 ei_widgetclass_t *return_class_frame(void)
 {
     ei_widgetclass_t *widgetclass_frame = calloc(1, sizeof(ei_widgetclass_t));
