@@ -36,6 +36,8 @@ static void draw_widgets_and_family(ei_widget_t *widget)
     if (current_widget->next_sibling != NULL)
         draw_widgets_and_family(current_widget->next_sibling);
 
+
+
 }
 
 /**
