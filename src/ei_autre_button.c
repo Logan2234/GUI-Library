@@ -5,12 +5,24 @@
 
 extern int widget_id;
 
+/**
+ * @brief Alloc l'espace pour un button
+ * 
+ * @param widget Widget (button) que l'on doit alloc.
+ * 
+ */
 static ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
     return (ei_widget_t *)widget_button;
 }
 
+/**
+ * @brief Est appelé pour release un button
+ * 
+ * @param widget Widget (button) que l'on doit free.
+ * 
+ */
 static void button_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
@@ -200,7 +212,6 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
  * @brief Permet de prévenir les fils lorsque qu'un changement apparait sur un widget comme un resize ou un déplacement
  * 
  * @param widget Widget (button) sur lequel un event apparait.
- * 
  * 
  */
 static void button_geomnotifyfunc(ei_widget_t *widget)

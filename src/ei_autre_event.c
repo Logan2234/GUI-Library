@@ -54,6 +54,12 @@ ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event
     return sortie;
 }
 
+/**
+ * @brief Permet de free la liste des events
+ * 
+ * @param liste Liste d'évènement à free
+ * 
+ */
 static void free_liste_event_widget(liste_events *liste)
 {
     liste_events *courant = liste;

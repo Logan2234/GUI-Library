@@ -4,12 +4,24 @@
 
 extern int widget_id;
 
+/**
+ * @brief Alloc l'espace pour une frame
+ * 
+ * @param widget Widget (frame) que l'on doit alloc.
+ * 
+ */
 static ei_widget_t *frame_allocfunc(void)
 {
     ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
     return (ei_widget_t *)widget_frame;
 }
 
+/**
+ * @brief Est appelé pour release une frame
+ * 
+ * @param widget Widget (frame) que l'on doit free.
+ * 
+ */
 static void frame_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
