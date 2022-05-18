@@ -205,13 +205,15 @@ void update_board(game_t* g)
 				if (tile_w != NULL) {
 
 					// Tile was removed, delete the widget.
+
 					ei_widget_destroy(tile_w);
 					*tile_w_ptr	= NULL;
 				}
 			} else {
 				if (tile_w == NULL) {
 				
-					// // The board has a value here, but the widget does not exist: create it.
+					// The board has a value here, but the widget does not exist: create it.
+
 					tile_w		= ei_widget_create("frame", g->toplevel, NULL, NULL);
 					*tile_w_ptr	= tile_w;
 					ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -514,7 +516,7 @@ int main(int argc, char* argv[])
 	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	new_game(4, 4, 80, 4);
-	// new_game(4, 4, 100, 4);
+	new_game(4, 4, 100, 4);
 
 	ei_bind(ei_ev_keydown, NULL, "all", global_event_handler, NULL);
 

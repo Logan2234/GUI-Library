@@ -40,7 +40,7 @@ int main(int argc, char** argv)
         ei_color_t      text_color      = {0x00, 0x00, 0x00, 0xff};
         ei_relief_t     relief          = ei_relief_raised;
         int             button_border_width    = 4;
-        char*           button_title    = "Click";
+        char*           button_title    = "click";
 
 	ei_anchor_t	button_anchor	= ei_anc_southeast;
         float           button_rel_x    = 1.0;

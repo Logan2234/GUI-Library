@@ -60,9 +60,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0 ", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
-ei_widget_t *ei_app_root_widget();
 
-int compte = 0;
 /**
  * \brief	Releases all the resources of the application, and releases the hardware
  *		(ie. calls \ref hw_quit).

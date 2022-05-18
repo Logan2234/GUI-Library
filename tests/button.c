@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	int		button_x		= 150;
 	int		button_y		= 200;
 	ei_color_t	button_color		= {0x88, 0x88, 0x88, 0xff};
-	char*		button_title		= "Click !";
+	char*		button_title		= "Mon premier Bouton !";
 	ei_color_t	button_text_color	= {0x00, 0x00, 0x00, 0xff};
 	int		button_corner_radius	= 20;
 	ei_relief_t	button_relief		= ei_relief_raised;
