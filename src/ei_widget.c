@@ -229,23 +229,6 @@ void ei_button_configure(ei_widget_t *widget, ei_size_t *requested_size, const e
     ei_anchor_t *text_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_surface_t *img_button = calloc(1, sizeof(ei_surface_t));
 
-    //ei_surface_t *img_button = (img != NULL) ? hw_surface_create(*img, hw_surface_get_size(*img), EI_FALSE) : NULL;
-    /*if (*img != NULL) {
-        hw_surface_lock(*img_button);
-        hw_surface_lock(*img);
-        ei_copy_surface(*img_button, NULL, *img, NULL, EI_FALSE);
-        hw_surface_unlock(*img_button);
-        hw_surface_unlock(*img);
-    }*/
-
-    // if (img != NULL)
-    // {
-    //     ei_copy_surface(*img_button, NULL, *img, NULL, EI_FALSE);
-    // }
-    // else 
-    // {
-    //     img_button = NULL;
-    // }
     ei_anchor_t *img_anchor_button = calloc(1, sizeof(ei_anchor_t));
     ei_rect_t ** img_rect_button = calloc(1, sizeof(ei_rect_t *));
     ei_rect_t * img_rect_button_in = calloc(1, sizeof(ei_rect_t));
