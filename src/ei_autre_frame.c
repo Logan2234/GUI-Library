@@ -37,7 +37,7 @@ void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick
     {
         ei_linked_point_t *zone_rectangle = calloc(1, sizeof(ei_linked_point_t));
         int h = widget->requested_size.height / 2;
-        
+
         zone_rectangle->next = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next->next = calloc(1, sizeof(ei_linked_point_t));
         zone_rectangle->next->next->next = calloc(1, sizeof(ei_linked_point_t));
@@ -96,16 +96,16 @@ void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick
 
         if (widget->screen_location.size.height <= taille_frame.height)
         {
-            ((ei_placer_t *)widget->geom_params)->height = taille_frame.height + *frame->border_width *2;
-            widget->requested_size.height = taille_frame.height + *frame->border_width *2;
+            ((ei_placer_t *)widget->geom_params)->height = taille_frame.height + *frame->border_width * 2;
+            widget->requested_size.height = taille_frame.height + *frame->border_width * 2;
         }
         if (widget->screen_location.size.width <= taille_frame.width)
         {
-            ((ei_placer_t *)widget->geom_params)->width = taille_frame.width + *frame->border_width *2;
-            widget->requested_size.width = taille_frame.width + *frame->border_width *2;
+            ((ei_placer_t *)widget->geom_params)->width = taille_frame.width + *frame->border_width * 2;
+            widget->requested_size.width = taille_frame.width + *frame->border_width * 2;
         }
         widget->geom_params->manager->runfunc(widget);
-        
+
         ei_point_t where = compute_location(widget, frame->text_anchor, EI_TRUE);
         ei_draw_text(surface, &where, *frame->text, *frame->text_font, *frame->text_color, clipper);
     }
@@ -126,11 +126,11 @@ void frame_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick
             widget->requested_size.width = taille_frame.width;
         }
         widget->geom_params->manager->runfunc(widget);
-        
+
         ei_point_t where = compute_location(widget, frame->img_anchor, EI_FALSE);
         // hw_surface_set_origin(frame->img, (ei_point_t){0, 200});
-
-    // if (frame->img != NULL && frame->text == NULL)
+        // TODO Gestion de l'ancre !!!
+        // if (frame->img != NULL && frame->text == NULL)
         // ei_point_t where = compute_location(widget, frame->img_anchor);
         (frame->img_rect != NULL) ? ei_copy_surface(surface, clipper, frame->img, *frame->img_rect, EI_FALSE)
                                   : ei_copy_surface(surface, clipper, frame->img, NULL, EI_FALSE);
@@ -167,7 +167,15 @@ void frame_setdefaultsfunc(ei_widget_t *widget)
 
 void frame_geomnotifyfunc(ei_widget_t *widget)
 {
-    widget->geom_params->manager->runfunc(widget);
+    if (widget->pick_id != 1)
+        widget->geom_params->manager->runfunc(widget);
+
+    ei_widget_t *sent = widget->children_head;
+    while (sent != NULL)
+    {
+        sent->wclass->geomnotifyfunc(sent);
+        sent = sent->next_sibling;
+    }
 }
 
 ei_widgetclass_t *return_class_frame(void)

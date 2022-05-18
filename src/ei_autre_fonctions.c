@@ -103,31 +103,6 @@ ei_widget_t *search_widget_by_id(ei_widget_t *widget, uint32_t id)
     return NULL;
 }
 
-void init_toplevel(ei_widget_t *widget)
-{
-    ei_callback_t deplacement_callback = deplacement_toplevel;
-    ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
-    ei_callback_t deplacement_actif_callback = deplacement_actif;
-    ei_callback_t close_toplevel_widget = close_toplevel;
-
-    if (!strcmp(widget->wclass->name, "toplevel"))
-    {
-        if (*((ei_toplevel_t *)widget)->closable)
-        {
-            ei_widget_t *button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
-            ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
-            ei_place(button, &close_button_anchor, &close_button_x, &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
-        }
-        ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
-        ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
-        ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
-    }
-    if (widget->next_sibling != NULL)
-        return init_toplevel(widget->next_sibling);
-    if (widget->children_head != NULL)
-        return init_toplevel(widget->children_head);
-}
-
 ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t ponctuel)
 {
     if (hw_now() - last_update > (double)1 / fps || ponctuel)
@@ -148,6 +123,25 @@ ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t po
     free_linked_rects(rectangles_list);
     rectangles_list = calloc(1, sizeof(ei_linked_rect_t));
     return rectangles_list;
+}
+
+void init_toplevel(ei_widget_t *widget)
+{
+    ei_callback_t deplacement_callback = deplacement_toplevel;
+    ei_callback_t fin_deplacement_callback = fin_deplacement_toplevel;
+    ei_callback_t deplacement_actif_callback = deplacement_actif;
+    ei_callback_t close_toplevel_widget = close_toplevel;
+    ei_widget_t *button = NULL;
+
+    if (*((ei_toplevel_t *)widget)->closable)
+    {
+        button = ei_widget_create("button\0\0\0\0\0\0\0\0\0\0\0\0\0", widget, NULL, NULL);
+        ei_button_configure(button, NULL, &close_button_color, &close_button_border_width, &close_button_corner_radius, &close_button_relief, &close_button_text, NULL, NULL, NULL, NULL, NULL, NULL, &close_toplevel_widget, NULL);
+        ei_place(button, &close_button_anchor, &close_button_x, &close_button_y, &close_button_width, &close_button_height, &close_button_rel_x, &close_button_rel_y, NULL, NULL);
+    }
+    ei_bind(ei_ev_mouse_buttondown, widget, NULL, deplacement_callback, NULL);
+    ei_bind(ei_ev_mouse_buttonup, widget, NULL, fin_deplacement_callback, NULL);
+    ei_bind(ei_ev_mouse_move, widget, NULL, deplacement_actif_callback, NULL);
 }
 
 void lighten_color(ei_color_t *couleur)

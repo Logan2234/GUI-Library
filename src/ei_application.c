@@ -17,7 +17,7 @@ ei_bool_t is_moving = EI_FALSE;
 ei_bool_t is_resizing = EI_FALSE;
 ei_bool_t arret_final = EI_FALSE;
 
-static ei_linked_rect_t *rect_to_update;
+ei_linked_rect_t *rect_to_update;
 
 /************************************************************/
 
@@ -44,12 +44,10 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0 ", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
-
+ei_widget_t *ei_app_root_widget();
 void ei_app_run()
 {
-    init_toplevel(widget_racine);
-
-    update_surface(rect_to_update, EI_TRUE);
+    (ei_app_root_widget())->wclass->geomnotifyfunc(ei_app_root_widget());
     update_surface(rect_to_update, EI_TRUE);
 
     ei_event_t *event = calloc(1, sizeof(ei_event_t));

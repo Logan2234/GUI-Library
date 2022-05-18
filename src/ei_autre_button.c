@@ -1,7 +1,7 @@
 #include "ei_autre_draw.h"
 #include "ei_autre_fonctions.h"
-#include "ei_autre_global_var.h"
 #include "ei_autre_event.h"
+#include "ei_application.h"
 
 extern int widget_id;
 
@@ -69,34 +69,50 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
         ei_draw_polygon(surface, partie_basse, color, &widget->screen_location);
     }
 
-    /* Puis on dessine un plus petit rounded rectangle par dessus */
-    ei_rect_t rectangle = widget->screen_location;
-    rectangle.top_left.x += *bouton->border_width;
-    rectangle.top_left.y += *bouton->border_width;
-    rectangle.size.width -= 2 * *bouton->border_width;
-    rectangle.size.height -= 2 * *bouton->border_width;
-    ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
+    free_linked_point_pointeur(partie_basse);
+    free_linked_point_pointeur(partie_haute);
 
-    ei_draw_polygon(surface, partie_milieu, color3, &new_clipper);
+    /* Puis on dessine un plus petit rounded rectangle par dessus */
+    if (widget->screen_location.size.height != 0 && widget->screen_location.size.width != 0)
+    {
+        ei_rect_t rectangle = widget->screen_location;
+        rectangle.top_left.x += *bouton->border_width;
+        rectangle.top_left.y += *bouton->border_width;
+        rectangle.size.width -= 2 * *bouton->border_width;
+        rectangle.size.height -= 2 * *bouton->border_width;
+        ei_linked_point_t *partie_milieu = ei_rounded_frame(&rectangle, (int)(2 * (float)(*bouton->corner_radius) / 3), 0);
+
+        ei_draw_polygon(surface, partie_milieu, color3, &new_clipper);
+        free_linked_point_pointeur(partie_milieu);
+    }
 
     /* Dessin du texte si nécessaire */
     if (*bouton->text != NULL && strcmp(*bouton->text, " "))
     {
         ei_surface_t surface_text = hw_text_create_surface(*bouton->text, *bouton->text_font, *bouton->text_color);
         ei_size_t taille_bouton = hw_surface_get_size(surface_text);
+        ei_bool_t has_been_resized = EI_FALSE;
+
         free(surface_text);
 
         if (widget->screen_location.size.height <= taille_bouton.height)
         {
             ((ei_placer_t *)widget->geom_params)->height = taille_bouton.height + *bouton->border_width * 2;
             widget->requested_size.height = taille_bouton.height + *bouton->border_width * 2;
+            has_been_resized = EI_TRUE;
         }
         if (widget->screen_location.size.width <= taille_bouton.width)
         {
             ((ei_placer_t *)widget->geom_params)->width = taille_bouton.width + *bouton->border_width * 2;
             widget->requested_size.width = taille_bouton.width + *bouton->border_width * 2;
+            has_been_resized = EI_TRUE;
         }
-        widget->geom_params->manager->runfunc(widget);
+
+        if (has_been_resized)
+        {
+            widget->geom_params->manager->runfunc(widget);
+            button_drawfunc(widget, surface, pick_surface, clipper);
+        }
 
         ei_point_t where = compute_location(widget, bouton->text_anchor, EI_TRUE);
         ei_draw_text(surface, &where, *bouton->text, *bouton->text_font, *bouton->text_color, clipper);
@@ -144,21 +160,24 @@ void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pic
                                     : ei_copy_surface(surface, widget->content_rect, *bouton->img, NULL, EI_FALSE);
     }
 
-    free_linked_point_pointeur(partie_haute);
-    free_linked_point_pointeur(partie_basse);
-    free_linked_point_pointeur(partie_milieu);
-
     /* La pick_color n'est dessinée que si l'on reste dans le clipper bien sûr */
     if (widget->screen_location.top_left.x <= new_clipper.top_left.x + new_clipper.size.width &&
         widget->screen_location.top_left.x + widget->screen_location.size.width >= new_clipper.top_left.x &&
         widget->screen_location.top_left.y <= new_clipper.top_left.y + new_clipper.size.height &&
         widget->screen_location.top_left.y + widget->screen_location.size.height >= new_clipper.top_left.y)
         ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
-} 
+}
 
 void button_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
+
+    ei_widget_t *sent = widget->children_head;
+    while (sent != NULL)
+    {
+        sent->wclass->geomnotifyfunc(sent);
+        sent = sent->next_sibling;
+    }
 }
 
 void button_setdefaultsfunc(ei_widget_t *widget)
