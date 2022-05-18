@@ -53,6 +53,18 @@ ei_bool_t recherche_traitants_event(liste_eventtypes_t *liste, ei_event_t *event
     return sortie;
 }
 
+static void free_liste_event_widget(liste_events *liste)
+{
+    liste_events *courant = liste;
+    liste_events *suivant = liste;
+    while (suivant != NULL)
+    {
+        courant = suivant;
+        suivant = suivant->next;
+        free(courant);
+    }
+}
+
 /**
  * @brief Fonction de libération de la mémoire associée à une liste_eventtypes_t (cf. ei_autre_struct.h).
  * 
@@ -68,18 +80,6 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
         courant = suivant;
         suivant = suivant->next;
         free_liste_event_widget(courant->liste);
-        free(courant);
-    }
-}
-
-static void free_liste_event_widget(liste_events *liste)
-{
-    liste_events *courant = liste;
-    liste_events *suivant = liste;
-    while (suivant != NULL)
-    {
-        courant = suivant;
-        suivant = suivant->next;
         free(courant);
     }
 }

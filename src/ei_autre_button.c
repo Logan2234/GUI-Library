@@ -5,7 +5,7 @@
 
 extern int widget_id;
 
-ei_widget_t *button_allocfunc(void)
+static ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
     return (ei_widget_t *)widget_button;

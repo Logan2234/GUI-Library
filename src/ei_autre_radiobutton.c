@@ -1,6 +1,6 @@
 #include "ei_autre_struct.h"
 
-ei_widget_t *radiobutton_allocfunc(void)
+static ei_widget_t *radiobutton_allocfunc(void)
 {
     return (ei_widget_t *)calloc(1, sizeof(ei_radiobutton_t));
 }

@@ -7,7 +7,7 @@
 extern int widget_id;
 extern ei_surface_t pick_surface;
 
-ei_widget_t *toplevel_allocfunc(void)
+static ei_widget_t *toplevel_allocfunc(void)
 {
     ei_toplevel_t *widget_toplevel = calloc(1, sizeof(ei_toplevel_t));
     return (ei_widget_t *)widget_toplevel;

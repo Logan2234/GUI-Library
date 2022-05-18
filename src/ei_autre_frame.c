@@ -4,7 +4,7 @@
 
 extern int widget_id;
 
-ei_widget_t *frame_allocfunc(void)
+static ei_widget_t *frame_allocfunc(void)
 {
     ei_frame_t *widget_frame = calloc(1, sizeof(ei_frame_t));
     return (ei_widget_t *)widget_frame;

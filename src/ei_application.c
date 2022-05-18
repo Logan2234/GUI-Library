@@ -176,7 +176,7 @@ void ei_app_invalidate_rect(ei_rect_t *rect)
     /* Si la première cellule de la liste chaînée est vide, on met seulement à jour cette première cellule */
     if (sent->rect.size.width == 0 && sent->rect.size.height == 0 && sent->rect.top_left.x == 0 && sent->rect.top_left.y == 0)
         sent->rect = *rect;
-    
+
     else
     {
         sent = sent->next;
