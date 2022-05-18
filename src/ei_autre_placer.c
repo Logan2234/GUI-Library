@@ -20,8 +20,8 @@ void placer_runfunc(ei_widget_t *widget)
     placer->rel_x = ((placer->rel_x == -1) ? 0 : placer->rel_x);
     placer->rel_y = ((placer->rel_y == -1) ? 0 : placer->rel_y);
 
-    int taille_width = (placer->rel_width == 0) ? placer->width : placer->rel_width * width_parent;
-    int taille_height = (placer->rel_height == 0 ) ?placer->height : placer->rel_height * height_parent;
+    int taille_width = (placer->rel_width == -1) ? placer->width : placer->rel_width * width_parent;
+    int taille_height = (placer->rel_height == -1) ?placer->height : placer->rel_height * height_parent;
     if (placer->anchor == NULL)
     {
         top_left->x += placer->x + placer->rel_x * width_parent;
