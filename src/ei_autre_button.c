@@ -5,12 +5,24 @@
 
 extern int widget_id;
 
+/**
+ * @brief Alloc l'espace pour un button
+ * 
+ * @param widget Widget (button) que l'on doit alloc.
+ * 
+ */
 static ei_widget_t *button_allocfunc(void)
 {
     ei_button_t *widget_button = calloc(1, sizeof(ei_button_t));
     return (ei_widget_t *)widget_button;
 }
 
+/**
+ * @brief Est appelé pour release un button
+ * 
+ * @param widget Widget (button) que l'on doit free.
+ * 
+ */
 static void button_releasefunc(ei_widget_t *widget)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
@@ -32,6 +44,18 @@ static void button_releasefunc(ei_widget_t *widget)
     free(bouton);
 }
 
+/**
+ * @brief Fonction permettant de dessiner un button
+ * 
+ * @param widget Widget (en l'occurance un button) à dessiner.
+ * 
+ * @param surface La surface sur lequel on le dessine.
+ * 
+ * @param pick_surface Surface permettant de savoir sur quel objet on clique.
+ * 
+ * @param clipper Zone délimitant le dessin par son parent.
+ * 
+ */
 static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_button_t *bouton = (ei_button_t *)widget;
@@ -183,6 +207,12 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
         ei_fill(pick_surface, widget->pick_color, &widget->screen_location);
 }
 
+/**
+ * @brief Permet de prévenir les fils lorsque qu'un changement apparait sur un widget comme un resize ou un déplacement
+ * 
+ * @param widget Widget (button) sur lequel un event apparait.
+ * 
+ */
 static void button_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
@@ -195,6 +225,12 @@ static void button_geomnotifyfunc(ei_widget_t *widget)
     }
 }
 
+/**
+ * @brief Initialise un button avec les paramètres par défaut.
+ * 
+ * @param widget Widget (button) que l'on doit initialiser.
+ * 
+ */
 static void button_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
@@ -217,6 +253,12 @@ static void button_setdefaultsfunc(ei_widget_t *widget)
     ei_bind(ei_ev_mouse_move, widget, NULL, button_interact_callback, NULL);
 }
 
+/**
+ * @brief Créé un widgetclass button avec les initialisations lors de la création de la fenêtre principale pour pouvoir construire un boutton
+ * 
+ * @return La classe du button avec les fonctions de bases du button.
+ * 
+ */
 ei_widgetclass_t *return_class_button(void)
 {
     ei_widgetclass_t *widgetclass_button = calloc(1, sizeof(ei_widgetclass_t));

@@ -56,6 +56,12 @@ void free_linked_point_pointeur(ei_linked_point_t *liste)
     free(courant);
 }
 
+/**
+ * @brief Permet de free la liste des rectangle après le dessin de la modification
+ * 
+ * @param liste Liste de rectangle qu'il faut free
+ * 
+ */
 void free_linked_rects(ei_linked_rect_t *liste_rect)
 {
     ei_linked_rect_t *sent = liste_rect->next;

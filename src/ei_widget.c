@@ -8,6 +8,14 @@ extern liste_geometrymanager_t *liste_geometrymanager;
 extern ei_surface_t pick_surface;
 extern int widget_id;
 
+/**
+ * @brief Permet de fermer les widgets lorsque l'on ferme la fenetre
+ * 
+ * @param widget Liste d'évènement à free
+ * 
+ * @param origin
+ * 
+ */
 static void ei_kill_widget(ei_widget_t *widget, ei_widget_t *origin)
 {
     ei_widget_t *pere = origin->parent;

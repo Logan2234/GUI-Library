@@ -7,12 +7,24 @@
 extern int widget_id;
 extern ei_surface_t pick_surface;
 
+/**
+ * @brief Alloc l'espace pour un toplevel
+ * 
+ * @param widget Widget (toplvel) que l'on doit alloc.
+ * 
+ */
 static ei_widget_t *toplevel_allocfunc(void)
 {
     ei_toplevel_t *widget_toplevel = calloc(1, sizeof(ei_toplevel_t));
     return (ei_widget_t *)widget_toplevel;
 }
 
+/**
+ * @brief Est appelé pour release un toplevel
+ * 
+ * @param widget Widget (toplevel) que l'on doit free.
+ * 
+ */
 static void toplevel_releasefunc(ei_widget_t *widget)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
@@ -29,6 +41,18 @@ static void toplevel_releasefunc(ei_widget_t *widget)
     free(toplevel);
 }
 
+/**
+ * @brief Fonction permettant de dessiner un toplevel
+ * 
+ * @param widget Widget (en l'occurance un toplevel) à dessiner.
+ * 
+ * @param surface La surface sur lequel on le dessine.
+ * 
+ * @param pick_surface Surface permettant de savoir sur quel objet on clique.
+ * 
+ * @param clipper Zone délimitant le dessin par son parent.
+ * 
+ */
 static void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surface_t pick_surface, ei_rect_t *clipper)
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
@@ -193,6 +217,12 @@ static void toplevel_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surf
         ei_fill(pick_surface, widget->pick_color, &new_clipper_including_header);
 }
 
+/**
+ * @brief Initialise un toplevel avec les paramètres par défaut.
+ * 
+ * @param widget Widget (toplevel) que l'on doit initialiser.
+ * 
+ */
 static void toplevel_setdefaultsfunc(ei_widget_t *widget)
 {
     /* Gestion du pick_id et de la couleur associée au pick_id */
@@ -212,6 +242,13 @@ static void toplevel_setdefaultsfunc(ei_widget_t *widget)
     init_toplevel(widget);
 }
 
+/**
+ * @brief Permet de prévenir les fils lorsque qu'un changement apparait sur un widget comme un resize ou un déplacement
+ * 
+ * @param widget Widget (toplevel) sur lequel un event apparait.
+ * 
+ * 
+ */
 static void toplevel_geomnotifyfunc(ei_widget_t *widget)
 {
     widget->geom_params->manager->runfunc(widget);
@@ -224,6 +261,12 @@ static void toplevel_geomnotifyfunc(ei_widget_t *widget)
     }
 }
 
+/**
+ * @brief Créé un widgetclass toplevel avec les initialisations lors de la création de la fenêtre principale pour pouvoir construire un toplevel
+ * 
+ * @return La classe du toplevel avec les fonctions de bases du toplevel.
+ * 
+ */
 ei_widgetclass_t *return_class_toplevel(void)
 {
     ei_widgetclass_t *widgetclass_toplevel = calloc(1, sizeof(ei_widgetclass_t));
