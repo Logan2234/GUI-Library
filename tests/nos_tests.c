@@ -154,11 +154,7 @@ int test_3()
     ei_surface_t *image = hw_image_load("misc/klimt.jpg", ei_app_root_surface());
     char *text = "Coucou Nillllllllllllllllllllllllllllllllllls";
     ei_widget_t *root = ei_app_root_widget();
-
-    printf("\nParent de ei_app_root_widget: %p\n", root->parent);
-    printf("Type de widget de ei_app_root_widget: %s\n", root->wclass->name);
-    printf("=> Il s'agit donc bien du widget racine\n\nLa fenêtre devrait afficher une couleur bleue claire\n");
-
+    
     ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     frame = ei_widget_create("frame", ei_app_root_widget(), NULL, NULL);
     ei_frame_configure(frame, &frame_size, &frame_color, &frame_border_width, &frame_relief, &text, NULL, NULL, NULL, NULL, NULL, NULL);
