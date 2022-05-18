@@ -8,10 +8,10 @@ extern ei_linked_rect_t *rect_to_update;
 static double last_update;
 
 /**
- * @brief Permet de tracer tout les widgets. 
- * 
+ * @brief Permet de tracer tout les widgets.
+ *
  * @param widget Le widget appelé doit être la racine de sorte à parcourir tout les widgets
- * 
+ *
  */
 static void draw_widgets_and_family(ei_widget_t *widget)
 {
@@ -23,18 +23,19 @@ static void draw_widgets_and_family(ei_widget_t *widget)
     else if (widget->geom_params != NULL)
     {
         (widget->parent->pick_id == 1)
-            ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
-            : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect);
+        ? widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->content_rect)
+        : widget->wclass->drawfunc(widget, racine_surface, pick_surface, widget->parent->content_rect);
     }
 
     else
         return;
 
     ei_widget_t *current_widget = widget;
-    if (current_widget->next_sibling != NULL)
-        draw_widgets_and_family(current_widget->next_sibling);
     if (current_widget->children_head != NULL)
         draw_widgets_and_family(current_widget->children_head);
+    if (current_widget->next_sibling != NULL)
+        draw_widgets_and_family(current_widget->next_sibling);
+
 }
 
 /**
