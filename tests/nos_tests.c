@@ -447,8 +447,6 @@ int main(int argc, char **argv)
         retour = test_4();
     else if (!strcmp(argv[1], "test5"))
         retour = test_5();
-    else if (!strcmp(argv[1], "test6"))
-        retour = test_6();
     else if (!strcmp(argv[1], "test7"))
         retour = test_7();
     else if (!strcmp(argv[1], "test8"))
