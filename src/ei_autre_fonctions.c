@@ -3,6 +3,7 @@
 #include "ei_autre_event.h"
 
 extern ei_surface_t pick_surface;
+extern ei_linked_rect_t *rect_to_update;
 
 static double last_update;
 
@@ -57,17 +58,15 @@ void free_linked_point_pointeur(ei_linked_point_t *liste)
 
 void free_linked_rects(ei_linked_rect_t *liste_rect)
 {
-    ei_linked_rect_t *sent = liste_rect;
-    ei_linked_rect_t *next = liste_rect->next;
+    ei_linked_rect_t *sent = liste_rect->next;
+    ei_linked_rect_t *next;
 
-    while (next != NULL)
+    while (sent != NULL)
     {
+        next = sent->next;
         free(sent);
         sent = next;
-        next = sent->next;
     }
-
-    free(sent);
 }
 
 /**
@@ -159,7 +158,7 @@ ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t po
         last_update = hw_now();
 
         hw_surface_unlock(ei_app_root_surface());
-
+        
         if (rectangles_list->next != NULL && rectangles_list->rect.size.height != 0)
             hw_surface_update_rects(ei_app_root_surface(), rectangles_list);
         else
@@ -167,7 +166,9 @@ ei_linked_rect_t *update_surface(ei_linked_rect_t *rectangles_list, ei_bool_t po
     }
 
     free_linked_rects(rectangles_list);
-    rectangles_list = calloc(1, sizeof(ei_linked_rect_t));
+
+    rect_to_update->next = NULL;
+
     return rectangles_list;
 }
 

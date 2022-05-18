@@ -232,7 +232,7 @@ ei_bool_t deplacement_actif(ei_widget_t *widget, ei_event_t *event, void *user_p
             }
             if (((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height - taille_header) ||
                  (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y < widget->parent->screen_location.top_left.y + widget->parent->content_rect->size.height)) &&
-                ((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y) ||
+                ((widget->parent->pick_id == 1 && widget->screen_location.top_left.y + delta_y + 1 > widget->parent->screen_location.top_left.y) ||
                  (widget->parent->pick_id != 1 && widget->screen_location.top_left.y + delta_y > widget->parent->screen_location.top_left.y + taille_header)))
             {
                 widget->screen_location.top_left.y += delta_y;

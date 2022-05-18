@@ -1,5 +1,6 @@
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
+#include "ei_application.h"
 
 /*********** Paramètres généraux de l'appli ****************/
 
@@ -154,7 +155,7 @@ void ei_app_run()
         }
         if (retour)
         {
-            rect_to_update = update_surface(rect_to_update, EI_TRUE);
+            update_surface(rect_to_update, EI_TRUE);
             retour = EI_FALSE;
         }
     }
@@ -171,10 +172,19 @@ void ei_app_run()
 void ei_app_invalidate_rect(ei_rect_t *rect)
 {
     ei_linked_rect_t *sent = rect_to_update;
-    while (sent->next != NULL)
+
+    /* Si la première cellule de la liste chaînée est vide, on met seulement à jour cette première cellule */
+    if (sent->rect.size.width == 0 && sent->rect.size.height == 0 && sent->rect.top_left.x == 0 && sent->rect.top_left.y == 0)
+        sent->rect = *rect;
+    
+    else
+    {
         sent = sent->next;
-    sent->next = calloc(1, sizeof(ei_linked_rect_t));
-    sent->next->rect = *rect;
+        while (sent != NULL)
+            sent = sent->next;
+        sent = calloc(1, sizeof(ei_linked_rect_t));
+        sent->rect = *rect;
+    }
 }
 
 /**

@@ -147,6 +147,7 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
     ei_font_t *text_font_frame = calloc(1, sizeof(ei_font_t));
     ei_color_t *text_color_frame = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *text_anchor_frame = calloc(1, sizeof(ei_anchor_t));
+    ei_surface_t *img_frame = calloc(1, sizeof(ei_surface_t));
     ei_rect_t ** img_rect_frame = calloc(1, sizeof(ei_rect_t *));
     ei_rect_t * img_rect_frame_in = calloc(1, sizeof(ei_rect_t));
     ei_anchor_t *img_anchor_frame = calloc(1, sizeof(ei_anchor_t));
@@ -158,12 +159,24 @@ void ei_frame_configure(ei_widget_t *widget, ei_size_t *requested_size, const ei
     *text_font_frame = (text_font != NULL) ? *text_font : (frame->text_font == NULL) ? ei_default_font : *frame->text_font;
     *text_color_frame = (text_color != NULL) ? *text_color : (frame->text_color == NULL) ? (ei_color_t)ei_font_default_color : *frame->text_color;
     *text_anchor_frame = (text_anchor != NULL) ? *text_anchor : (frame->text_anchor == NULL) ? default_anchor_frame : *frame->text_anchor;
-    ei_surface_t *img_frame = (img != NULL) ? img : NULL;
-    img_rect_frame_in = (img_rect != NULL) ? *img_rect : NULL;
-    *img_anchor_frame = (img_anchor != NULL) ? *img_anchor : (frame->img_anchor == NULL) ? default_anchor_frame : *frame->img_anchor;
+    
+    if (img != NULL)
+    {
+        *img_frame = *img;
+    }
+    else
+        img_frame = NULL;
 
+    if (img_rect != NULL)
+    {
+        *img_rect_frame_in = **img_rect;
+        *img_rect_frame = img_rect_frame_in;
+    }
+    else
+        *img_rect_frame = NULL;
+
+    *img_anchor_frame = (img_anchor != NULL) ? *img_anchor : (frame->img_anchor == NULL) ? default_anchor_frame : *frame->img_anchor;
     *text_frame = text_frame_in;
-    *img_rect_frame = img_rect_frame_in;
 
     widget->requested_size = (requested_size != NULL) ? (*requested_size) : widget->requested_size;
     
