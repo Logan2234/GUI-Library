@@ -1,5 +1,6 @@
 #include "ei_autre_event.h"
 #include "ei_autre_fonctions.h"
+#include "ei_application.h"
 
 /*********** Paramètres généraux de l'appli ****************/
 
@@ -44,7 +45,7 @@ void ei_app_create(ei_size_t main_window_size, ei_bool_t fullscreen)
     widget_racine = ei_widget_create("frame\0\0\0\0\0\0\0\0\0\0\0\0\0\0 ", NULL, NULL, NULL);
     ei_frame_configure(widget_racine, NULL, &ei_default_background_color, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
-ei_widget_t *ei_app_root_widget();
+
 void ei_app_run()
 {
     (ei_app_root_widget())->wclass->geomnotifyfunc(ei_app_root_widget());
@@ -93,7 +94,7 @@ void ei_app_run()
         }
         if (retour)
         {
-            rect_to_update = update_surface(rect_to_update, EI_TRUE);
+            update_surface(rect_to_update, EI_TRUE);
             retour = EI_FALSE;
         }
     }
@@ -132,6 +133,7 @@ void ei_app_free()
 
     /* On libère la liste des rectangles à mettre à jour */
     free_linked_rects(rect_to_update);
+    free(rect_to_update);
 
     /* On libère les ressources créées par hw_init */
     hw_quit();
@@ -150,10 +152,19 @@ ei_surface_t ei_app_root_surface(void)
 void ei_app_invalidate_rect(ei_rect_t *rect)
 {
     ei_linked_rect_t *sent = rect_to_update;
-    while (sent->next != NULL)
+
+    /* Si la première cellule de la liste chaînée est vide, on met seulement à jour cette première cellule */
+    if (sent->rect.size.width == 0 && sent->rect.size.height == 0 && sent->rect.top_left.x == 0 && sent->rect.top_left.y == 0)
+        sent->rect = *rect;
+    
+    else
+    {
         sent = sent->next;
-    sent->next = calloc(1, sizeof(ei_linked_rect_t));
-    sent->next->rect = *rect;
+        while (sent != NULL)
+            sent = sent->next;
+        sent = calloc(1, sizeof(ei_linked_rect_t));
+        sent->rect = *rect;
+    }
 }
 
 void ei_app_quit_request(void)
