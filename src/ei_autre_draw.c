@@ -21,7 +21,6 @@ ei_linked_point_t *ei_draw_arc(ei_point_t center, uint32_t rayon, float angle_de
 
 	for (uint32_t i = 1; i <= longueur_arc; i++)
 	{
-
 		int x = center.x + (int)((float)rayon * cosf(angle_debut + (float)i * pas));
 		int y = center.y - (int)((float)rayon * sinf(angle_debut + (float)i * pas));
 		while (suivant->next != NULL)
@@ -226,20 +225,4 @@ void ei_draw_losange(ei_rect_t *rectangle, int largeur, ei_color_t color, ei_boo
 	free_linked_point_pointeur(partie_haute);
 	free_linked_point_pointeur(partie_milieu);
 	free_linked_point_pointeur(partie_basse);
-}
-
-void ei_draw_img(ei_surface_t surface, const ei_point_t *where, const char **filename, const ei_rect_t *clipper)
-{
-	if (filename != NULL)
-	{
-		ei_surface_t *surface_source = hw_image_load(*filename, surface);
-		ei_rect_t source = hw_surface_get_rect(surface_source);
-		ei_rect_t dest;
-		dest.size = (clipper == NULL) ? (hw_surface_get_size(surface_source)) : clipper->size;
-
-		dest.top_left.x = where->x;
-		dest.top_left.y = where->y;
-
-		ei_copy_surface(surface, &dest, surface_source, &source, EI_FALSE);
-	}
 }
