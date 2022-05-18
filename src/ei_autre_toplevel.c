@@ -7,12 +7,24 @@
 extern int widget_id;
 extern ei_surface_t pick_surface;
 
+/**
+ * @brief Alloc l'espace pour un toplevel
+ * 
+ * @param widget Widget (toplvel) que l'on doit alloc.
+ * 
+ */
 static ei_widget_t *toplevel_allocfunc(void)
 {
     ei_toplevel_t *widget_toplevel = calloc(1, sizeof(ei_toplevel_t));
     return (ei_widget_t *)widget_toplevel;
 }
 
+/**
+ * @brief Est appelé pour release un toplevel
+ * 
+ * @param widget Widget (toplevel) que l'on doit free.
+ * 
+ */
 static void toplevel_releasefunc(ei_widget_t *widget)
 {
     free(widget->pick_color);
