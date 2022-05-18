@@ -2,6 +2,7 @@
 #include "ei_autre_fonctions.h"
 #include "ei_autre_event.h"
 #include "ei_application.h"
+#include "ei_autre_global_var.h"
 
 extern int widget_id;
 
@@ -193,12 +194,15 @@ static void button_drawfunc(ei_widget_t *widget, ei_surface_t surface, ei_surfac
             button_drawfunc(widget, surface, pick_surface, clipper);
         }
 
-        ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
-
         ei_rect_t rect_dst = *widget->content_rect;
-        rect_dst.top_left.x += where.x;
-        rect_dst.top_left.y += where.y;
 
+        if (*bouton->img_anchor != default_anchor_button || *bouton->img_rect == NULL)
+        {
+            ei_point_t where = compute_location(widget, bouton->img_anchor, EI_FALSE);
+
+            rect_dst.top_left.x += where.x;
+            rect_dst.top_left.y += where.y;
+        }
         if (*bouton->img_rect != NULL)
             ei_copy_surface(surface, &rect_dst, *bouton->img, *bouton->img_rect, EI_FALSE);
         else

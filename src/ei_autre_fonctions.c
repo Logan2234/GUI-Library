@@ -286,7 +286,7 @@ ei_point_t compute_location(ei_widget_t *widget, ei_anchor_t *ancre, ei_bool_t a
             point = (ei_point_t){0, 0};
         else
             point = (ei_point_t){widget->content_rect->top_left.x - widget->screen_location.top_left.x, widget->content_rect->top_left.y - widget->screen_location.top_left.y};
-            
+
     int largeur_parent = widget->content_rect->size.width;
     int hauteur_parent = widget->content_rect->size.height;
 
