@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
 	ei_bool_t	fullscreen			= EI_FALSE;
 
 	ei_app_create(root_window_size, fullscreen);
-	ei_frame_configure(ei_app_root_widget(), NULL, (&root_bgcol)+1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	if (argc > 1)
 		create_puzzle_window(argv[1]);
