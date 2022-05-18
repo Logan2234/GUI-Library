@@ -62,7 +62,7 @@ void ei_app_run()
             retour = recherche_traitants_event(liste_events_widgets, event, EI_FALSE, NULL, NULL);
 
         /* Cas où on appuie avec le clic gauche */
-        else if (event->type == ei_ev_mouse_buttondown)
+        else if (event->type == ei_ev_mouse_buttondown && event->param.mouse.button == ei_mouse_button_left)
         {
             pressed_widget = ei_widget_pick(&event->param.mouse.where);
             retour = recherche_traitants_event(liste_events_widgets, event, EI_TRUE, pressed_widget, NULL);

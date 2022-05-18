@@ -68,8 +68,8 @@ void ei_place(ei_widget_t *widget, ei_anchor_t *anchor, int *x, int *y, int *wid
     ((ei_placer_t *)placer)->y = ((y == NULL) ? widget->content_rect->top_left.y : *y);
     ((ei_placer_t *)placer)->rel_x = ((rel_x == NULL) ? -1 : *rel_x);
     ((ei_placer_t *)placer)->rel_y = ((rel_y == NULL) ? -1 : *rel_y);
-    ((ei_placer_t *)placer)->rel_width = ((rel_width == NULL) ? 0 : *rel_width);
-    ((ei_placer_t *)placer)->rel_height = ((rel_height == NULL) ? 0 : *rel_height);
+    ((ei_placer_t *)placer)->rel_width = ((rel_width == NULL) ? -1 : *rel_width);
+    ((ei_placer_t *)placer)->rel_height = ((rel_height == NULL) ? -1 : *rel_height);
     ((ei_placer_t *)placer)->width = ((width == NULL) ? (rel_width == NULL) ? widget->requested_size.width : ((ei_placer_t *)placer)->rel_width * width_parent : *width);
     ((ei_placer_t *)placer)->height = ((height == NULL) ? (rel_height == NULL) ? widget->requested_size.height : ((ei_placer_t *)placer)->rel_height * height_parent : *height);
 

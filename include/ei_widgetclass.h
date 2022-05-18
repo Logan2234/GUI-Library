@@ -1,5 +1,5 @@
 /**
- *  @file	widgetclass.h
+ *  @file	ei_widgetclass.h
  *  @brief	Definition and registration of widget classes.
  *
  *  \author 

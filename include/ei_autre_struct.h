@@ -7,7 +7,10 @@
  *
  */
 
-/****** Struct des frames ******/
+/**
+ * @brief Définition du type frame.
+ * 
+*/
 typedef struct ei_frame_t
 {
     ei_widget_t widget;
@@ -23,7 +26,10 @@ typedef struct ei_frame_t
     ei_anchor_t *img_anchor;
 } ei_frame_t;
 
-/****** Struct des boutons ******/
+/**
+ * @brief Définition du type button.
+ * 
+*/
 typedef struct ei_button_t
 {
     ei_widget_t widget;
@@ -42,7 +48,10 @@ typedef struct ei_button_t
     void **user_param;
 } ei_button_t;
 
-/****** Struct des toplevels ******/
+/**
+ * @brief Définition du type toplevel.
+ * 
+*/
 typedef struct ei_toplevel_t
 {
     ei_widget_t widget;
@@ -54,21 +63,27 @@ typedef struct ei_toplevel_t
     ei_size_t **min_size;
 } ei_toplevel_t;
 
-/****** Liste chaînée des widgetclass enregistrées ******/
+/**
+ * @brief Liste chaînée des widgetclass enregistrées.
+ **/
 typedef struct liste_widgetclass
 {
     ei_widgetclass_t *first_widgetclass;
     struct liste_widgetclass *next;
 } liste_widgetclass_t;
 
-/****** Liste chaînée des gestionaires de géométrie enregistrés ******/
+/**
+ * @brief Liste chaînée des gestionaires de géométrie enregistrés.
+ **/
 typedef struct liste_geometrymanager
 {
     ei_geometrymanager_t *geometrymanager_cell;
     struct liste_geometrymanager *next;
 } liste_geometrymanager_t;
 
-/****** Struct du placer ******/
+/**
+ * @brief Deéfinition du struct du placer 
+ **/
 typedef struct ei_placer_t
 {
     ei_geometry_param_t manager;
@@ -83,7 +98,9 @@ typedef struct ei_placer_t
     float rel_height;
 } ei_placer_t;
 
-/* Liste chainée liant widgets, tags, events et callback */
+/**
+ * @brief Liste chainée liant widgets, tags, events et callback 
+ **/
 typedef struct liste_events_widgets_t
 {
     ei_widget_t *widget;
@@ -94,7 +111,10 @@ typedef struct liste_events_widgets_t
     struct liste_events_widgets_t *next;
 } liste_events;
 
-/****** Liste chainée des eventype menant vers une liste_events ******/
+/**
+ * @brief Liste chainée des eventype menant vers une liste_events 
+ *
+ */
 typedef struct liste_eventtypes_t
 {
     ei_eventtype_t eventtype;
@@ -102,7 +122,9 @@ typedef struct liste_eventtypes_t
     struct liste_eventtypes_t *next;
 } liste_eventtypes_t;
 
-/* Extension 1 : radiobutton */
+/**
+ * @brief  Extension 1 : radiobutton 
+ **/
 typedef struct ei_radiobutton_t
 {
     ei_widget_t widget;
