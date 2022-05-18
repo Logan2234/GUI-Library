@@ -85,6 +85,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 }
 
 /************ FONCTIONS DE CALLBACK DÉJÀ CRÉÉES ************/
+
 /**
  * @brief Fonction générale utilisée comme callback lors de l'intéraction avec des boutons.
  * Cette fonction permet de gérer entre autres le changement de relief lors de l'intéraction
@@ -99,6 +100,7 @@ void free_liste_eventtypes(liste_eventtypes_t *liste)
 ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_params)
 {
     ei_bool_t retour = EI_FALSE;
+    ei_rect_t old_rect = widget->screen_location;
 
     if (event->param.mouse.button == ei_mouse_button_left)
     {
@@ -135,7 +137,7 @@ ei_bool_t relief_toggle(ei_widget_t *widget, ei_event_t *event, void *user_param
     }
 
     if (retour)
-        ei_app_invalidate_rect(&widget->screen_location);
+        ei_app_invalidate_rect(&old_rect);
 
     return retour;
 }
@@ -158,6 +160,7 @@ ei_bool_t close_toplevel(ei_widget_t *widget, ei_event_t *event, void *user_para
     old_rect.top_left.x -= *((ei_toplevel_t *)widget->parent)->border_width;
 
     ei_app_invalidate_rect(&old_rect);
+    
     ei_widget_destroy(widget->parent);
 
     return EI_TRUE;

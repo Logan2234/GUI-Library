@@ -164,7 +164,9 @@ int ei_copy_surface(ei_surface_t destination, const ei_rect_t *dst_rect,
                     ei_surface_t source, const ei_rect_t *src_rect, ei_bool_t alpha)
 {
     /* Tout d'abord, on ne copie l'image que si la taille de la surface et la desrination sont les memes ou qu'on ait des instructions sur où appliquer la fonction */
-    if (src_rect == NULL && dst_rect == NULL && ((hw_surface_get_size(source).width != hw_surface_get_size(destination).width) || (hw_surface_get_size(source).height != hw_surface_get_size(destination).height)))
+    ei_size_t size_src = hw_surface_get_size(source);
+    ei_size_t size_dst = hw_surface_get_size(destination);
+    if (src_rect == NULL && dst_rect == NULL && ((size_src.width != size_dst.width) || (size_src.height != size_dst.height)))
         return EXIT_FAILURE;
     
     else
