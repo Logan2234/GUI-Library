@@ -191,6 +191,7 @@ ei_bool_t deplacement_toplevel(ei_widget_t *widget, ei_event_t *event, void *use
 {
     ei_toplevel_t *toplevel = (ei_toplevel_t *)widget;
     if (!strcmp(widget->wclass->name, "toplevel") &&
+        widget->screen_location.top_left.x <= event->param.mouse.where.x &&
         event->param.mouse.where.x <= widget->screen_location.top_left.x + widget->screen_location.size.width &&
         widget->screen_location.top_left.y <= event->param.mouse.where.y &&
         event->param.mouse.where.y <= widget->screen_location.top_left.y + taille_header)
